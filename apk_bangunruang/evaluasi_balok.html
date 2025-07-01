@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Evaluasi Balok</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>Latihan Soal: Balok</h1>
+
+    <form id="kuisForm">
+      <div class="soal">
+        <p>1. Balok memiliki ... sisi.</p>
+        <label><input type="radio" name="soal1" value="a"> 4</label><br>
+        <label><input type="radio" name="soal1" value="b"> 6</label><br>
+        <label><input type="radio" name="soal1" value="c"> 8</label><br>
+        <label><input type="radio" name="soal1" value="d"> 10</label>
+      </div>
+  
+      <div class="soal">
+        <p>2. Bentuk sisi-sisi balok adalah ...</p>
+        <label><input type="radio" name="soal2" value="a"> Persegi</label><br>
+        <label><input type="radio" name="soal2" value="b"> Segitiga</label><br>
+        <label><input type="radio" name="soal2" value="c"> Persegi panjang</label><br>
+        <label><input type="radio" name="soal2" value="d"> Lingkaran</label>
+      </div>
+  
+      <div class="soal">
+        <p>3. Balok memiliki ... titik sudut.</p>
+        <label><input type="radio" name="soal3" value="a"> 4</label><br>
+        <label><input type="radio" name="soal3" value="b"> 6</label><br>
+        <label><input type="radio" name="soal3" value="c"> 8</label><br>
+        <label><input type="radio" name="soal3" value="d"> 12</label>
+      </div>
+  
+      <div class="soal">
+        <p>4. Rumus volume balok adalah ...</p>
+        <label><input type="radio" name="soal4" value="a"> p × l</label><br>
+        <label><input type="radio" name="soal4" value="b"> s × s × s</label><br>
+        <label><input type="radio" name="soal4" value="c"> p × l × t</label><br>
+        <label><input type="radio" name="soal4" value="d"> 6 × s</label>
+      </div>
+  
+      <div class="soal">
+        <p>5. Jika panjang 8 cm, lebar 3 cm, dan tinggi 4 cm, maka volume balok adalah ...</p>
+        <label><input type="radio" name="soal5" value="a"> 96 cm³</label><br>
+        <label><input type="radio" name="soal5" value="b"> 48 cm³</label><br>
+        <label><input type="radio" name="soal5" value="c"> 64 cm³</label><br>
+        <label><input type="radio" name="soal5" value="d"> 24 cm³</label>
+      </div>
+  
+      <div class="soal">
+        <p>6. Balok memiliki berapa rusuk?</p>
+        <label><input type="radio" name="soal6" value="a"> 8</label><br>
+        <label><input type="radio" name="soal6" value="b"> 12</label><br>
+        <label><input type="radio" name="soal6" value="c"> 10</label><br>
+        <label><input type="radio" name="soal6" value="d"> 6</label>
+      </div>
+  
+      <div class="soal">
+        <p>7. Dua sisi yang sejajar dan sama besar disebut ...</p>
+        <label><input type="radio" name="soal7" value="a"> Diagonal</label><br>
+        <label><input type="radio" name="soal7" value="b"> Alas dan atap</label><br>
+        <label><input type="radio" name="soal7" value="c"> Rusuk</label><br>
+        <label><input type="radio" name="soal7" value="d"> Sisi sejajar</label>
+      </div>
+  
+      <div class="soal">
+        <p>8. Luas permukaan balok adalah ...</p>
+        <label><input type="radio" name="soal8" value="a"> 2(pl + pt + lt)</label><br>
+        <label><input type="radio" name="soal8" value="b"> p × l × t</label><br>
+        <label><input type="radio" name="soal8" value="c"> s × s × s</label><br>
+        <label><input type="radio" name="soal8" value="d"> 6 × s × s</label>
+      </div>
+  
+      <div class="soal">
+        <p>9. Jika panjang balok 10 cm, lebar 5 cm, dan tinggi 2 cm, maka volumenya adalah ...</p>
+        <label><input type="radio" name="soal9" value="a"> 100 cm³</label><br>
+        <label><input type="radio" name="soal9" value="b"> 120 cm³</label><br>
+        <label><input type="radio" name="soal9" value="c"> 90 cm³</label><br>
+        <label><input type="radio" name="soal9" value="d"> 80 cm³</label>
+      </div>
+  
+      <div class="soal">
+        <p>10. Balok memiliki bentuk sisi yang ...</p>
+        <label><input type="radio" name="soal10" value="a"> Semua sisi sama</label><br>
+        <label><input type="radio" name="soal10" value="b"> Semua sisi persegi</label><br>
+        <label><input type="radio" name="soal10" value="c"> Pasangan sisi persegi panjang</label><br>
+        <label><input type="radio" name="soal10" value="d"> Tidak beraturan</label>
+      </div>
+
+    <button type="button" class="btn" onclick="hitungNilaiBalok()">Lihat Nilai</button>
+  </form>
+
+  <div id="hasil"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

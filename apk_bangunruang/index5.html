@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bangun Ruang - MTS Bany Tsamin</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background-color: #dbe3d2;
+      overflow-x: hidden;
+    }
+
+    header {
+      padding: 1rem 2rem;
+      font-weight: bold;
+      color: #2e4b32;
+      font-size: 1.2rem;
+    }
+
+    .main {
+      position: relative;
+      background: white;
+      margin: 2rem;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .title-section {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .title-section h3 {
+      font-size: 0.8rem;
+      color: gray;
+      font-weight: normal;
+    }
+
+    .title-section h1 {
+      font-size: 2rem;
+      color: #2e4b32;
+      margin: 0.3rem 0;
+    }
+
+    .description {
+      max-width: 500px;
+      margin: 1rem auto;
+      text-align: center;
+      color: #444;
+      line-height: 1.6;
+    }
+
+    .main img.icon {
+      width: 180px;
+      position: absolute;
+      top: 30px;
+      right: 30px;
+    }
+
+    .audio-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #f5f5f5;
+      border: 2px solid #2e4b32;
+      border-radius: 12px;
+      width: 50px;
+      height: 50px;
+      position: absolute;
+      top: 200px;
+      right: 50px;
+      cursor: pointer;
+    }
+
+    .audio-button i {
+      font-size: 24px;
+      color: #2e4b32;
+    }
+
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .buttons button {
+      background-color: #a5bfa0;
+      color: #2e4b32;
+      padding: 0.8rem 2rem;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: bold;
+      box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .buttons button:hover {
+      background-color: #91a68c;
+    }
+
+    .shape-cube {
+      display: block;
+      margin: 2rem auto;
+      width: 100px;
+    }
+  </style>
+  <script>
+    function playAudio() {
+      const audio = new Audio('https://cdn.pixabay.com/audio/2022/10/30/audio_9a3b257b1b.mp3'); // Ganti sesuai file
+      audio.play();
+    }
+  </script>
+</head>
+<body>
+  <header>MTS Bany Tsamin</header>
+
+  <div class="main">
+    <div class="title-section">
+      <h3>Aplikasi Alat Peraga Interaktif</h3>
+      <h1>BANGUN RUANG</h1>
+    </div>
+
+    <p class="description">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.
+      Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+    </p>
+
+    <img class="icon" src="https://cdn.pixabay.com/photo/2021/02/28/05/36/stationery-6056130_1280.png" alt="Alat tulis" />
+
+    <div class="audio-button" onclick="playAudio()">
+      <i class="fas fa-volume-up"></i>
+    </div>
+
+    <img class="shape-cube" src="https://upload.wikimedia.org/wikipedia/commons/3/37/Cube_wireframe.svg" alt="bangun ruang" />
+
+    <div class="buttons">
+      <button onclick="location.href='simulator.html'">Simulator Bangun Ruang</button>
+      <button onclick="location.href='evaluasi.html'">Evaluasi Umum</button>
+    </div>
+  </div>
+
+  <!-- FontAwesome for icon -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</body>
+</html>
+<!-- container card bangun ruang (horizontal) -->
+  <div class="container">
+    <!-- KUBUS -->
+    <div class="shape-card">
+      <div id="kubus-container" class="shape-canvas"></div>
+      <h2>Kubus</h2>
+      <button class="info-btn" onclick="showInfo('Kubus adalah bangun ruang dengan 6 sisi berbentuk persegi dan semua rusuk sama panjang.')">Penjelasan</button>
+    </div>
+
+    <!-- BALOK -->
+    <div class="shape-card">
+      <div id="balok-container" class="shape-canvas"></div>
+      <h2>Balok</h2>
+      <button class="info-btn" onclick="showInfo('Balok adalah bangun ruang dengan sisi berbentuk persegi panjang. Panjang, lebar, dan tinggi bisa berbeda.')">Penjelasan</button>
+    </div>
+
+    <!-- LIMAS -->
+    <div class="shape-card">
+      <div id="limas-container" class="shape-canvas"></div>
+      <h2>Limas</h2>
+      <button class="info-btn" onclick="showInfo('Limas adalah bangun ruang dengan alas berbentuk segi banyak dan sisi tegak berbentuk segitiga yang bertemu di titik puncak.')">Penjelasan</button>
+    </div>
+
+    <!-- PRISMA -->
+    <div class="shape-card">
+      <div id="prisma-container" class="shape-canvas"></div>
+      <h2>Prisma</h2>
+      <button class="info-btn" onclick="showInfo('Prisma adalah bangun ruang yang dibatasi oleh alas dan tutup berbentuk segi-n dan sisi tegak berbentuk persegi atau persegi panjang.')">Penjelasan</button>
+    </div>
+
+      <!-- KERUCUT -->
+      <div class="shape-card">
+        <div id="kerucut-container" class="shape-canvas"></div>
+        <h2>Kerucut</h2>
+        <button class="info-btn" onclick="showInfo('Kerucut adalah bangun ruang yang mempunyai satu alas berbentuk lingkaran dan satu titik puncak.')">Penjelasan</button>
+      </div>
+
+      <!-- TABUNG -->
+    <div class="shape-card">
+      <div id="tabung-container" class="shape-canvas"></div>
+      <h2>Tabung</h2>
+      <button class="info-btn" onclick="showInfo('Tabung adalah bangun ruang yang memiliki dua alas berbentuk lingkaran dan satu permukaan lengkung menghubungkan kedua alas tersebut.')">Penjelasan</button>
+    </div>
+
+    <!-- BOLA -->
+  <div class="shape-card">
+    <div id="bola-container" class="shape-canvas"></div>
+    <h2>Bola</h2>
+    <button class="info-btn" onclick="showInfo('Bola adalah bangun ruang yang semua titiknya berada pada jarak yang sama dari titik pusat.')">Penjelasan</button>
+  </div>
+  </div>
+
+  
+
+  <script src="script.js"></script>
+
+  <!-- Modal Custom -->
+<div id="customModal" class="modal-overlay">
+  <div class="modal-box">
+    <p id="modalText"></p>
+    <button onclick="closeModal()" class="close-btn">Tutup</button>
+  </div>
+</div>
+

@@ -1,0 +1,51 @@
+<!-- container card bangun ruang (horizontal) -->
+  <div class="container">
+    <!-- KUBUS -->
+    <div class="shape-card">
+      <div id="kubus-container" class="shape-canvas"></div>
+      <h2>Kubus</h2>
+      <button class="info-btn" onclick="showInfo('Kubus adalah bangun ruang dengan 6 sisi berbentuk persegi dan semua rusuk sama panjang.')">Penjelasan</button>
+    </div>
+
+    <!-- BALOK -->
+    <div class="shape-card">
+      <div id="balok-container" class="shape-canvas"></div>
+      <h2>Balok</h2>
+      <button class="info-btn" onclick="showInfo('Balok adalah bangun ruang dengan sisi berbentuk persegi panjang. Panjang, lebar, dan tinggi bisa berbeda.')">Penjelasan</button>
+    </div>
+
+    <!-- LIMAS -->
+    <div class="shape-card">
+      <div id="limas-container" class="shape-canvas"></div>
+      <h2>Limas</h2>
+      <button class="info-btn" onclick="showInfo('Limas adalah bangun ruang dengan alas berbentuk segi banyak dan sisi tegak berbentuk segitiga yang bertemu di titik puncak.')">Penjelasan</button>
+    </div>
+
+    <!-- PRISMA -->
+    <div class="shape-card">
+      <div id="prisma-container" class="shape-canvas"></div>
+      <h2>Prisma</h2>
+      <button class="info-btn" onclick="showInfo('Prisma adalah bangun ruang yang dibatasi oleh alas dan tutup berbentuk segi-n dan sisi tegak berbentuk persegi atau persegi panjang.')">Penjelasan</button>
+    </div>
+
+      <!-- KERUCUT -->
+      <div class="shape-card">
+        <div id="kerucut-container" class="shape-canvas"></div>
+        <h2>Kerucut</h2>
+        <button class="info-btn" onclick="showInfo('Kerucut adalah bangun ruang yang mempunyai satu alas berbentuk lingkaran dan satu titik puncak.')">Penjelasan</button>
+      </div>
+
+      <!-- TABUNG -->
+    <div class="shape-card">
+      <div id="tabung-container" class="shape-canvas"></div>
+      <h2>Tabung</h2>
+      <button class="info-btn" onclick="showInfo('Tabung adalah bangun ruang yang memiliki dua alas berbentuk lingkaran dan satu permukaan lengkung menghubungkan kedua alas tersebut.')">Penjelasan</button>
+    </div>
+
+    <!-- BOLA -->
+  <div class="shape-card">
+    <div id="bola-container" class="shape-canvas"></div>
+    <h2>Bola</h2>
+    <button class="info-btn" onclick="showInfo('Bola adalah bangun ruang yang semua titiknya berada pada jarak yang sama dari titik pusat.')">Penjelasan</button>
+  </div>
+  </div>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu Evaluasi - Aplikasi Bangun Ruang</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f2f2f2;
+    }
+    h1 {
+      text-align: center;
+    }
+    h2 {
+      margin-top: 40px;
+      color: #00796B;
+    }
+    .menu-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+    .menu-item {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+      cursor: pointer;
+    }
+    .menu-item:hover {
+      transform: scale(1.05);
+      background-color: #e0f7fa;
+    }
+    .menu-item a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Evaluasi Bangun Ruang</h1>
+
+  <h2>Bangun Ruang Sisi Datar</h2>
+  <div class="menu-container">
+    <div class="menu-item"><a href="evaluasi_kubus.html">Kubus</a></div>
+    <div class="menu-item"><a href="evaluasi_balok.html">Balok</a></div>
+    <div class="menu-item"><a href="evaluasi_prisma.html">Prisma</a></div>
+    <div class="menu-item"><a href="evaluasi_limas.html">Limas</a></div>
+  </div>
+
+  <h2>Bangun Ruang Sisi Lengkung</h2>
+  <div class="menu-container">
+    <div class="menu-item"><a href="evaluasi_tabung.html">Tabung</a></div>
+    <div class="menu-item"><a href="evaluasi_kerucut.html">Kerucut</a></div>
+    <div class="menu-item"><a href="evaluasi_bola.html">Bola</a></div>
+  </div>
+</body>
+</html>
+ 

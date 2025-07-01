@@ -1,0 +1,242 @@
+// audio
+ function playAudio() {
+  var audio = document.getElementById("myAudio");
+  var button = document.getElementById("audioBtn");
+  if (audio.paused) {
+    audio.play();
+    button.src = "assets/speaker-on.png";
+  } else {
+    audio.pause();
+    button.src = "assets/speaker-off.png";
+  }
+}
+const script = document.createElement('script');
+script.src = "https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js";
+document.head.appendChild(script);
+
+script.onload = () => {
+  function createShape(containerId, geometry, positionX = -0.6, rotateY = 0) {
+    const container = document.getElementById(containerId);
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ alpha: true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    container.appendChild(renderer.domElement);
+
+    const material = new THREE.MeshBasicMaterial({
+      color: 0x000000,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.6,
+    });
+
+    const shape = new THREE.Mesh(geometry, material);
+    shape.position.x = positionX;
+    shape.rotation.y = rotateY;
+    scene.add(shape);
+
+    camera.position.z = 5;
+
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+
+    container.addEventListener('mousemove', (event) => {
+      const rect = container.getBoundingClientRect();
+      mouse.x = ((event.clientX - rect.left) / container.clientWidth) * 2 - 1;
+      mouse.y = -((event.clientY - rect.top) / container.clientHeight) * 2 + 1;
+
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObject(shape);
+
+      const tooltip = document.getElementById("tooltip");
+      if (intersects.length > 0) {
+        const faceIndex = intersects[0].faceIndex;
+        const sideNames = [
+          "Sisi Depan", "Sisi Depan",
+          "Sisi Belakang", "Sisi Belakang",
+          "Sisi Atas", "Sisi Atas",
+          "Sisi Bawah", "Sisi Bawah",
+          "Sisi Kanan", "Sisi Kanan",
+          "Sisi Kiri", "Sisi Kiri"
+        ];
+        const sideName = sideNames[faceIndex] || "Sisi";
+
+        tooltip.innerText = sideName;
+        tooltip.style.display = "block";
+        tooltip.style.left = `${event.clientX + 10}px`;
+        tooltip.style.top = `${event.clientY + 10}px`;
+      } else {
+        tooltip.style.display = "none";
+      }
+    });
+
+    function animate() {
+      requestAnimationFrame(animate);
+      shape.rotation.x += 0.01;
+      shape.rotation.y += 0.01;
+      renderer.render(scene, camera);
+    }
+
+    animate();
+  }
+
+  // Panggil untuk setiap bangun ruang
+  createShape("kubus-container", new THREE.BoxGeometry(2, 2, 2));
+  createShape("balok-container", new THREE.BoxGeometry(2.8, 1.5, 1.5));
+  createShape("limas-container", new THREE.ConeGeometry(1.7, 2.5, 4), -0.4, Math.PI / 4);
+  createShape("prisma-container", new THREE.CylinderGeometry(1.3, 1.5, 1.3, 5), -0.4, Math.PI / 4);
+  createShape("kerucut-container", new THREE.ConeGeometry(1.5, 2, 30), -0.4, Math.PI / 4);
+  createShape("tabung-container", new THREE.CylinderGeometry(1.3, 1.3, 2, 30), -0.4, Math.PI / 4);
+  createShape("bola-container", new THREE.SphereGeometry(1.6, 10, 10), 0, Math.PI / 4);
+};
+
+
+
+
+function createShape(containerId, geometry, positionX = -0.6, rotateY = 0) {
+  // Membuat scene 3D yang akan menjadi wadah untuk objek
+  const scene = new THREE.Scene();
+  
+  // Membuat kamera dengan sudut pandang 75 derajat, rasio aspek 1 (untuk tampilan persegi), dan jarak dekat dan jauh untuk rendering
+  const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+  
+  // Membuat renderer WebGL yang memungkinkan transparansi (alpha: true)
+  const renderer = new THREE.WebGLRenderer({ alpha: true });
+  renderer.setSize(280, 280);  // Mengatur ukuran renderer menjadi 280x280 piksel
+  document.getElementById(containerId).appendChild(renderer.domElement);  // Menambahkan elemen canvas renderer ke dalam container HTML sesuai ID
+  
+  // Membuat material untuk mesh dengan warna hitam, wireframe (gaya garis), transparan, dan opasitas 0.6
+  const material = new THREE.MeshBasicMaterial({
+    color: 0x000000,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.6
+  });
+
+  // Membuat mesh menggunakan geometry (bentuk objek) dan material yang sudah ditentukan
+  const shape = new THREE.Mesh(geometry, material);
+  
+  // Menetapkan posisi objek pada sumbu X sesuai dengan parameter positionX (default adalah -0.6)
+  shape.position.x = -0.8;
+  
+  // Menetapkan rotasi objek pada sumbu Y sesuai dengan parameter rotateY (default adalah 0)
+  shape.rotation.y = rotateY;
+  
+  // Menambahkan objek (shape) ke dalam scene
+  scene.add(shape);
+  
+  // Menetapkan posisi kamera di sepanjang sumbu Z untuk melihat objek (kamera berada di 5 satuan di belakang objek)
+  camera.position.z = 5;
+
+  // Fungsi animasi yang berulang untuk merotasi objek
+  function animate() {
+    requestAnimationFrame(animate);  // Memanggil animasi untuk frame berikutnya
+    shape.rotation.x += 0.01;  // Rotasi objek sedikit di sumbu X
+    shape.rotation.y += 0.01;  // Rotasi objek sedikit di sumbu Y
+    renderer.render(scene, camera);  // Merender scene dengan kamera
+  }
+  
+  // Memulai animasi objek
+  animate();
+}
+
+  
+  // KUBUS
+  createShape("kubus-container", new THREE.BoxGeometry(2, 2, 2));
+  
+  // BALOK
+  createShape("balok-container", new THREE.BoxGeometry(2.8, 1.5, 1.5));
+  
+  // LIMAS
+  createShape("limas-container", new THREE.ConeGeometry(1.7, 2.5, 4), -0.4, Math.PI / 4);
+  
+  // PRISMA
+  createShape("prisma-container", new THREE.CylinderGeometry(1.3, 1.5, 1.3, 5), -0.4, Math.PI / 4);
+
+  // KERUCUT
+  createShape("kerucut-container", new THREE.ConeGeometry(1.5, 2, 30), -0.4, Math.PI / 4);
+
+  // TABUNG
+  createShape("tabung-container", new THREE.CylinderGeometry(1.3, 1.3, 2, 30), -0.4, Math.PI / 4);
+
+  // Bola
+  createShape("bola-container", new THREE.SphereGeometry(1.6, 10, 10), 0, Math.PI / 4);
+
+  //button penjelasan
+  function showInfo(text) {
+    document.getElementById("modalText").textContent = text;
+    document.getElementById("customModal").style.display = "flex";
+  }
+  
+  function closeModal() {
+    document.getElementById("customModal").style.display = "none";
+  }
+  
+  // menu evaluasi
+  // evaluasi kubus
+  function hitungNilaiKubus() {
+    const kunciJawaban = {
+      soal1_kubus: "b",
+      soal2_kubus: "c",
+      soal3_kubus: "c",
+      soal4_kubus: "c",
+      soal5_kubus: "a",
+      soal6_kubus: "b",
+      soal7_kubus: "d",
+      soal8_kubus: "a",
+      soal9_kubus: "a",
+      soal10_kubus: "c"
+    };
+    hitungNilaiDenganKunci(kunciJawaban, "kubus");
+  }
+  
+  function hitungNilaiDenganKunci(kunciJawaban, prefix) {
+    let skor = 0;
+    for (let i = 1; i <= 10; i++) {
+      const name = `soal${i}_${prefix}`;
+      const jawaban = document.querySelector(`input[name="${name}"]:checked`);
+      if (jawaban && jawaban.value === kunciJawaban[name]) {
+        skor++;
+      }
+    }
+    document.getElementById("hasil").innerText = `Nilai Kamu: ${skor * 10}`;
+  }
+  
+  // evaluasi balok
+  function hitungNilaiBalok() {
+    const kunciJawaban = {
+      soal1_balok: "b",
+      soal2_balok: "c",
+      soal3_balok: "c",
+      soal4_balok: "c",
+      soal5_balok: "a",
+      soal6_balok: "b",
+      soal7_balok: "d",
+      soal8_balok: "a",
+      soal9_balok: "a",
+      soal10_balok: "c"
+    };
+    hitungNilaiDenganKunci(kunciJawaban, "balok");
+  }
+  
+  function hitungNilaiDenganKunci(kunciJawaban, prefix) {
+    let skor = 0;
+    for (let i = 1; i <= 10; i++) {
+      const name = `soal${i}_${prefix}`;
+      const jawaban = document.querySelector(`input[name="${name}"]:checked`);
+      if (jawaban && jawaban.value === kunciJawaban[name]) {
+        skor++;
+      }
+    }
+    document.getElementById("hasil").innerText = `Nilai Kamu: ${skor * 10}`;
+  }
+  
+  // evaluasi limas
+
+  // evaluasi prisma
+
+  // evaluasi tabung
+
+  // evaluasi kerucut
+
+  // evaluasi bola

@@ -1,0 +1,44 @@
+html
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bangun Ruang 3D dengan Three.js</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        body { margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f0f0f0; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <script>
+        // 1. Buat scene (ruang untuk menampilkan objek 3D)
+        const scene = new THREE.Scene();
+
+        // 2. Buat kamera (penglihatan terhadap objek)
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 5; // Posisi kamera
+
+        // 3. Buat renderer (untuk menampilkan scene)
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // 4. Buat objek kubus
+        const geometry = new THREE.BoxGeometry(); // Bentuk kubus
+        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 }); // Warna hijau
+        const cube = new THREE.Mesh(geometry, material);
+        scene.add(cube); // Tambahkan kubus ke dalam scene
+
+        // 5. Animasi putaran kubus
+        function animate() {
+            requestAnimationFrame(animate);
+            cube.rotation.x += 0.01; // Rotasi sumbu X
+            cube.rotation.y += 0.01; // Rotasi sumbu Y
+            renderer.render(scene, camera);
+        }
+        animate();
+    </script>
+</body>
+</html>

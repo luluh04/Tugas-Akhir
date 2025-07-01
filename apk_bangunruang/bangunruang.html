@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sisi Bangun Ruang</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- CSS AOS -->
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  
+</head>
+
+<body>
+  <!-- Tombol Home (posisi atas kiri) -->
+  <a href="index4.html">
+    <div class="circle-button home">
+      <img id="audioBtn" src="assets/Home Page.png" alt="Tombol Home" />
+    </div>
+  </a>
+
+  <!-- Section Pertama -->
+  <div class="section section-top">
+    <div class="content content-right" data-aos="fade-up" data-aos-duration="1000">
+      <small>Bangun Ruang</small>
+      <h2>SISI DATAR</h2>
+      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum illum id aliquid quo facere quos fuga, obcaecati ea assumenda corrupti ipsa repudiandae nisi doloremque a, sunt reiciendis aut quod impedit?</p>
+    </div>
+  </div>
+
+  <!-- Sepeda di tengah garis antara section -->
+  <div class="bike-center"></div>
+
+  <!-- Tombol di antara -->
+  <div class="circle-button next between" data-aos="zoom-in" data-aos-duration="800">
+    <img src="assets/Sort Right.png" alt="Next" />
+  </div>
+
+  <!-- Section Kedua -->
+  <div class="section section-bottom">
+    <div class="content content-left" data-aos="fade-up" data-aos-duration="1000">
+      <small>Bangun Ruang</small>
+      <h2>SISI LENGKUNG</h2>
+      <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nostrum voluptate, dolorum quibusdam velit, itaque non, soluta commodi hic aliquid incidunt repellat? Natus fuga repellat inventore ducimus veniam amet quod vitae?</p>
+    </div>
+  </div>
+
+  <!-- Tombol Next di bawah kiri -->
+  <div class="circle-button next bottom">
+    <img src="assets/Sort Right.png" alt="Next">
+  </div>
+
+  <!-- Script AOS -->
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init();
+  </script>
+</body>
+<script>
+  function animateTextByLetter(elementId, delay = 100) {
+    const el = document.getElementById(elementId);
+    const text = el.innerText;
+    el.innerText = "";
+    [...text].forEach((char, i) => {
+      const span = document.createElement("span");
+      span.textContent = char;
+      span.style.opacity = "0";
+      span.style.transition = `opacity 0.3s ease ${i * delay}ms`;
+      el.appendChild(span);
+      setTimeout(() => span.style.opacity = "1", i * delay);
+    });
+  }
+
+  // sepeda
+  window.addEventListener("DOMContentLoaded", () => {
+    animateTextByLetter("judul1", 80); // untuk ID judul1
+  });
+
+  function animateBike(id, direction) {
+  const el = document.getElementById(id);
+  if (direction === 'left') {
+    el.classList.add('animate-left');
+  } 
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  // Jalankan animasi sepeda
+  setTimeout(() => {
+    animateBike("bikeLeftTop", "left");
+  }, 500);
+});
+
+</script>
+
+</html>
