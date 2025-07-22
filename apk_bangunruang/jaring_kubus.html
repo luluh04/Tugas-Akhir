@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jaring Kubus Interaktif 3D</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background-color: #f0f0f0;
+    }
+    canvas {
+      display: block;
+    }
+    #slider-container {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fff;
+      padding: 10px 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      z-index: 10;
+    }
+    #slider {
+      width: 300px;
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+  <div id="slider-container">
+    <label for="slider">Geser untuk Lipat / Buka</label><br>
+    <input type="range" id="slider" min="0" max="1" step="0.01" value="0" />
+  </div>
+  <script>
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
+    camera.position.set(4, 4, 8);
+    camera.lookAt(0, 0, 0);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    const material = new THREE.MeshNormalMaterial({ side: THREE.DoubleSide });
+    const boxSize = 1;
+    const faces = [];
+
+    for (let i = 0; i < 6; i++) {
+      const geometry = new THREE.PlaneGeometry(boxSize, boxSize);
+      const mesh = new THREE.Mesh(geometry, material);
+      faces.push(mesh);
+    }
+
+    const pivots = faces.map(face => {
+      const pivot = new THREE.Object3D();
+      scene.add(pivot);
+      pivot.add(face);
+      return pivot;
+    });
+
+    function updateFold(progress) {
+      const transforms = [
+        { pos: [0, 0, 0], axis: null, angle: 0 }, // tengah
+        { pos: [-0.5, 0, 0], axis: [0, 1, 0], angle: Math.PI / 2 }, // kiri
+        { pos: [0.5, 0, 0], axis: [0, 1, 0], angle: -Math.PI / 2 }, // kanan
+        { pos: [0, 0.5, 0], axis: [1, 0, 0], angle: -Math.PI / 2 }, // atas
+        { pos: [0, -0.5, 0], axis: [1, 0, 0], angle: Math.PI / 2 }, // bawah
+        { pos: [0, 0, -0.5], axis: [0, 1, 0], angle: Math.PI }, // belakang
+      ];
+
+      for (let i = 0; i < faces.length; i++) {
+        const { pos, axis, angle } = transforms[i];
+        const pivot = pivots[i];
+        pivot.position.set(...pos);
+        pivot.rotation.set(0, 0, 0);
+        if (axis) {
+          pivot.rotateOnAxis(new THREE.Vector3(...axis), angle * progress);
+        }
+      }
+    }
+
+    updateFold(0);
+
+    document.getElementById('slider').addEventListener('input', (e) => {
+      const progress = parseFloat(e.target.value);
+      updateFold(progress);
+    });
+
+    function animate() {
+      requestAnimationFrame(animate);
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>

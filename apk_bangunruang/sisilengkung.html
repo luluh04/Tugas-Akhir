@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sisi Lengkung</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
+
+</head>
+<body>
+  <!-- Header seperti gambar -->
+    <div class="header-bar">
+      <a href="bangunruang.html">
+      <div class="circle-cut">
+        <img src="assets/Undo.png" alt="Back">
+      </div>
+       </a>
+</div>
+
+  <!-- Judul -->
+  <div class="section-list">
+    <h2 class="judul">SISI LENGKUNG</h2>
+
+<!-- Container Flex -->
+    <div class="lengkung-container">
+
+<!-- TABUNG -->
+<div class="item tabung">
+  <div class="circle-button play">
+    <img src="assets/Sort Right.png" alt="Play" />
+  </div>
+  <div class="vertical-label">TABUNG</div>
+  <div id="tabung-container" class="canvas-bangun-lengkung"></div>
+  <div class="description">
+    <h3>Tabung</h3>
+    <p>Tabung memiliki dua sisi datar berbentuk lingkaran dan satu sisi lengkung. Termasuk bangun ruang sisi lengkung karena salah satu sisinya melengkung.</p>
+  </div>
+</div>
+
+<!-- KERUCUT -->
+<div class="item kerucut">
+  <div class="circle-button play">
+    <img src="assets/Sort Right.png" alt="Play" />
+  </div>
+  <div class="vertical-label">KERUCUT</div>
+  <div id="kerucut-container" class="canvas-bangun-lengkung"></div>
+  <div class="description">
+    <h3>Kerucut</h3>
+    <p>Kerucut memiliki alas datar berbentuk lingkaran dan satu sisi lengkung yang menyatu pada titik puncak. Termasuk bangun ruang sisi lengkung.</p>
+  </div>
+</div>
+
+<!-- BOLA -->
+<div class="item bola">
+  <div class="circle-button play">
+    <img src="assets/Sort Right.png" alt="Play" />
+  </div>
+  <div class="vertical-label">BOLA</div>
+  <div id="bola-container" class="canvas-bangun-lengkung"></div>
+  <div class="description">
+    <h3>Bola</h3>
+    <p>Bola tidak memiliki sisi datar, seluruh permukaannya berbentuk lengkung. Termasuk bangun ruang sisi lengkung.</p>
+  </div>
+</div>
+
+
+    </div>
+  </div>
+
+
+
+
+<script>
+function init3DLoncatCanvas(containerId, geometry, colors) {
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+  const container = document.getElementById(containerId);
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  container.appendChild(renderer.domElement);
+
+  // Pencahayaan
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+  directionalLight.position.set(1, 1, 2);
+  scene.add(ambientLight, directionalLight);
+
+  // Bahan material transparan dengan warna berbeda
+  const materials = colors.map(color => new THREE.MeshStandardMaterial({
+    color: color,
+    transparent: true,
+    opacity: 0.5,
+    side: THREE.DoubleSide
+  }));
+
+  const mesh = new THREE.Mesh(geometry, materials);
+  scene.add(mesh);
+
+  // Garis tepi
+  const edges = new THREE.EdgesGeometry(geometry);
+  const lineMaterial = new THREE.LineBasicMaterial({ color: 0x000000 });
+  const wireframe = new THREE.LineSegments(edges, lineMaterial);
+  mesh.add(wireframe);
+
+  camera.position.z = 2.8;
+
+  // Animasi melayang naik turun
+  let time = Math.random() * 1000;
+  function animate() {
+    requestAnimationFrame(animate);
+    time += 0.05;
+    mesh.position.y = Math.abs(Math.sin(time)) * 0.2;
+    renderer.render(scene, camera);
+  }
+  animate();
+}
+
+// ✅ TABUNG
+init3DLoncatCanvas("tabung-container", new THREE.CylinderGeometry(0.5, 0.5, 1.2, 32), [
+  0xffc107, // sisi samping
+  0x03a9f4, // alas
+  0x03a9f4  // tutup
+]);
+
+// ✅ KERUCUT
+init3DLoncatCanvas("kerucut-container", new THREE.ConeGeometry(0.6, 1.2, 32), [
+  0x8bc34a, // sisi kerucut
+  0xff5722  // alas
+]);
+
+// ✅ BOLA
+init3DLoncatCanvas("bola-container", new THREE.SphereGeometry(0.7, 32, 32), [
+  0x9c27b0 // satu warna untuk seluruh permukaan
+]);
+</script>
+
+
+
+
+
+
+</body>
+</html>

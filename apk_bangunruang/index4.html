@@ -12,65 +12,69 @@
   <!-- Three.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
-<body>
-  <!-- nyoba -->
+<body class="kubus">
   <div class="hero-section">
-    <div class="grid-bg top"></div> <!-- Grid atas, akan dimirror -->
-    <div class="hero-content">
-      <h3>Aplikasi Alat Peraga Interaktif</h3>
-      <h1>BANGUN RUANG</h1>
-      <h2>MTS Bany Tsamin</h2>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit explicabo aspernatur esse, eius officia, aliquid modi unde porro et facere quibusdam, sunt laudantium! Ullam, unde! A eligendi porro natus id!</p>
-    </div>
-    <div class="grid-bg bottom"></div> <!-- Grid bawah --> 
-  </div>
+    <!-- Grid Background -->
+    <div class="grid-bg top"></div>
 
-<!-- Gambar alat tulis & tombol audio -->
-<div class="image-stack">
+    <div class="hero-content">
+      <!-- animasi karakter -->
+       <div class="komentar-box">
+          <div class="karakter"></div>
+          <div class="teks-komentar" id="teksKomentar"></div>
+        </div>
+
+        <!-- Header Bar Gabungan Nama dan Audio -->
+        <div class="header-audio-bar">
+  <h1 class="school-name">MTS Bany Tsamin</h1>
   <div class="audio-box">
-    <img src="assets/square.png" alt="Tombol Audio" />
+    <img src="assets/square.png" alt="Background Audio Box" />
     <button class="audio-button" onclick="playAudio()">
       <img id="audioBtn" src="assets/Speaker.png" alt="Tombol Audio" />
     </button>
   </div>
 </div>
 
-<!-- Audio -->
-<audio id="myAudio" loop>
-  <source src="https://cdn.pixabay.com/audio/2022/10/30/audio_9a3b257b1b.mp3" type="audio/mpeg">
-  Browser tidak mendukung audio.
-</audio>
 
 
-  <!-- Lingkaran Latar -->
-<div class="background-circles">
-  <div class="circle circle1"></div>
-  <div class="circle circle2"></div>
-  <div class="circle circle3"></div>
-</div>
+      <!-- Audio Background -->
+      <audio id="myAudio" loop>
+        <source src="https://cdn.pixabay.com/audio/2022/10/30/audio_9a3b257b1b.mp3" type="audio/mpeg">
+        Browser tidak mendukung pemutaran audio.
+      </audio>
 
-<!-- Konten di Tengah Lingkaran -->
-<div class="centered-content">
-  <div class="shape-wrapper">
-    <div id="kubus-container" class="shape-canvas"></div>
-    <div class="shadow-circle"></div>
+      <!-- Lingkaran Background -->
+      <div class="background-circles">
+        <div class="circle circle1"></div>
+        <div class="circle circle2"></div>
+        <div class="circle circle3"></div>
+      </div>
+
+      <!-- Konten Utama -->
+      <div class="centered-content">
+        <div class="shape-wrapper">
+          <div id="kubus-container" class="shape-canvas"></div>
+          <div class="shadow-circle"></div>
+        </div>
+
+        <!-- Tooltip Info -->
+        <div id="tooltip"></div>
+
+        <!-- Navigasi -->
+        <div class="buttons">
+          <button onclick="location.href='bangunruang.html'">Simulator Bangun Ruang</button>
+          <button onclick="location.href='evaluasi.html'">Evaluasi Umum</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-bg bottom"></div>
   </div>
-
-  <!-- Tooltip -->
-  <div id="tooltip"></div>
-
-  <!-- Tombol Navigasi -->
-  <div class="buttons">
-    <button onclick="location.href='bangunruang.html'">Simulator Bangun Ruang</button>
-    <button onclick="location.href='evaluasi.html'">Evaluasi Umum</button>
-  </div>
-</div>
-
 
   <!-- Icon FontAwesome -->
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
-  <!-- JS File kamu -->
+  <!-- JS Utama -->
   <script src="script.js"></script>
 </body>
 </html>

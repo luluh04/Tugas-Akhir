@@ -6,58 +6,165 @@
   <title>Sisi Datar</title>
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
+
 </head>
 <body>
-
   <!-- Header seperti gambar -->
-<div class="header-bar">
-  <div class="back-circle">
-    <img src="assets/Undo.png" alt="Kembali">
-  </div>
-  <span class="school-name">MTS Bany Tsamin</span>
+    <div class="header-bar">
+      <a href="bangunruang.html">
+      <div class="circle-cut">
+        <img src="assets/Undo.png" alt="Back">
+      </div>
+       </a>
 </div>
 
   <!-- Judul -->
   <div class="section-list">
     <h2 class="judul">SISI DATAR</h2>
 
-    <!-- Item 1: Kubus -->
-    <div class="item">
-      <div class="circle-button play">
-        <img src="assets/play.png" alt="Play">
-      </div>
-      <div class="vertical-label">KUBUS</div>
-      <img src="assets/kubus.png" alt="Kubus" class="shape-img">
-    </div>
+<!-- Container Flex -->
+    <div class="datar-container">
 
-    <!-- Item 2: Balok -->
-    <div class="item">
-      <div class="circle-button play">
-        <img src="assets/play.png" alt="Play">
+      <!-- KUBUS -->
+      <div class="item kubus">
+        <a href="kubus.html">
+        <div class="circle-button play">
+          <img src="assets/Sort Right.png" alt="Play" />
+        </div>
+        </a>
+        <div class="vertical-label">KUBUS</div>
+        <div id="kubus-container" class="canvas-bangun-datar"></div>
+        <div class="description">
+          <h3>Kubus</h3>
+          <p>Kubus memiliki 6 sisi berbentuk persegi yang sama besar. Termasuk bangun ruang sisi datar karena seluruh sisinya berbentuk bidang datar.</p>
+        </div>
       </div>
-      <div class="vertical-label">BALOK</div>
-      <img src="assets/balok.png" alt="Balok" class="shape-img">
-    </div>
 
-    <!-- Item 3: Prisma -->
-    <div class="item">
-      <div class="circle-button play">
-        <img src="assets/play.png" alt="Play">
+      <!-- BALOK -->
+      <div class="item balok">
+        <a href="balok.html">
+        <div class="circle-button play">
+          <img src="assets/Sort Right.png" alt="Play" />
+        </div>
+        </a>
+        <div class="vertical-label">BALOK</div>
+        <div id="balok-container" class="canvas-bangun-datar"></div>
+        <div class="description">
+          <h3>Balok</h3>
+          <p>Balok memiliki 6 sisi berupa persegi dan persegi panjang. Termasuk bangun ruang sisi datar karena semua sisinya berbentuk bidang datar.</p>
+        </div>
       </div>
-      <div class="vertical-label">PRISMA</div>
-      <img src="assets/prisma.png" alt="Prisma" class="shape-img">
-    </div>
 
-    <!-- Item 4: Limas -->
-    <div class="item">
-      <div class="circle-button play">
-        <img src="assets/play.png" alt="Play">
+      <!-- PRISMA -->
+      <div class="item prisma">
+        <div class="circle-button play">
+          <img src="assets/Sort Right.png" alt="Play" />
+        </div>
+        <div class="vertical-label">PRISMA</div>
+        <div id="prisma-container" class="canvas-bangun-datar"></div>
+        <div class="description">
+          <h3>Prisma</h3>
+          <p>Prisma memiliki alas dan tutup berbentuk segi-n dengan sisi tegak berbentuk persegi panjang. Semua permukaannya datar.</p>
+        </div>
       </div>
-      <div class="vertical-label">LIMAS</div>
-      <img src="assets/limas.png" alt="Limas" class="shape-img">
-    </div>
 
+      <!-- LIMAS -->
+      <div class="item limas">
+        <div class="circle-button play">
+          <img src="assets/Sort Right.png" alt="Play" />
+        </div>
+        <div class="vertical-label">LIMAS</div>
+        <div id="limas-container" class="canvas-bangun-datar"></div>
+        <div class="description">
+          <h3>Limas</h3>
+          <p>Limas memiliki alas berbentuk segi-n dan sisi tegak berbentuk segitiga. Disebut sisi datar karena permukaannya bidang datar.</p>
+        </div>
+      </div>
+
+    </div>
   </div>
+
+
+
+
+<script>
+function init3DLoncatCanvas(containerId, geometry, colors) {
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+  const container = document.getElementById(containerId);
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  container.appendChild(renderer.domElement);
+
+  // Pencahayaan
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+  directionalLight.position.set(1, 1, 2);
+  scene.add(ambientLight, directionalLight);
+
+  // Bahan material transparan + sisi berbeda
+  const materials = colors.map(color => new THREE.MeshStandardMaterial({
+    color: color,
+    transparent: true,
+    opacity: 0.4,
+    side: THREE.DoubleSide
+  }));
+
+  const mesh = new THREE.Mesh(geometry, materials);
+  scene.add(mesh);
+
+  // Tambahkan garis tepi (wireframe)
+  const edges = new THREE.EdgesGeometry(geometry);
+  const lineMaterial = new THREE.LineBasicMaterial({ color: 0x000000 }); // hitam
+  const wireframe = new THREE.LineSegments(edges, lineMaterial);
+  mesh.add(wireframe);
+
+  camera.position.z = 2.5;
+
+  // Animasi naik turun
+  let time = Math.random() * 1000;
+  function animate() {
+    requestAnimationFrame(animate);
+    time += 0.05;
+    mesh.position.y = Math.abs(Math.sin(time)) * 0.2;
+    renderer.render(scene, camera);
+  }
+  animate();
+}
+
+// ✅ Panggil fungsi untuk setiap bangun ruang
+init3DLoncatCanvas("kubus-container", new THREE.BoxGeometry(1, 1, 1), [
+  0xffc107, // kuning
+  0xe91e63, // pink
+  0x03a9f4, // biru
+  0x4caf50, // hijau
+  0x9c27b0, // ungu
+  0xff5722  // oranye
+]);
+
+init3DLoncatCanvas("balok-container", new THREE.BoxGeometry(1.4, 1, 0.6), [
+  0xffeb3b, // kuning
+  0xff9800, // oranye
+  0x009688, // teal
+  0x3f51b5, // indigo
+  0xcddc39, // lime
+  0xf44336  // merah
+]);
+
+init3DLoncatCanvas("prisma-container", new THREE.CylinderGeometry(0.5, 0.5, 1, 6), [
+  0x4caf50, 0x2196f3, 0xff5722, 0xffc107, 0x9c27b0, 0x00bcd4
+]);
+
+init3DLoncatCanvas("limas-container", new THREE.ConeGeometry(0.8, 1.2, 4), [
+  0xe91e63, 0x3f51b5, 0x8bc34a, 0xff9800, 0x00bcd4
+]);
+</script>
+
+
+
+
 
 </body>
 </html>
