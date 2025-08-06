@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>2 Prisma Interaktif</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+  <!-- urutannya harus seperti ini -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body class="prisma">
+<button id="btn-kembali" onclick="window.location.href='sisidatar.html'">←</button>
+<audio id="myAudio" src="assets/cheerful-joyful-playful-music-381499.mp3" autoplay loop></audio>
+  <!-- Tooltip -->
+  <div id="tooltip">
+    <div class="tooltip-title">Sifat-sifat Prisma</div> 
+    <div>
+      <ul>
+        <li>Memiliki 5 sisi, terdiri dari 2 sisi segitiga dan 3 sisi persegi panjang</li>
+        <li>Memiliki 9 rusuk (3 pada setiap alas segitiga dan 3 rusuk tegak)</li>
+        <li>Memiliki 6 titik sudut</li>
+        <li>Dua alas berbentuk segitiga yang kongruen dan sejajar</li>
+        <li>Sisi tegaknya berbentuk persegi panjang dan tegak lurus pada alas (jika prisma tegak)</li>
+        <li>Volume = Luas Alas × Tinggi Prisma</li>
+        <li>Luas Permukaan = (2 × Luas Alas) + (Keliling Alas × Tinggi Prisma)</li>
+      </ul>
+    </div>
+  </div>
+  <div id="tooltip-drag" class="tooltip"></div>
+ 
+
+  <!-- Kontainer -->
+  <div class="container-prisma">
+    <div id="container-prisma1"></div>
+    <div id="container-prisma2"></div>
+    <div id="geogebra-container" style="display: none; margin-top: 20px;">
+  <iframe 
+    src="https://www.geogebra.org/material/iframe/id/yrke3fgn/width/800/height/600/border/888888/rc/false/ai/false/sdz/true/smb/false/stb/false" 
+    width="500" 
+    height="500" 
+    style="border: 0;">
+  </iframe>
+</div>
+<div id="container-prisma3">
+  <div id="canvas-prisma3"></div>
+
+  <form id="hasil-perhitungan-prisma3" style="color: black;">
+    <div class="form-group">
+      <label for="volume-prisma3">Volume:</label>
+      <p id="volume-prisma3" class="readonly-output">-</p>
+    </div>
+    <div class="form-group">
+      <label for="luas-prisma3">Luas Alas Segilima:</label>
+      <p id="luas-prisma3" class="readonly-output">-</p>
+    </div>
+  </form>
+</div>
+
+  </div>
+
+  <!-- Tombol reset di bawah -->
+<div class="bottom-buttons">
+  <button id="explain-button">Penjelasan</button>
+  <button id="guide-button">Panduan</button>
+  <button onclick="tampilkanGeoGebra()">Tampilkan Pola Prisma</button>
+  <button onclick="tampilkanPrisma(1)">Tampilkan Prisma 1</button>
+  <button onclick="tampilkanPrisma(2)">Tampilkan Prisma 2</button>
+  <button onclick="resetSisi()">Reset Prisma 2</button>
+  <div>
+  <input type="number" id="input-sisi-prisma3" placeholder="Sisi alas segilima (cm)">
+<input type="number" id="input-tinggi-prisma3" placeholder="Tinggi prisma (cm)">
+<button onclick="tampilkanPrisma(3)">Tampilkan Prisma 3</button>
+
+<!-- <div id="hasil-perhitungan-kubus3" style="color: black;"></div> -->
+</div>
+</div>
+<!-- Modal penjelasan -->
+<div id="modal-explain" class="modal">
+  <div class="modal-content">
+    <span class="close" data-close="modal-explain">&times;</span>
+
+    <!-- Karakter animasi -->
+    <!-- <div class="character">
+      <img src="assets/cycling-pyoraily.gif" alt="Karakter" />
+    </div> -->
+
+    <!-- Teks penjelasan -->
+    <div class="penjelasan-teks">
+      <h2>Penjelasan Prisma</h2>
+      <p>
+  Prisma adalah bangun ruang tiga dimensi yang memiliki dua sisi sejajar dan kongruen (sama bentuk dan ukuran) yang disebut <strong>sisi alas dan sisi atas</strong>, serta sisi tegak berupa <strong>persegi panjang</strong>. 
+  Bentuk alas menentukan jenis prisma.
+</p>
+
+<p><strong>Ciri-ciri Prisma:</strong></p>
+<ul>
+  <li>Memiliki dua sisi sejajar dan kongruen (alas dan tutup).</li>
+  <li>Jumlah sisi, rusuk, dan titik sudut tergantung pada bentuk alasnya.</li>
+  <li>Sisi-sisi tegaknya berbentuk persegi panjang.</li>
+  <li>Semua penampang tegak sejajar alas berbentuk dan berukuran sama.</li>
+</ul>
+
+<p><strong>Rumus Umum:</strong></p>
+<ul>
+  <li><strong>Volume</strong> = Luas alas × tinggi</li>
+  <li><strong>Luas Permukaan</strong> = 2 × Luas alas + Keliling alas × tinggi</li>
+</ul>
+<p>
+  Di mana tinggi adalah jarak tegak antara alas dan tutup prisma.
+</p>
+
+<p><strong>Macam-macam Prisma Berdasarkan Bentuk Alas:</strong></p>
+<ul>
+  <li><strong>Prisma segitiga</strong> – alas berbentuk segitiga</li>
+  <li><strong>Prisma segi empat</strong> (termasuk balok dan kubus)</li>
+  <li><strong>Prisma segi lima</strong> – alas berbentuk segi lima</li>
+  <li><strong>Prisma segi enam</strong> – alas berbentuk segi enam</li>
+  <li><strong>Prisma tak beraturan</strong> – alas berbentuk poligon tak beraturan</li>
+</ul>
+
+<p><strong>Contoh Penerapan Prisma dalam Kehidupan Sehari-hari:</strong></p>
+<ul>
+  <li>Atap rumah berbentuk prisma segitiga.</li>
+  <li>Kemasan makanan berbentuk prisma segi empat atau segi enam.</li>
+  <li>Tenda segitiga (prisma segitiga).</li>
+  <li>Bangunan atau struktur jembatan dengan bentuk prisma.</li>
+</ul>
+
+    </div>
+  </div>
+</div>
+
+<!-- Modal Panduan -->
+<div id="modal-guide" class="modal">
+  <div class="modal-content">
+    <span class="close" data-close="modal-guide">&times;</span>
+    <h2>Panduan Penggunaan</h2>
+    <ol>
+  <li>Klik menu <strong>Tampilkan Prisma 1 dan 2</strong> untuk menampilkan kedua prisma dalam tampilan interaktif.</li>
+
+  <li><strong>Prisma 1</strong> dapat diputar dengan klik dan drag menggunakan mouse atau touchpad untuk melihat bentuk prisma dari berbagai sudut pandang.</li>
+
+  <li>Arahkan kursor ke sisi-sisi Prisma 1 untuk melihat tooltip yang menampilkan informasi seperti panjang sisi alas, tinggi prisma, dan bentuk sisi tegaknya.</li>
+
+  <li><strong>Prisma 2</strong> terdiri dari sisi alas, tutup, dan sisi-sisi tegak yang dapat di-drag atau digeser. Pengguna dapat menyusun ulang bagian-bagian ini untuk memahami jaring-jaring prisma secara visual.</li>
+
+  <li>Gunakan tombol <strong>Reset Prisma 2</strong> untuk mengembalikan semua bagian Prisma 2 ke posisi awal sebelum disusun ulang.</li>
+
+  <li>Masukkan nilai pada kolom <strong>sisi alas</strong> dan <strong>tinggi</strong> untuk menampilkan <strong>Prisma 3</strong> sesuai ukuran yang diinginkan. Prisma akan ditampilkan berdasarkan bentuk alas dan tinggi yang dimasukkan oleh pengguna.</li>
+
+  <li>Klik tombol <strong>Penjelasan</strong> untuk membaca informasi umum tentang prisma, seperti ciri-ciri prisma, macam-macam prisma berdasarkan bentuk alas, rumus volume dan luas permukaan, serta contoh penerapan dalam kehidupan sehari-hari.</li>
+
+  <li>Klik tombol <strong>Pola Prisma</strong> untuk menampilkan <em>jaring-jaring prisma</em> yang terdiri dari dua sisi alas dan tutup (berbentuk segi-n) serta sisi-sisi tegak berbentuk persegi panjang. Jaring ini dapat di-drag atau digeser menggunakan slider untuk membantu memahami bagaimana prisma terbentuk dari bagian-bagiannya.</li>
+</ol>
+  </div>
+</div>
+<script>
+const tooltip = document.getElementById("tooltip");
+const tooltipDrag = document.getElementById("tooltip-drag");
+// prisma 1
+const container1 = document.getElementById("container-prisma1");
+const scene1 = new THREE.Scene();
+const camera1 = new THREE.PerspectiveCamera(
+  75,
+  container1.clientWidth / container1.clientHeight,
+  0.1,
+  1000
+);
+const renderer1 = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer1.setClearColor(0x000000, 0);
+container1.appendChild(renderer1.domElement);
+
+function resizeRenderer() {
+  const width = container1.clientWidth;
+  const height = container1.clientHeight;
+  renderer1.setSize(width, height);
+  camera1.aspect = width / height;
+  camera1.updateProjectionMatrix();
+}
+
+resizeRenderer(); // panggil saat awal
+window.addEventListener('resize', resizeRenderer);
+
+controls1 = new THREE.OrbitControls(camera1, renderer1.domElement);
+controls1.enableDamping = true;
+camera1.position.set(2, 2, 2); // (bebas sesuai posisi terbaik untuk prisma)
+camera1.lookAt(0, 0, 0);       // opsional, supaya kamera langsung menghadap objek
+controls1.update(); // dipanggil setelah controls1 dibuat
+
+function createNumberTexture(number, textColor = "#ffffff") {
+  const size = 256;
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext("2d");
+
+  ctx.fillStyle = textColor;
+  ctx.font = "bold 120px Arial";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(number.toString(), size / 2, size / 2);
+
+  return new THREE.CanvasTexture(canvas);
+}
+
+// Fungsi membuat segilima
+const cubeSides = []; // Tetap pakai nama cubeSides agar bagian lain tidak terganggu
+const radius = 1;
+const height = 1.5;
+const bottomY = -height / 2;
+const topY = height / 2;
+
+const sideColors = [0xff0000, 0xffff00, 0x0000ff, 0x00ff00, 0x800080, 0xffa500, 0x00ffff];
+const faceNumbers = [1, 2, 3, 4, 5, 6, 7]; // 7 sisi: 2 alas + 5 sisi tegak
+
+// === BUAT ALAS DAN TUTUP (2 sisi segilima) ===
+for (let j = 0; j < 2; j++) {
+  const shape = new THREE.Shape();
+  for (let i = 0; i < 5; i++) {
+    const angle = (i / 5) * Math.PI * 2 - Math.PI / 2;
+    const x = radius * Math.cos(angle);
+    const y = radius * Math.sin(angle);
+    if (i === 0) shape.moveTo(x, y);
+    else shape.lineTo(x, y);
+  }
+  shape.closePath();
+
+  const geometry = new THREE.ShapeGeometry(shape);
+  const material = new THREE.MeshBasicMaterial({
+    color: sideColors[j],
+    transparent: true,
+    opacity: 0.6,
+    side: THREE.DoubleSide
+  });
+
+  const mesh = new THREE.Mesh(geometry, material);
+  mesh.rotation.x = Math.PI / 2;
+  mesh.position.y = j === 0 ? topY : bottomY;
+  mesh.userData = { type: "face", info: `Sisi ${faceNumbers[j]}` };
+
+  // Nomor sisi
+  const numberTexture = createNumberTexture(faceNumbers[j], "#ffffff", "#000000");
+  const numberMaterial = new THREE.MeshBasicMaterial({ map: numberTexture, transparent: true });
+  const numberPlane = new THREE.Mesh(new THREE.PlaneGeometry(0.4, 0.4), numberMaterial);
+  numberPlane.position.set(0, 0, 0.01); // sedikit naik dari permukaan
+numberPlane.rotation.set(0, 0, 0); // agar tetap horizontal dalam koordinat lokal alas/tutup
+  mesh.add(numberPlane);
+
+  scene1.add(mesh);
+  cubeSides.push(mesh);
+}
+
+// === BUAT 5 SISI TEGAK (5 persegi panjang) ===
+for (let i = 0; i < 5; i++) {
+  const angle1 = (i / 5) * Math.PI * 2 - Math.PI / 2;
+  const angle2 = ((i + 1) / 5) * Math.PI * 2 - Math.PI / 2;
+
+  const x1 = radius * Math.cos(angle1);
+  const z1 = radius * Math.sin(angle1);
+  const x2 = radius * Math.cos(angle2);
+  const z2 = radius * Math.sin(angle2);
+
+  const dx = x2 - x1;
+  const dz = z2 - z1;
+  const length = Math.sqrt(dx * dx + dz * dz);
+
+  const geometry = new THREE.PlaneGeometry(length, height);
+  const material = new THREE.MeshBasicMaterial({
+    color: sideColors[i + 2],
+    transparent: true,
+    opacity: 0.6,
+    side: THREE.DoubleSide
+  });
+
+  const plane = new THREE.Mesh(geometry, material);
+  plane.position.set((x1 + x2) / 2, 0, (z1 + z2) / 2);
+  plane.rotation.y = -Math.atan2(dz, dx);
+  plane.userData = { type: "face", info: `Sisi ${faceNumbers[i + 2]}` };
+
+// Nomor sisi
+const number = faceNumbers[i + 2];
+const numberTexture = createNumberTexture(number, "#ffffff", "#000000");
+const numberMaterial= new THREE.MeshBasicMaterial({
+  map: numberTexture,
+  transparent: true,
+  side: THREE.DoubleSide,
+});
+const numberPlane = new THREE.Mesh(new THREE.PlaneGeometry(0.4, 0.4), numberMaterial);
+
+const offset = 0.001; // Offset sangat kecil agar benar-benar menempel di permukaan
+
+if ([3, 4, 5, 6, 7].includes(number)) {
+  // Sisi-sisi selimut yang tegak
+  numberPlane.position.set(0, 0, -0.1); // Geser sedikit ke depan
+  numberPlane.rotation.y = -Math.PI;   // Hadap depan
+} else if (number === 1) {
+  const numberPlaneTop = numberPlane.clone();
+  numberPlaneTop.position.set(0, 0.21, 0);
+  numberPlaneTop.rotation.set(-Math.PI / 2, 0, 0);
+
+  const numberPlaneBottom = numberPlane.clone();
+  numberPlaneBottom.position.set(0, 0.19, 0);
+  numberPlaneBottom.rotation.set(Math.PI / 2, 0, 0);
+
+  mesh.add(numberPlaneTop);
+  mesh.add(numberPlaneBottom);
+}
+ else if (number === 2) {
+  numberPlane.position.set(0, 0.01, 0);
+  numberPlane.rotation.set(0, 0, 0); // horizontal hadap atas
+}
+
+
+
+
+
+
+
+// Tambahkan ke sisi plane
+plane.add(numberPlane);
+scene1.add(plane);
+cubeSides.push(plane);
+
+}
+
+// === TITIK SUDUT PRISMA ===
+// Titik sudut
+const points = [];
+const segments = 5;
+
+for (let i = 0; i < segments; i++) {
+  const angle = (i / segments) * Math.PI * 2 - Math.PI / 2;
+  const x = radius * Math.cos(angle);
+  const z = radius * Math.sin(angle); // pakai z, bukan y
+  points.push([x, -height / 2, z]); // alas (y = bawah)
+}
+
+for (let i = 0; i < segments; i++) {
+  const angle = (i / segments) * Math.PI * 2 - Math.PI / 2;
+  const x = radius * Math.cos(angle);
+  const z = radius * Math.sin(angle);
+  points.push([x, height / 2, z]); // atas (y = atas)
+}
+
+// Buat bola titik sudut
+const spheres = [];
+points.forEach((p, i) => {
+  const s = new THREE.Mesh(
+    new THREE.SphereGeometry(0.05, 16, 16),
+    new THREE.MeshBasicMaterial({ color: "purple" })
+  );
+  s.position.set(...p);
+  s.userData = { type: "vertex", info: `Titik Sudut ${i + 1}` };
+  scene1.add(s);
+  spheres.push(s);
+});
+
+// === RUSUK PRISMA ===
+const edgeMaterial = new THREE.LineBasicMaterial({ color: 0xff0000 });
+const edgeGeometry = new THREE.BufferGeometry();
+const edgeVertices = [];
+
+for (let i = 0; i < 5; i++) {
+  edgeVertices.push(...points[i], ...points[(i + 1) % 5]); // alas
+  edgeVertices.push(...points[i + 5], ...points[((i + 1) % 5) + 5]); // atas
+  edgeVertices.push(...points[i], ...points[i + 5]); // tegak
+}
+
+edgeGeometry.setAttribute("position", new THREE.Float32BufferAttribute(edgeVertices, 3));
+const edgeLines = new THREE.LineSegments(edgeGeometry, edgeMaterial);
+edgeLines.userData = { type: "edge", info: "Rusuk (Edge)" };
+scene1.add(edgeLines);
+
+
+
+
+// Fungsi tooltip
+const tooltip1 = document.getElementById("tooltip");
+const raycaster1 = new THREE.Raycaster();
+const mouse1 = new THREE.Vector2();
+
+function onMouseMove1(event) {
+  const bounds = renderer1.domElement.getBoundingClientRect();
+  mouse1.x = ((event.clientX - bounds.left) / bounds.width) * 2 - 1;
+  mouse1.y = -((event.clientY - bounds.top) / bounds.height) * 2 + 1;
+
+  raycaster1.setFromCamera(mouse1, camera1);
+  const intersects = raycaster1.intersectObjects(cubeSides.concat(spheres), true);
+
+  if (intersects.length > 0) {
+    tooltip1.style.display = "block";
+    tooltip1.style.left = event.clientX + 10 + "px";
+    tooltip1.style.top = event.clientY + 10 + "px";
+    tooltip1.innerHTML = `
+      <div class="tooltip-title">🔷 Prisma Segilima</div>
+      <ul>
+        <li>Memiliki 7 sisi (2 segilima dan 5 persegi panjang)</li>
+        <li>Memiliki 10 titik sudut (lingkaran ungu)</li>
+        <li>Memiliki 15 rusuk (garis merah)</li>
+        <li>Alas dan tutup berbentuk segilima</li>
+        <li>Sisi tegaknya berbentuk persegi panjang</li>
+      </ul>
+    `;
+  } else {
+    tooltip1.style.display = "none";
+  }
+}
+
+window.addEventListener("mousemove", onMouseMove1);
+
+// Fungsi angka
+function createNumberTexture(number, textColor = "#ffffff") {
+  const size = 256;
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext("2d");
+
+  ctx.fillStyle = textColor;
+  ctx.font = "bold 120px Arial";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(number.toString(), size / 2, size / 2);
+
+  return new THREE.CanvasTexture(canvas);
+}
+
+
+
+
+// === prisma 2 ===
+const container2 = document.getElementById("container-prisma2");
+const scene2 = new THREE.Scene();
+const camera2 = new THREE.PerspectiveCamera(75, container2.clientWidth / container2.clientHeight, 0.1, 1000);
+camera2.position.set(0, 0, 5);
+
+const renderer2 = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer2.setClearColor(0x000000, 0);
+renderer2.setSize(container2.clientWidth, container2.clientHeight);
+container2.appendChild(renderer2.domElement);
+
+function resize() {
+  const width = container2.clientWidth;
+  const height = container2.clientHeight;
+  renderer2.setSize(width, height);
+  camera2.aspect = width / height;
+  camera2.updateProjectionMatrix();
+}
+window.addEventListener('resize', resize);
+resize();
+
+
+function createNumberTexture(number, textColor = "#000000") {
+  const size = 256;
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext("2d");
+  ctx.fillStyle = textColor;
+  ctx.font = "bold 120px Arial";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(number.toString(), size / 2, size / 2);
+  return new THREE.CanvasTexture(canvas);
+}
+
+const sisiTegak = 5;
+const tinggi = 2;
+const radius2 = 1.5;
+
+const faceColors = [0xff0000, 0xffff00, 0x0000ff, 0x00ff00, 0x800080, 0xffa500];
+const faceNames = ["Alas", "Tutup", "Sisi 1", "Sisi 2", "Sisi 3", "Sisi 4", "Sisi 5"];
+const faceNumbers2 = [1, 2, 3, 4, 5, 6, 7];
+
+const sides = [], originalPositions = [], originalRotations = [];
+
+for (let i = 0; i < sisiTegak + 2; i++) {
+  let geometry, pos, rot;
+  const color = faceColors[i % faceColors.length];
+  const number = faceNumbers2[i];
+  const material = new THREE.MeshBasicMaterial({
+    color: color,
+    transparent: true,
+    opacity: 0.6,
+    side: THREE.DoubleSide
+  });
+
+  if (i === 0 || i === 1) {
+    // Alas dan Tutup
+    geometry = new THREE.CircleGeometry(radius2, 5);
+    const y = (i === 0) ? -tinggi / 2 : tinggi / 2;
+    pos = [0, y, 0];
+    rot = [(i === 0) ? Math.PI / 2 : -Math.PI / 2, 0, 0];
+  } else {
+    // Sisi tegak
+    const angle = (2 * Math.PI / sisiTegak) * (i - 2);
+    const nextAngle = angle + (2 * Math.PI / sisiTegak);
+    const x1 = radius2 * Math.cos(angle);
+    const z1 = radius2 * Math.sin(angle);
+    const x2 = radius2 * Math.cos(nextAngle);
+    const z2 = radius2 * Math.sin(nextAngle);
+
+    const dx = x2 - x1;
+    const dz = z2 - z1;
+    const width = Math.sqrt(dx * dx + dz * dz);
+
+    geometry = new THREE.PlaneGeometry(width, tinggi);
+    pos = [(x1 + x2) / 2, 0, (z1 + z2) / 2];
+    const rotY = Math.atan2(dz, dx);
+    rot = [0, -rotY, 0];
+  }
+
+  const side = new THREE.Mesh(geometry, material);
+  side.position.set(...pos);
+  side.rotation.set(...rot);
+  side.name = faceNames[i] || `Sisi ${number}`;
+  side.userData = { type: "face", info: `Sisi ${number}` };
+
+  originalPositions.push([...pos]);
+  originalRotations.push([...rot]);
+
+  // Tambahkan border hitam
+  const border = new THREE.LineSegments(
+    new THREE.EdgesGeometry(geometry),
+    new THREE.LineBasicMaterial({ color: 0x000000 })
+  );
+  side.add(border);
+
+  // Tambahkan angka
+  const numberTexture = createNumberTexture(number, "#000000");
+  const numberMaterial = new THREE.MeshBasicMaterial({ map: numberTexture, transparent: true });
+  const numberPlane = new THREE.Mesh(new THREE.PlaneGeometry(0.4, 0.4), numberMaterial);
+
+  // Cek apakah alas atau tutup
+if (i === 0 || i === 1) {
+  // Alas (i=0) dan Tutup (i=1)
+  numberPlane.position.set(0, 0, 0.01);
+  numberPlane.rotation.set(0, 0, 0);
+} else if (number === 5) {
+  // Atur manual posisi dan rotasi khusus untuk nomor 5
+  numberPlane.position.set(0, 0.15, 0); // geser lebih keluar
+  numberPlane.rotation.set(0, 0, 0);    // tegak
+} else {
+  // Sisi selimut biasa
+  const normal = new THREE.Vector3(0, 0, 1).applyEuler(side.rotation);
+  const offset = normal.clone().multiplyScalar(0.2);
+  numberPlane.position.copy(offset);
+  numberPlane.lookAt(camera2.position);
+}
+
+
+side.add(numberPlane);
+  scene2.add(side);
+  sides.push(side);
+}
+
+
+// (Setelah semua kode setup balok1 dan balok2)
+
+// Animasi untuk balok interaktif (balok 1)
+function animate() {
+  requestAnimationFrame(animate);
+
+  if (container1.classList.contains("aktif")) {
+    controls1.update();
+    renderer1.render(scene1, camera1);
+  }
+
+  if (container2.classList.contains("aktif")) {
+    renderer2.render(scene2, camera2);
+  }
+}
+animate();
+
+
+
+// === Interaksi drag sisi
+const raycaster2 = new THREE.Raycaster();
+const mouse2 = new THREE.Vector2();
+let selectedSide = null;
+let isDragging = false;
+
+container2.addEventListener("pointerdown", (event) => {
+  const rect = container2.getBoundingClientRect();
+  mouse2.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+  mouse2.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+  raycaster2.setFromCamera(mouse2, camera2);
+  const intersects = raycaster2.intersectObjects(sides);
+  if (intersects.length > 0) {
+    selectedSide = intersects[0].object;
+    isDragging = true;
+    tooltipDrag.innerHTML = `<div class='tooltip-title'>🔷 ${selectedSide.name}</div><p>Drag sisi ini</p>`;
+    tooltipDrag.style.left = event.clientX + 20 + 'px';
+    tooltipDrag.style.top = event.clientY + 20 + 'px';
+    tooltipDrag.style.display = 'block';
+  }
+});
+
+container2.addEventListener("pointermove", (event) => {
+  if (selectedSide && isDragging) {
+    // Paksa ukuran sisi tegak tetap (misalnya 1.5 x 2)
+    if (selectedSide.name.startsWith("Sisi")) {
+      selectedSide.scale.set(1.2, 1.6, 1); // versi lebih kecil
+    }
+
+    // Pastikan posisi z tetap di 0 agar tidak menyusut karena perspektif
+    selectedSide.position.z = 0;
+
+    // Koreksi khusus jika sisi belakang (agar tidak tampak kecil)
+    if (selectedSide.name === "Belakang") {
+      selectedSide.position.z = 0.5; // bisa disesuaikan sesuai jarak sisi depan
+    }
+
+    // Update posisi berdasarkan drag
+    selectedSide.position.x += event.movementX * 0.005;
+    selectedSide.position.y -= event.movementY * 0.005;
+
+    // Reset rotasi
+    selectedSide.rotation.set(0, 0, 0);
+
+    // Update tooltip posisi
+    tooltipDrag.style.left = event.clientX + 20 + 'px';
+    tooltipDrag.style.top = event.clientY + 20 + 'px';
+  }
+});
+
+container2.addEventListener("pointerup", () => {
+  selectedSide = null;
+  isDragging = false;
+  tooltipDrag.style.display = 'none';
+});
+
+function resetSisi() {
+  sides.forEach((side, i) => {
+    // Reset posisi
+    side.position.set(...originalPositions[i]);
+
+    // Reset rotasi
+    side.rotation.set(...originalRotations[i]);
+
+    // Reset skala ke default (1, 1, 1)
+    side.scale.set(1, 1, 1);
+  });
+
+  // Sembunyikan tooltip jika masih aktif
+  tooltipDrag.style.display = 'none';
+
+  // Pastikan tidak ada sisi yang sedang dipilih atau di-drag
+  selectedSide = null;
+  isDragging = false;
+}
+
+
+let scene3, camera3, renderer3, mesh3, controls3;
+let isFirstTimePrisma3 = true;
+
+function buatPrisma3() {
+  const sisi = parseFloat(document.getElementById("input-sisi-prisma3").value);
+  const tinggi = parseFloat(document.getElementById("input-tinggi-prisma3").value);
+
+  if (isNaN(sisi) || isNaN(tinggi) || sisi <= 0 || tinggi <= 0) {
+    alert("Masukkan sisi alas dan tinggi yang valid.");
+    return;
+  }
+
+  const container = document.getElementById("container-prisma3");
+
+  // Inisialisasi scene, kamera, renderer
+  if (isFirstTimePrisma3) {
+    scene3 = new THREE.Scene();
+
+    camera3 = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+    camera3.position.z = 10;
+
+    renderer3 = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+
+    renderer3.setSize(width, height);
+    camera3.aspect = width / height;
+    camera3.updateProjectionMatrix();
+
+    document.getElementById("canvas-prisma3").appendChild(renderer3.domElement);
+
+    controls3 = new THREE.OrbitControls(camera3, renderer3.domElement);
+    controls3.enableDamping = true;
+
+    animatePrisma3();
+    isFirstTimePrisma3 = false;
+  }
+
+  if (mesh3) {
+    scene3.remove(mesh3);
+  }
+
+  // Buat bentuk segilima
+const shape = new THREE.Shape();
+const jumlahSisi = 5;
+const radius = sisi / (2 * Math.sin(Math.PI / jumlahSisi)); // sesuaikan jari-jari
+
+for (let i = 0; i <= jumlahSisi; i++) {
+  const angle = (i / jumlahSisi) * Math.PI * 2 - Math.PI / 2;
+  const x = radius * Math.cos(angle);
+  const y = radius * Math.sin(angle);
+  if (i === 0) shape.moveTo(x, y);
+  else shape.lineTo(x, y);
+}
+shape.closePath();
+
+// Buat extrude (tinggi ke arah Z)
+const extrudeSettings = {
+  steps: 1,
+  depth: tinggi,
+  bevelEnabled: false
+};
+const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+
+// Material transparan hijau
+const material = new THREE.MeshPhongMaterial({
+  color: 0x00ff00,           // hijau terang
+  transparent: true,
+  opacity: 0.5,
+  side: THREE.DoubleSide
+});
+
+// Buat mesh dan tambahkan garis tepi
+mesh3 = new THREE.Mesh(geometry, material);
+
+const edges = new THREE.EdgesGeometry(geometry);
+const lineMaterial = new THREE.LineBasicMaterial({ color: 0x000000 });
+const lineSegments = new THREE.LineSegments(edges, lineMaterial);
+mesh3.add(lineSegments);
+
+// Jika perlu rotasi agar tegak (ekstrusi ke Z → rotasi ke Y)
+mesh3.rotation.x = -Math.PI / 2;
+
+// Tambahkan ke scene
+scene3.add(mesh3);
+
+
+  // Hitung Luas Alas & Volume Prisma
+  const luasAlas = (5 / 4) * sisi * sisi * (1 / Math.tan(Math.PI / 5)); // rumus luas segilima
+  const volume = luasAlas * tinggi;
+
+  document.getElementById("volume-prisma3").textContent = `${volume.toFixed(2)} cm³`;
+  document.getElementById("luas-prisma3").textContent = `${luasAlas.toFixed(2)} cm² (alas)`;
+}
+
+function animatePrisma3() {
+  requestAnimationFrame(animatePrisma3);
+  if (mesh3) {
+    mesh3.rotation.x += 0.01;
+    mesh3.rotation.y += 0.01;
+  }
+  renderer3.render(scene3, camera3);
+  controls3.update();
+}
+
+window.onload = function () {
+  document.getElementById("explain-button").addEventListener("click", function () {
+    document.getElementById("modal-explain").style.display = "block";
+  });
+
+  document.getElementById("guide-button").addEventListener("click", function () {
+    document.getElementById("modal-guide").style.display = "block";
+  });
+
+  document.querySelectorAll(".close").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      const modalId = btn.getAttribute("data-close");
+      document.getElementById(modalId).style.display = "none";
+    });
+  });
+};
+// Fungsi untuk menutup modal berdasarkan ID
+  document.querySelectorAll(".close").forEach(function (closeBtn) {
+    closeBtn.addEventListener("click", function () {
+      const targetId = this.getAttribute("data-close");
+      const modal = document.getElementById(targetId);
+      if (modal) {
+        modal.style.display = "none";
+      }
+    });
+  });
+
+  // Menutup modal saat klik di luar konten
+  window.addEventListener("click", function (event) {
+    document.querySelectorAll(".modal").forEach(function (modal) {
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    });
+  });
+
+function tampilkanPrisma(nomor) {
+  const prisma1 = document.getElementById("container-prisma1");
+  const prisma2 = document.getElementById("container-prisma2");
+  const prisma3 = document.getElementById("container-prisma3");
+  const geogebra = document.getElementById("geogebra-container");
+
+  prisma1.classList.remove("aktif");
+  prisma2.classList.remove("aktif");
+  prisma3.style.display = "none";
+  geogebra.style.display = "none";
+
+  // Tampilkan sesuai pilihan
+  if (nomor === 1) prisma1.classList.add("aktif");
+  else if (nomor === 2) prisma2.classList.add("aktif");
+  else if (nomor === 3) {
+    prisma3.style.display = "block";
+    buatPrisma3();
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  tampilkanPrisma(1);
+});
+
+function tampilkanGeoGebra() {
+  const prisma1 = document.getElementById("container-prisma1");
+  const prisma2 = document.getElementById("container-prisma2");
+  const container = document.getElementById('geogebra-container');
+
+  prisma1.classList.remove("aktif");
+  prisma2.classList.remove("aktif");
+  container.style.display = 'block';
+}
+
+  </script>
+</body>
+</html>

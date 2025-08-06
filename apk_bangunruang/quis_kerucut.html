@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kuis Bangun Ruang - Kerucut</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="style.css">
+</head>
+<body class="quis">
+  <button onclick="goToMenu()" class="icon-button">
+  <i class="bi bi-arrow-left-circle"></i>
+</button>
+  <audio id="myAudio" src="assets/cheerful-joyful-playful-music-381499.mp3" autoplay loop></audio>
+  <div class="container">
+    <h2>Kuis Kerucut</h2>
+
+    <div id="quiz-box">
+      <p id="question"></p>
+      <div id="options" class="option-group"></div>
+      <button onclick="nextQuestion()">Selanjutnya</button>
+    </div>
+
+    <div id="result-box" style="display:none;">
+      <h3>Hasil Kuis</h3>
+      <p id="score"></p>
+      <button onclick="showAnswers()">Lihat Jawaban</button>
+      <div id="answer-review"></div>
+      <button onclick="startQuiz()">Ulangi Kuis</button>
+    </div>
+  </div>
+
+  <script>
+const questionBank = [
+  { question: "Kerucut adalah bangun ruang yang memiliki alas berbentuk ...", options: ["persegi", "lingkaran", "segitiga", "persegi panjang"], answer: "lingkaran" },
+  { question: "Kerucut memiliki berapa titik puncak?", options: ["0", "1", "2", "3"], answer: "1" },
+  { question: "Sisi alas kerucut berbentuk ...", options: ["persegi", "segitiga", "lingkaran", "trapesium"], answer: "lingkaran" },
+  { question: "Bagian sisi tegak pada kerucut disebut ...", options: ["bidang alas", "selimut", "tutup", "puncak"], answer: "selimut" },
+  { question: "Kerucut termasuk bangun ruang sisi ...", options: ["datar", "lengkung", "majemuk", "kombinasi"], answer: "lengkung" },
+  { question: "Kerucut memiliki berapa sisi?", options: ["1", "2", "3", "0"], answer: "2" },
+  { question: "Kerucut memiliki berapa rusuk?", options: ["0", "1", "2", "3"], answer: "1" },
+  { question: "Kerucut memiliki berapa titik sudut?", options: ["1", "2", "0", "Tak hingga"], answer: "0" },
+  { question: "Volume kerucut dihitung dengan rumus ...", options: ["π x r² x t", "1/2 x π x r² x t", "1/3 x π x r² x t", "π x r x t"], answer: "1/3 x π x r² x t" },
+  { question: "Luas permukaan kerucut adalah ...", options: ["πr²", "π x r x s", "πr² + πrs", "2πr²"], answer: "πr² + πrs" },
+  { question: "Jaring-jaring kerucut terdiri dari ...", options: ["2 lingkaran", "1 lingkaran dan 1 segitiga", "1 lingkaran dan 1 sektor lingkaran", "1 persegi panjang dan 1 lingkaran"], answer: "1 lingkaran dan 1 sektor lingkaran" },
+  { question: "Jika jari-jari 7 cm dan tinggi 24 cm, maka panjang garis pelukisnya adalah ...", options: ["25 cm", "26 cm", "24 cm", "30 cm"], answer: "25 cm" },
+  { question: "Jika jari-jari 7 cm dan tinggi 12 cm, maka volume kerucut adalah ...", options: ["616 cm³", "514 cm³", "492 cm³", "616.66 cm³"], answer: "616 cm³" },
+  { question: "Kerucut memiliki simetri putar sebanyak ...", options: ["1", "2", "Tak hingga", "0"], answer: "Tak hingga" },
+  { question: "Kerucut tidak memiliki titik sudut karena ...", options: ["alasnya lingkaran", "sisi-sisinya sejajar", "tidak ada sisi datar", "tidak ada rusuk"], answer: "alasnya lingkaran" },
+  { question: "Selimut kerucut berbentuk ...", options: ["persegi panjang", "setengah lingkaran", "sektor lingkaran", "segitiga"], answer: "sektor lingkaran" },
+  { question: "Satuan volume kerucut adalah ...", options: ["cm²", "cm³", "m", "liter"], answer: "cm³" },
+  { question: "Satuan luas permukaan kerucut adalah ...", options: ["cm", "cm²", "cm³", "m"], answer: "cm²" },
+  { question: "Apakah kerucut memiliki selimut?", options: ["Ya", "Tidak", "Tergantung alas", "Tergantung jari-jari"], answer: "Ya" },
+  { question: "Contoh benda berbentuk kerucut adalah ...", options: ["kaleng susu", "topi ulang tahun", "bola tenis", "kotak pensil"], answer: "topi ulang tahun" },
+  { question: "Jumlah sisi kerucut adalah ...", options: ["1", "2", "3", "4"], answer: "2" },
+  { question: "Kerucut memiliki puncak di bagian ...", options: ["alas", "tengah", "tutup", "atas"], answer: "atas" },
+  { question: "Panjang garis pelukis kerucut adalah ...", options: ["jarak dari pusat alas ke puncak", "diameter", "jari-jari", "garis dari titik tepi alas ke puncak"], answer: "garis dari titik tepi alas ke puncak" },
+  { question: "Jika jari-jari dan tinggi kerucut dikalikan 2, maka volumenya menjadi ...", options: ["2 kali", "4 kali", "6 kali", "8 kali"], answer: "8 kali" },
+  { question: "Jika volume kerucut = 1/3 x π x r² x t, maka π adalah ...", options: ["3.14", "1.5", "1/3", "2.71"], answer: "3.14" },
+  { question: "Kerucut memiliki alas dan ...", options: ["tutup", "sisi tegak", "sisi datar", "sudut tumpul"], answer: "sisi tegak" },
+  { question: "Jika luas alas 154 cm² dan tinggi 12 cm, maka volume kerucut adalah ...", options: ["616 cm³", "924 cm³", "480 cm³", "512 cm³"], answer: "616 cm³" },
+  { question: "Sifat utama kerucut adalah memiliki ...", options: ["dua alas", "titik puncak", "rusuk sejajar", "segitiga"], answer: "titik puncak" },
+  { question: "Luas alas kerucut adalah rumus ...", options: ["πr", "πr²", "πrs", "2πr"], answer: "πr²" },
+  { question: "Jika panjang garis pelukis (s) = 10 cm dan jari-jari 6 cm, maka luas permukaannya ...", options: ["301.44 cm²", "282.74 cm²", "230.4 cm²", "248.2 cm²"], answer: "301.44 cm²" },
+  { question: "Kerucut memiliki rusuk ...", options: ["1", "2", "tidak ada", "sejumlah jari-jari"], answer: "tidak ada" },
+  { question: "Apakah kerucut memiliki sisi datar dan lengkung?", options: ["Ya", "Tidak", "Hanya datar", "Hanya lengkung"], answer: "Ya" },
+  { question: "Jika selimut kerucut digulung, maka akan berbentuk ...", options: ["segitiga", "setengah lingkaran", "sektor lingkaran", "persegi panjang"], answer: "sektor lingkaran" },
+  { question: "Kerucut termasuk bangun ruang ...", options: ["beraturan", "tak beraturan", "lengkung", "poligon"], answer: "lengkung" },
+  { question: "Kerucut memiliki alas berbentuk lingkaran dan ...", options: ["tutup", "bidang miring", "puncak", "rusuk"], answer: "puncak" },
+  { question: "Tinggi kerucut adalah garis dari ...", options: ["pinggir alas ke puncak", "tengah alas ke puncak", "titik sudut ke titik tengah", "diameter ke tepi"], answer: "tengah alas ke puncak" },
+  { question: "Kerucut dan tabung memiliki kesamaan yaitu ...", options: ["sama-sama memiliki dua puncak", "sama-sama memiliki alas lingkaran", "sama-sama memiliki sisi datar", "tidak memiliki alas"], answer: "sama-sama memiliki alas lingkaran" },
+  { question: "Apakah kerucut memiliki volume?", options: ["Ya", "Tidak", "Kadang", "Tergantung"], answer: "Ya" },
+  { question: "Jika jari-jari = 5 cm dan tinggi = 12 cm, maka volume kerucut adalah ...", options: ["314 cm³", "100 cm³", "220 cm³", "330 cm³"], answer: "314 cm³" },
+  { question: "Sisi kerucut terdiri dari ...", options: ["dua datar dan satu lengkung", "satu datar dan satu lengkung", "hanya datar", "dua lengkung"], answer: "satu datar dan satu lengkung" },
+  { question: "Salah satu benda berbentuk kerucut adalah ...", options: ["kaleng", "topi ulang tahun", "dadu", "kotak tisu"], answer: "topi ulang tahun" },
+  { question: "Jika tinggi kerucut = 10 cm dan jari-jari = 7 cm, berapa volumenya?", options: ["513.33 cm³", "540 cm³", "490 cm³", "570 cm³"], answer: "513.33 cm³" },
+  { question: "Jika diameter alas kerucut 10 cm, maka jari-jarinya adalah ...", options: ["4 cm", "5 cm", "6 cm", "10 cm"], answer: "5 cm" },
+  { question: "Volume kerucut adalah sepertiga dari ...", options: ["balok", "bola", "tabung", "prisma"], answer: "tabung" }
+];
+
+    let selectedQuestions = [];
+    let currentQuestion = 0;
+    let userAnswers = [];
+
+    function shuffle(array) {
+      const copy = array.slice();
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function startQuiz() {
+      selectedQuestions = shuffle(questionBank).slice(0, 10);
+      currentQuestion = 0;
+      userAnswers = [];
+
+      document.getElementById("quiz-box").style.display = "block";
+      document.getElementById("result-box").style.display = "none";
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const q = selectedQuestions[currentQuestion];
+      document.getElementById("question").textContent = `${currentQuestion + 1}. ${q.question}`;
+
+      const optionsHtml = q.options.map(option => `
+        <label class="option-label">
+          <input type="radio" name="option" value="${option}" />
+          ${option}
+        </label>
+      `).join("");
+
+      document.getElementById("options").innerHTML = optionsHtml;
+    }
+
+    function nextQuestion() {
+      const selected = document.querySelector('input[name="option"]:checked');
+      if (!selected) return alert("Pilih jawaban dulu ya!");
+
+      userAnswers.push(selected.value);
+      currentQuestion++;
+
+      if (currentQuestion < selectedQuestions.length) {
+        renderQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      let score = 0;
+      for (let i = 0; i < selectedQuestions.length; i++) {
+        if (userAnswers[i] === selectedQuestions[i].answer) score++;
+      }
+
+      document.getElementById("quiz-box").style.display = "none";
+      document.getElementById("result-box").style.display = "block";
+      document.getElementById("score").innerHTML = `Jawaban Benar: ${score} dari ${selectedQuestions.length} soal <br> Skor: <strong>${(score / selectedQuestions.length * 100).toFixed(0)}%</strong>`;
+    }
+
+    function showAnswers() {
+      let html = "";
+      for (let i = 0; i < selectedQuestions.length; i++) {
+        const q = selectedQuestions[i];
+        const userAns = userAnswers[i];
+        const correct = userAns === q.answer;
+        html += `
+          <p>
+            <strong>Soal ${i + 1}:</strong> ${q.question}<br>
+            Jawabanmu: <span style="color:${correct ? 'green' : 'red'}">${userAns}</span><br>
+            Jawaban benar: <strong>${q.answer}</strong>
+          </p>
+        `;
+      }
+      document.getElementById("answer-review").innerHTML = html;
+    }
+
+    window.onload = startQuiz;
+     function goToMenu() {
+    window.location.href = "evaluasi.html"; // Ganti sesuai nama file halaman menunya
+  }
+  </script>
+</body>
+</html>

@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bola Interaktif</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body class="bola">
+<button id="btn-kembali" onclick="window.location.href='sisilengkung.html'">←</button>
+<audio id="myAudio" src="assets/cheerful-joyful-playful-music-381499.mp3" autoplay loop></audio>
+  <!-- Tooltip -->
+  <div id="tooltip">
+    <div class="tooltip-title">Sifat-sifat Bola</div> 
+    <div>
+      <ul>
+        <li>Memiliki satu sisi lengkung tanpa sudut dan rusuk</li>
+        <li>Tidak memiliki titik sudut maupun sisi datar</li>
+        <li>Semua titik pada permukaan bola berjarak sama dari titik pusat</li>
+        <li>Tidak memiliki rusuk atau sudut siku-siku</li>
+        <li>Volume = (4/3) × π × r³, Luas Permukaan = 4 × π × r²</li>
+      </ul>
+    </div>
+  </div>
+  <div id="tooltip-drag" class="tooltip"></div>
+
+
+  <!-- Kontainer -->
+  <div class="container-bola">
+    <div id="container-bola1"></div>
+    <div id="container-bola2"></div>
+    <div id="geogebra-container" style="display: none; margin-top: 20px;">
+  <iframe 
+    src="https://www.geogebra.org/material/iframe/id/zfgwb2un/width/800/height/600/border/888888/rc/false/ai/true" 
+    width="1000" 
+    height="1000" 
+    style="border: 0;">
+  </iframe>
+</div>
+<div id="container-bola3">
+  <div id="canvas-bola3"></div>
+<form id="hasil-perhitungan-bola3" style="color: black;">
+    <div class="form-group">
+      <label for="volume-bola3">Volume:</label>
+      <p id="volume-bola3" class="readonly-output">-</p>
+    </div>
+    <div class="form-group">
+      <label for="luas-bola3">Luas Permukaan:</label>
+      <p id="luas-bola3" class="readonly-output">-</p>
+    </div>
+  </form>
+</div>
+  </div>
+
+  <!-- Tombol reset di bawah -->
+<div class="bottom-buttons">
+  <button id="explain-button">Penjelasan</button>
+  <button id="guide-button">Panduan</button>
+  <button onclick="tampilkanGeoGebra()">Tampilkan Pola Bola</button>
+  <button onclick="tampilkanBola(1)">Tampilkan Bola 1</button>
+  <button onclick="tampilkanBola(2)">Tampilkan Bola 2</button>
+  <button onclick="resetSisi()">Reset Bola 2</button>
+  <div>
+  <input type="number" id="input-jari-bola3" placeholder="Jari-jari bola (cm)">
+<button onclick="tampilkanBola(3)">Tampilkan Bola 3</button>
+<!-- <div id="hasil-perhitungan-kubus3" style="color: black;"></div> -->
+</div>
+</div>
+<!-- Modal penjelasan -->
+<div id="modal-explain" class="modal">
+  <div class="modal-content">
+    <span class="close" data-close="modal-explain">&times;</span>
+
+    <!-- Karakter animasi -->
+    <!-- <div class="character">
+      <img src="assets/fruttidino-frutti-dino.gif" alt="Karakter" />
+    </div> -->
+
+    <!-- Teks penjelasan -->
+    <div class="penjelasan-teks">
+      <h2>Penjelasan Bola</h2>
+      <p>
+  Bola adalah bangun ruang tiga dimensi yang seluruh bagiannya berbentuk <strong>lengkung sempurna</strong> dan memiliki <strong>satu titik pusat</strong> yang berjarak sama ke seluruh titik pada permukaannya. Bola tidak memiliki sisi datar, rusuk, atau titik sudut.
+</p>
+
+<p><strong>Ciri-ciri Bola:</strong></p>
+<ul>
+  <li>Memiliki permukaan lengkung sempurna (tanpa sisi datar).</li>
+  <li>Memiliki satu titik pusat di tengah bola.</li>
+  <li>Jarak dari pusat ke permukaan disebut <strong>jari-jari</strong> (r).</li>
+  <li>Tidak memiliki rusuk maupun titik sudut.</li>
+  <li>Bersifat simetris ke segala arah.</li>
+</ul>
+
+<p><strong>Bola Terbentuk dari Apa?</strong></p>
+<p>
+  Secara geometri, bola terbentuk dari <strong>sebuah lingkaran</strong> yang diputar penuh sejauh 360° terhadap salah satu diameternya sebagai sumbu rotasi. Dengan kata lain, bola adalah hasil rotasi sebuah setengah lingkaran terhadap garis diameternya, membentuk permukaan lengkung sempurna yang berpusat pada satu titik.
+</p>
+
+<p><strong>Elemen-elemen pada Bola:</strong></p>
+<ul>
+  <li><strong>r</strong>: jari-jari bola</li>
+  <li><strong>d</strong>: diameter bola (d = 2 × r)</li>
+  <li><strong>π</strong>: konstanta pi (≈ 3.14 atau 22/7)</li>
+</ul>
+
+<p><strong>Rumus:</strong></p>
+<ul>
+  <li><strong>Volume</strong> = (4/3) × π × r³</li>
+  <li><strong>Luas Permukaan</strong> = 4 × π × r²</li>
+</ul>
+
+<p>
+  Semua titik pada permukaan bola memiliki jarak yang sama dari pusat, sehingga bola bersifat simetris dan seimbang secara geometris.
+</p>
+
+<p><strong>Contoh Penerapan Bola dalam Kehidupan Sehari-hari:</strong></p>
+<ul>
+  <li>Bola olahraga seperti sepak bola, basket, tenis, dan voli.</li>
+  <li>Gundu atau kelereng.</li>
+  <li>Globe atau bola dunia.</li>
+  <li>Balon bulat dan bola hias.</li>
+  <li>Planet seperti Bumi dan Bulan yang menyerupai bentuk bola.</li>
+</ul>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Panduan -->
+<div id="modal-guide" class="modal">
+  <div class="modal-content">
+    <span class="close" data-close="modal-guide">&times;</span>
+    <h2>Panduan Penggunaan</h2>
+    <ol>
+  <li>Klik menu <strong>Tampilkan Bola 1 dan 2</strong> untuk menampilkan kedua bola dalam tampilan interaktif.</li>
+  
+  <li><strong>Bola 1</strong> dapat diputar dengan klik dan drag menggunakan mouse atau touchpad untuk melihat bentuk bola dari berbagai sudut pandang.</li>
+  
+  <li>Arahkan kursor ke permukaan Bola 1 untuk melihat tooltip yang menampilkan informasi seperti jari-jari, diameter, atau titik pusat bola.</li>
+  
+  <li><strong>Bola 2</strong> terdiri dari bagian-bagian permukaan bola yang dapat di-drag atau digeser. Pengguna dapat menyusun ulang potongan bola ini untuk memahami struktur permukaan bola secara visual.</li>
+  
+  <li>Gunakan tombol <strong>Reset Bola 2</strong> untuk mengembalikan seluruh bagian Bola 2 ke posisi semula sebelum disusun ulang.</li>
+  
+  <li>Masukkan nilai <strong>r</strong> (jari-jari) untuk menampilkan <strong>Bola 3</strong> sesuai ukuran yang diinginkan. Bola akan disesuaikan secara otomatis berdasarkan input pengguna.</li>
+  
+  <li>Klik tombol <strong>Penjelasan</strong> untuk membaca informasi umum tentang bola, seperti ciri-ciri bola, asal-usul bentuk bola dari rotasi lingkaran, rumus volume, luas permukaan, serta contoh penerapan dalam kehidupan sehari-hari.</li>
+  
+  <li>Klik tombol <strong>Pola Bola</strong> untuk menampilkan pendekatan <em>jaring-jaring bola</em>, berupa potongan lengkung atau irisan bola yang dapat di-drag atau digeser. Fitur ini membantu pengguna memahami bagaimana bola terbentuk secara geometris dari rotasi lingkaran atau pembagian permukaan.</li>
+</ol>
+  </div>
+</div>
+<script>
+const tooltip = document.getElementById("tooltip");
+const tooltipDrag = document.getElementById("tooltip-drag");
+
+// === BALOK 1 ===
+const container1 = document.getElementById("container-bola1");
+const scene1 = new THREE.Scene();
+const camera1 = new THREE.PerspectiveCamera(75, container1.clientWidth / container1.clientHeight, 0.1, 1000);
+const renderer1 = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer1.setClearColor(0x000000, 0);
+container1.appendChild(renderer1.domElement);
+
+function resizeRenderer() {
+  const width = container1.clientWidth;
+  const height = container1.clientHeight;
+  renderer1.setSize(width, height);
+  camera1.aspect = width / height;
+  camera1.updateProjectionMatrix();
+}
+
+resizeRenderer(); // panggil saat awal
+window.addEventListener('resize', resizeRenderer);
+
+const controls1 = new THREE.OrbitControls(camera1, renderer1.domElement);
+camera1.position.set(2, 2, 2);
+camera1.lookAt(0, 0, 0); // <— Tambahan penting agar kamera langsung menghadap ke bola
+controls1.update();
+scene1.add(new THREE.AmbientLight(0xffffff, 1));
+
+function createNumberTexture(number, textColor = "#ffffff") {
+  const size = 256;
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext("2d");
+
+  ctx.fillStyle = textColor;
+  ctx.font = "bold 120px Arial";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(number.toString(), size / 2, size / 2);
+
+  return new THREE.CanvasTexture(canvas);
+}
+
+
+// Geometri dan material bola
+const radius = 1;
+const widthSegments = 64;
+const heightSegments = 64;
+
+const sphereGeometry = new THREE.SphereGeometry(radius, widthSegments, heightSegments);
+const sphereMaterial = new THREE.MeshBasicMaterial({
+  color: 0x00aaff,
+  transparent: true,
+  opacity: 0.6,
+  side: THREE.DoubleSide
+});
+
+const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+sphere.userData = { type: "face", info: "Permukaan bola" };
+scene1.add(sphere);
+
+// Tambahkan wireframe (border)
+const wireframeGeometry = new THREE.WireframeGeometry(sphereGeometry);
+const wireframeMaterial = new THREE.LineBasicMaterial({ color: 0x000000 }); // Hitam untuk kontras
+const wireframe = new THREE.LineSegments(wireframeGeometry, wireframeMaterial);
+sphere.add(wireframe);
+
+
+
+const raycaster1 = new THREE.Raycaster();
+const mouse1 = new THREE.Vector2();
+
+container1.addEventListener("mousemove", (event) => {
+  const rect = container1.getBoundingClientRect();
+  mouse1.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+  mouse1.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+  raycaster1.setFromCamera(mouse1, camera1);
+  const intersects = raycaster1.intersectObjects([sphere], true);
+
+
+  // Jika klik tidak menyentuh apapun, sembunyikan tooltip
+  if (intersects.length === 0) {
+    tooltip.style.display = "none";
+    return;
+  }
+
+  const obj = intersects[0].object;
+
+  // Tampilkan tooltip di posisi klik
+  tooltip.style.left = event.clientX + 200 + "px";
+  tooltip.style.top = event.clientY + 10 + "px";
+
+  // Satu tooltip untuk semua objek
+  tooltip.innerHTML = `
+  <div class="tooltip-title">⚽ Bola</div>
+  <ul>
+    <li>Memiliki satu sisi lengkung</li>
+    <li>Tidak memiliki rusuk</li>
+    <li>Tidak memiliki titik sudut</li>
+    <li>Semua titik pada permukaan berjarak sama dari pusat</li>
+    <li>Bentuk simetris sempurna ke segala arah</li>
+  </ul>
+`;
+  tooltip.style.display = "block";
+});
+
+function animate() {
+  requestAnimationFrame(animate);
+  controls1.update(); // agar interaksi mouse halus
+  renderer1.render(scene1, camera1);
+}
+animate();
+
+
+
+// === BOLA 2 ===
+const container2 = document.getElementById("container-bola2");
+const scene2 = new THREE.Scene();
+const camera2 = new THREE.PerspectiveCamera(75, container2.clientWidth / container2.clientHeight, 0.1, 1000);
+camera2.position.set(0, 0, 5);
+
+const renderer2 = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer2.setClearColor(0x000000, 0);
+renderer2.setSize(container2.clientWidth, container2.clientHeight);
+container2.appendChild(renderer2.domElement);
+
+function resize() {
+  const width = container2.clientWidth;
+  const height = container2.clientHeight;
+  renderer2.setSize(width, height);
+  camera2.aspect = width / height;
+  camera2.updateProjectionMatrix();
+}
+window.addEventListener('resize', resize);
+resize();
+
+// === Bola Utuh ===
+const bolaUtuhGeo = new THREE.SphereGeometry(radius, widthSegments, heightSegments);
+const bolaUtuhMat = new THREE.MeshPhongMaterial({ color: 0x66ccff, transparent: true, opacity: 0.9 });
+const bolaUtuh = new THREE.Mesh(bolaUtuhGeo, bolaUtuhMat);
+scene2.add(bolaUtuh);
+
+const edgeBola = new THREE.EdgesGeometry(bolaUtuhGeo);
+bolaUtuh.add(new THREE.LineSegments(edgeBola, new THREE.LineBasicMaterial({ color: 0x00aaff })));
+
+let bola2AwalPosisi = bolaUtuh.position.clone();
+let bola2AwalRotasi = bolaUtuh.rotation.clone();
+
+// Animasi untuk balok interaktif (bola 1)
+function animateBola1() {
+  requestAnimationFrame(animateBola1);
+  controls1.update(); // OrbitControls agar bisa rotasi/zoom
+  renderer1.render(scene1, camera1);
+}
+animateBola1();
+
+// Animasi untuk Bola net (Bola 2)
+function animateBola2() {
+  requestAnimationFrame(animateBola2);
+  renderer2.render(scene2, camera2);
+}
+animateBola2();
+
+
+// === Interaksi drag belahan bola (bola2)
+const raycaster2 = new THREE.Raycaster();
+const mouse2 = new THREE.Vector2();
+let selectedHalf = null;
+let isDragging = false;
+
+container2.addEventListener("pointerdown", (event) => {
+  const rect = container2.getBoundingClientRect();
+  mouse2.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+  mouse2.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+  raycaster2.setFromCamera(mouse2, camera2);
+
+  const intersects = raycaster2.intersectObject(bolaUtuh);
+  if (intersects.length > 0) {
+    selectedHalf = intersects[0].object;
+    isDragging = true;
+
+    // Ubah menjadi lingkaran 2D jika belum diubah
+    if (!selectedHalf.userData.flattened) {
+      const circleGeo = new THREE.CircleGeometry(radius, 64);
+      selectedHalf.geometry.dispose();
+      selectedHalf.geometry = circleGeo;
+
+      selectedHalf.material.dispose(); // buang material bola lama
+      selectedHalf.material = new THREE.MeshBasicMaterial({
+        color: 0x3399ff,               // biru
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.5                   // transparan
+      });
+      selectedHalf.rotation.set(0, 0, 0); // Hadap depan (default)
+      selectedHalf.userData.flattened = true;
+
+      // Hapus border lama
+      selectedHalf.children.forEach(child => {
+        if (child.type === "LineSegments") selectedHalf.remove(child);
+      });
+
+      // Tambahkan border baru
+      const circleEdge = new THREE.LineSegments(
+        new THREE.EdgesGeometry(circleGeo),
+        new THREE.LineBasicMaterial({ color: 0x000000 })
+      );
+      selectedHalf.add(circleEdge);
+    }
+
+    tooltipDrag.innerHTML = `<div class='tooltip-title'>🔵 Bola</div><p>Drag untuk melihat alas lingkaran</p>`;
+    tooltipDrag.style.left = event.clientX + 20 + 'px';
+    tooltipDrag.style.top = event.clientY + 20 + 'px';
+    tooltipDrag.style.display = 'block';
+  }
+});
+
+
+container2.addEventListener("pointermove", (event) => {
+  if (selectedHalf && isDragging) {
+    selectedHalf.position.x += event.movementX * 0.005;
+    selectedHalf.position.y -= event.movementY * 0.005;
+    tooltipDrag.style.left = event.clientX + 20 + 'px';
+    tooltipDrag.style.top = event.clientY + 20 + 'px';
+  }
+});
+
+
+container2.addEventListener("pointerup", () => {
+  selectedHalf = null;
+  isDragging = false;
+  tooltipDrag.style.display = 'none';
+});
+
+// === Fungsi Reset
+function resetSisi() {
+  // Kembalikan ke bola
+  bolaUtuh.geometry.dispose();
+  bolaUtuh.geometry = new THREE.SphereGeometry(radius, widthSegments, heightSegments);
+
+  bolaUtuh.position.copy(bola2AwalPosisi);
+  bolaUtuh.rotation.copy(bola2AwalRotasi);
+  bolaUtuh.userData.flattened = false;
+
+  // Hapus garis tepi lama
+  bolaUtuh.children.forEach(child => {
+    if (child.type === "LineSegments") bolaUtuh.remove(child);
+  });
+
+  // Tambah ulang garis tepi bola
+  const edge = new THREE.EdgesGeometry(bolaUtuh.geometry);
+  bolaUtuh.add(new THREE.LineSegments(edge, new THREE.LineBasicMaterial({ color: 0x00aaff })));
+}
+
+let scene3, camera3, renderer3, mesh3, controls3;
+let isFirstTime = true;
+
+function buatBola3() {
+  const jari = parseFloat(document.getElementById("input-jari-bola3").value);
+  if (isNaN(jari) || jari <= 0) {
+    alert("Masukkan jari-jari yang valid.");
+    return;
+  }
+
+  const container = document.getElementById("container-bola3");
+
+  // Inisialisasi scene, kamera, renderer
+  if (isFirstTime) {
+    scene3 = new THREE.Scene();
+
+    camera3 = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+    camera3.position.z = 10;
+
+    renderer3 = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+
+    renderer3.setSize(width, height);
+    camera3.aspect = width / height;
+    camera3.updateProjectionMatrix();
+
+    document.getElementById("canvas-bola3").appendChild(renderer3.domElement);
+
+    controls3 = new THREE.OrbitControls(camera3, renderer3.domElement);
+    controls3.enableDamping = true;
+
+    animate3();
+    isFirstTime = false;
+  }
+
+  // Hapus bola lama jika ada
+  if (mesh3) {
+    scene3.remove(mesh3);
+  }
+
+  // Buat bola
+  const geometry = new THREE.SphereGeometry(jari, 64, 64); // ganti ke bola
+const material = new THREE.MeshPhongMaterial({
+  color: 0x90ee90,            // hijau muda opsional
+  transparent: true,
+  opacity: 0.2,
+  side: THREE.DoubleSide,
+});
+
+mesh3 = new THREE.Mesh(geometry, material);
+
+// Tambahkan garis tepi
+const edges = new THREE.EdgesGeometry(geometry);
+const lineMaterial = new THREE.LineBasicMaterial({ color: 0x000000 });
+const lineSegments = new THREE.LineSegments(edges, lineMaterial);
+mesh3.add(lineSegments);
+
+// Tambahkan ke scene
+scene3.add(mesh3);
+
+
+  // Hitung volume dan luas permukaan
+  const phi = Math.PI;
+  const volume = (4 / 3) * phi * Math.pow(jari, 3);
+  const luas = 4 * phi * Math.pow(jari, 2);
+
+  document.getElementById("volume-bola3").textContent = `${volume.toFixed(2)} cm³`;
+  document.getElementById("luas-bola3").textContent = `${luas.toFixed(2)} cm²`;
+}
+
+function animate3() {
+  requestAnimationFrame(animate3);
+  if (mesh3) {
+    mesh3.rotation.x += 0.01;
+    mesh3.rotation.y += 0.01;
+  }
+  renderer3.render(scene3, camera3);
+  controls3.update();
+}
+
+
+window.onload = function () {
+  document.getElementById("explain-button").addEventListener("click", function () {
+    document.getElementById("modal-explain").style.display = "block";
+  });
+
+  document.getElementById("guide-button").addEventListener("click", function () {
+    document.getElementById("modal-guide").style.display = "block";
+  });
+
+  document.querySelectorAll(".close").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      const modalId = btn.getAttribute("data-close");
+      document.getElementById(modalId).style.display = "none";
+    });
+  });
+};
+// Fungsi untuk menutup modal berdasarkan ID
+  document.querySelectorAll(".close").forEach(function (closeBtn) {
+    closeBtn.addEventListener("click", function () {
+      const targetId = this.getAttribute("data-close");
+      const modal = document.getElementById(targetId);
+      if (modal) {
+        modal.style.display = "none";
+      }
+    });
+  });
+
+  // Menutup modal saat klik di luar konten
+  window.addEventListener("click", function (event) {
+    document.querySelectorAll(".modal").forEach(function (modal) {
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    });
+  });
+
+function tampilkanBola(nomor) {
+  const bola1 = document.getElementById("container-bola1");
+  const bola2 = document.getElementById("container-bola2");
+  const bola3 = document.getElementById("container-bola3");
+  const geogebra = document.getElementById("geogebra-container");
+
+  bola1.classList.remove("aktif");
+  bola2.classList.remove("aktif");
+  bola3.style.display = "none";
+  geogebra.style.display = "none";
+
+  // Tampilkan sesuai pilihan
+  if (nomor === 1) bola1.classList.add("aktif");
+  else if (nomor === 2) bola2.classList.add("aktif");
+  else if (nomor === 3) {
+    bola3.style.display = "block";
+    buatBola3();
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  tampilkanBola(1);
+});
+
+function tampilkanGeoGebra() {
+  const bola1 = document.getElementById("container-bola1");
+  const bola2 = document.getElementById("container-bola2");
+  const container = document.getElementById('geogebra-container');
+
+  bola1.classList.remove("aktif");
+  bola2.classList.remove("aktif");
+  container.style.display = 'block';
+}
+
+  </script>
+
+</body>
+</html>

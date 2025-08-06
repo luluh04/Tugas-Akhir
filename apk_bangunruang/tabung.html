@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tabung Interaktif</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body class="halaman-tabung">
+<button id="btn-kembali" onclick="window.location.href='sisilengkung.html'">←</button>
+  <audio id="myAudio" src="assets/cheerful-joyful-playful-music-381499.mp3" autoplay loop></audio>
+  <!-- Tooltip -->
+  <div id="tooltip">
+    <div class="tooltip-title">Sifat-sifat Tabung</div> 
+    <div>
+      <ul>
+        <li>Memiliki 2 sisi alas berbentuk lingkaran</li>
+        <li>Memiliki 1 sisi lengkung yang menghubungkan kedua alas</li>
+        <li>Tidak memiliki titik sudut</li>
+        <li>Rusuk berupa garis lengkung di tepi kedua lingkaran</li>
+        <li>Volume = π × r² × t, Luas Permukaan = 2 × π × r × (r + t)</li>
+      </ul>
+    </div>
+  </div>
+  <div id="tooltip-drag" class="tooltip"></div>
+
+
+  <!-- Kontainer -->
+  <div class="container-tabung">
+    <div id="container-tabung1"></div>
+    <div id="container-tabung2"></div>
+    <div id="geogebra-container" style="display: none; margin-top: 20px;">
+  <iframe 
+    src="https://www.geogebra.org/material/iframe/id/pcr2gass/width/800/height/600/border/888888/rc/false/ai/true" 
+    width="1000" 
+    height="1000" 
+    style="border: 0;">
+  </iframe>
+</div>
+<div id="container-tabung3">
+  <div id="canvas-tabung3"></div>
+<form id="hasil-perhitungan-tabung3" style="color: black;">
+    <div class="form-group">
+      <label for="volume-tabung3">Volume:</label>
+      <p id="volume-tabung3" class="readonly-output">-</p>
+    </div>
+    <div class="form-group">
+      <label for="luas-tabung3">Luas Permukaan:</label>
+      <p id="luas-tabung3" class="readonly-output">-</p>
+    </div>
+  </form>
+</div>
+  </div>
+
+  <!-- Tombol reset di bawah -->
+<div class="bottom-buttons">
+  <button id="explain-button">Penjelasan</button>
+  <button id="guide-button">Panduan</button>
+  <button onclick="tampilkanGeoGebra()">Tampilkan Pola Tabung</button>
+  <button onclick="tampilkanTabung(1)">Tampilkan Tabung 1</button>
+  <button onclick="tampilkanTabung(2)">Tampilkan Tabung 2</button>
+  <button onclick="resetSisi()">Reset Tabung 2</button>
+  <div>
+  <input type="number" id="input-jari-tabung3" placeholder="Jari-jari alas (cm)">
+<input type="number" id="input-tinggi-tabung3" placeholder="Tinggi tabung (cm)">
+<button onclick="tampilkanTabung(3)">Tampilkan Tabung 3</button>
+
+<!-- <div id="hasil-perhitungan-kubus3" style="color: black;"></div> -->
+</div>
+</div>
+<!-- Modal penjelasan -->
+<div id="modal-explain" class="modal">
+  <div class="modal-content">
+    <span class="close" data-close="modal-explain">&times;</span>
+
+    <!-- Karakter animasi -->
+    <!-- <div class="character">
+      <img src="assets/fruttidino-frutti-dino.gif" alt="Karakter" />
+    </div> -->
+
+    <!-- Teks penjelasan -->
+    <div class="penjelasan-teks">
+      <h2>Penjelasan Tabung</h2>
+      <p>
+  Tabung adalah bangun ruang tiga dimensi yang memiliki dua sisi alas dan tutup berbentuk <strong>lingkaran</strong> yang sejajar dan kongruen, serta satu sisi lengkung yang menghubungkan keduanya. Sisi lengkung tabung disebut <strong>selimut tabung</strong> dan berbentuk persegi panjang jika dibuka menjadi jaring-jaring.
+</p>
+
+<p><strong>Ciri-ciri Tabung:</strong></p>
+<ul>
+  <li>Memiliki dua sisi datar berbentuk lingkaran: alas dan tutup.</li>
+  <li>Memiliki satu sisi lengkung yang menyelimuti sisi alas dan tutup.</li>
+  <li>Memiliki <strong>tidak ada titik sudut dan tidak ada rusuk</strong>.</li>
+  <li>Jarak antara alas dan tutup adalah tinggi tabung.</li>
+</ul>
+
+<p><strong>Elemen-elemen pada Tabung:</strong></p>
+<ul>
+  <li><strong>r</strong>: jari-jari alas (lingkaran)</li>
+  <li><strong>t</strong>: tinggi tabung</li>
+  <li><strong>π</strong>: konstanta pi (≈ 3.14 atau 22/7)</li>
+</ul>
+
+<p><strong>Rumus:</strong></p>
+<ul>
+  <li><strong>Volume</strong> = π × r² × t</li>
+  <li><strong>Luas Permukaan</strong> = 2 × π × r × (r + t)</li>
+</ul>
+<p>
+  Luas permukaan tabung terdiri dari dua lingkaran (alas dan tutup) serta satu persegi panjang yang membentuk sisi lengkung saat dibuka.
+</p>
+
+<p><strong>Contoh Penerapan Tabung dalam Kehidupan Sehari-hari:</strong></p>
+<ul>
+  <li>Kaleng makanan atau minuman (seperti kaleng susu atau soda).</li>
+  <li>Drum penyimpanan minyak.</li>
+  <li>Pipa air.</li>
+  <li>Tempat pensil silinder.</li>
+  <li>Gelas berbentuk tabung.</li>
+</ul>
+
+    </div>
+  </div>
+</div>
+
+<!-- Modal Panduan -->
+<div id="modal-guide" class="modal">
+  <div class="modal-content">
+    <span class="close" data-close="modal-guide">&times;</span>
+    <h2>Panduan Penggunaan</h2>
+    <ol>
+  <li>Klik menu <strong>Tampilkan Tabung 1 dan 2</strong> untuk menampilkan kedua tabung dalam tampilan interaktif.</li>
+
+  <li><strong>Tabung 1</strong> dapat diputar dengan klik dan drag menggunakan mouse atau touchpad untuk melihat bentuk tabung dari berbagai sudut pandang.</li>
+
+  <li>Arahkan kursor ke bagian-bagian Tabung 1 untuk melihat tooltip yang menampilkan informasi seperti jari-jari alas, tinggi tabung, dan diameter.</li>
+
+  <li><strong>Tabung 2</strong> terdiri dari bagian alas, tutup, dan selimut yang dapat di-drag atau digeser. Pengguna dapat menyusun ulang bagian-bagian tersebut untuk memahami jaring-jaring tabung secara visual.</li>
+
+  <li>Gunakan tombol <strong>Reset Tabung 2</strong> untuk mengembalikan semua bagian Tabung 2 ke posisi awal sebelum disusun ulang.</li>
+
+  <li>Masukkan nilai pada kolom <strong>r</strong> (jari-jari) dan <strong>t</strong> (tinggi) untuk menampilkan <strong>Tabung 3</strong> sesuai ukuran yang diinginkan. Tabung akan ditampilkan lengkap dengan alas, tutup, dan selimut berdasarkan input pengguna.</li>
+
+  <li>Klik tombol <strong>Penjelasan</strong> untuk membaca informasi umum tentang tabung, seperti ciri-ciri tabung, elemen penyusunnya, rumus volume dan luas permukaan, serta contoh penerapan dalam kehidupan sehari-hari.</li>
+
+  <li>Klik tombol <strong>Pola Tabung</strong> untuk menampilkan <em>jaring-jaring tabung</em>, berupa dua lingkaran (alas dan tutup) serta satu persegi panjang sebagai selimut. Jaring ini dapat di-drag atau digeser menggunakan slider untuk membantu memahami bagaimana bentuk tabung terbentuk dari bagian-bagian tersebut.</li>
+</ol>
+  </div>
+</div>
+<script>
+const tooltip = document.getElementById("tooltip");
+const tooltipDrag = document.getElementById("tooltip-drag");
+
+// === Tabung 1 ===
+const container1 = document.getElementById("container-tabung1");
+const scene1 = new THREE.Scene();
+const camera1 = new THREE.PerspectiveCamera(75, container1.clientWidth / container1.clientHeight, 0.1, 1000);
+const renderer1 = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer1.setClearColor(0x000000, 0);
+container1.appendChild(renderer1.domElement);
+
+function resizeRenderer() {
+  const width = container1.clientWidth;
+  const height = container1.clientHeight;
+  renderer1.setSize(width, height);
+  camera1.aspect = width / height;
+  camera1.updateProjectionMatrix();
+}
+
+resizeRenderer(); // panggil saat awal
+window.addEventListener('resize', resizeRenderer);
+
+const controls1 = new THREE.OrbitControls(camera1, renderer1.domElement);
+camera1.position.set(2, 2, 2);
+camera1.lookAt(0, 0, 0); // <— Tambahan penting agar kamera langsung menghadap ke balok
+controls1.update();
+scene1.add(new THREE.AmbientLight(0xffffff, 1));
+
+function createNumberTexture(number, textColor = "#ffffff") {
+  const size = 256;
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext("2d");
+ctx.clearRect(0, 0, size, size); 
+  ctx.fillStyle = transparent;
+  ctx.font = "bold 120px Arial";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(number.toString(), size / 2, size / 2);
+
+  return new THREE.CanvasTexture(canvas);
+}
+
+
+const radius = 1;
+const height = 1.5;
+const radialSegments = 64;
+
+const sideColors = [0xff0000, 0xffff00, 0x0000ff]; // selimut, alas, tutup
+const sideInfo = ["Selimut", "Alas", "Tutup"];
+const faceNumbers = [1, 2, 3];
+const textPlanes = [];
+const cylinderParts = [];
+
+// Selimut (samping tabung)
+const sideGeometry = new THREE.CylinderGeometry(radius, radius, height, radialSegments, 1, true);
+const sideMaterial = new THREE.MeshBasicMaterial({
+  color: sideColors[0],
+  transparent: true,
+  opacity: 0.6,
+  side: THREE.DoubleSide
+});
+const sideMesh = new THREE.Mesh(sideGeometry, sideMaterial);
+sideMesh.userData = { type: "face", info: `Sisi ${faceNumbers[0]} (${sideInfo[0]})` };
+
+// Nomor selimut (tegak dan menghadap kamera)
+const numberTexture1 = createNumberTexture(faceNumbers[0], "#ffffff", "#000000");
+const numberMaterial1 = new THREE.MeshBasicMaterial({ 
+  map: numberTexture1, 
+  transparent: true,
+    alphaTest: 0.5, // ⬅️ Tambahan ini bantu hilangkan background "semu"
+  side: THREE.DoubleSide // ⬅️ Tambahkan ini!
+});
+
+const numberPlane1 = new THREE.Mesh(new THREE.PlaneGeometry(0.4, 0.4), numberMaterial1);
+numberPlane1.position.set(radius + 0.01, 0, 0); // keluar dari permukaan
+sideMesh.add(numberPlane1);
+textPlanes.push(numberPlane1); // supaya menghadap kamera
+
+scene1.add(sideMesh);
+cylinderParts.push(sideMesh);
+
+// === Alas dan Tutup ===
+// Tambahkan ini sebelum loop alas & tutup
+const capGeometry = new THREE.CircleGeometry(radius, radialSegments);
+["bottom", "top"].forEach((pos, i) => {
+  const material = new THREE.MeshBasicMaterial({
+    color: sideColors[i + 1],
+    transparent: true,
+    opacity: 0.6,
+    side: THREE.DoubleSide
+  });
+
+  const cap = new THREE.Mesh(capGeometry, material);
+  const y = pos === "bottom" ? -height / 2 : height / 2;
+  cap.position.y = y;
+  cap.rotation.x = -Math.PI / 2;
+
+  cap.userData = { type: "face", info: `Sisi ${faceNumbers[i + 1]} (${sideInfo[i + 1]})` };
+
+  // ✅ Buat texture dan material khusus untuk sisi ini
+  const texture = createNumberTexture(faceNumbers[i + 1], "#ffffff", "#000000");
+  const numberMaterial = new THREE.MeshBasicMaterial({
+    map: texture,
+    transparent: true,
+    alphaTest: 0.5,
+    side: THREE.DoubleSide
+  });
+
+  const numberPlane = new THREE.Mesh(new THREE.PlaneGeometry(0.4, 0.4), numberMaterial);
+
+  if (pos === "top") {
+  numberPlane.rotation.set(0, 0, 0); // horizontal, menghadap ke atas
+  numberPlane.position.set(0, 0.01, 0); // di tengah permukaan atas
+} else {
+  numberPlane.rotation.set(Math.PI, 0, 0); // horizontal, menghadap ke bawah
+  numberPlane.position.set(0, -0.01, 0); // di tengah permukaan bawah
+}
+
+
+
+
+  cap.add(numberPlane);
+  textPlanes.push(numberPlane); // supaya menghadap kamera
+  scene1.add(cap);
+  cylinderParts.push(cap);
+});
+
+
+
+// === Rusuk Tabung ===
+const edgeMaterial = new THREE.LineBasicMaterial({ color: 0xff0000 });
+
+const basePoints = [];
+const topPoints = [];
+for (let i = 0; i <= radialSegments; i++) {
+  const theta = (i / radialSegments) * 2 * Math.PI;
+  const x = radius * Math.cos(theta);
+  const z = radius * Math.sin(theta);
+  basePoints.push(new THREE.Vector3(x, -height / 2, z));
+  topPoints.push(new THREE.Vector3(x, height / 2, z));
+}
+
+// 1. Rusuk vertikal (tegak)
+for (let i = 0; i < radialSegments; i += radialSegments / 8) { // ambil sebagian titik saja biar tidak terlalu padat
+  const idx = Math.floor(i);
+  const geometry = new THREE.BufferGeometry().setFromPoints([
+    basePoints[idx],
+    topPoints[idx]
+  ]);
+  const line = new THREE.Line(geometry, edgeMaterial);
+  line.userData = { type: "edge", info: "Rusuk Tegak" };
+  scene1.add(line);
+}
+
+// 2. Garis keliling alas
+for (let i = 0; i < radialSegments; i++) {
+  const current = basePoints[i];
+  const next = basePoints[(i + 1) % radialSegments];
+  const geometry = new THREE.BufferGeometry().setFromPoints([current, next]);
+  const line = new THREE.Line(geometry, edgeMaterial);
+  line.userData = { type: "edge", info: "Garis Alas" };
+  scene1.add(line);
+}
+
+// 3. Garis keliling tutup
+for (let i = 0; i < radialSegments; i++) {
+  const current = topPoints[i];
+  const next = topPoints[(i + 1) % radialSegments];
+  const geometry = new THREE.BufferGeometry().setFromPoints([current, next]);
+  const line = new THREE.Line(geometry, edgeMaterial);
+  line.userData = { type: "edge", info: "Garis Tutup" };
+  scene1.add(line);
+}
+
+
+
+const raycaster1 = new THREE.Raycaster();
+const mouse1 = new THREE.Vector2();
+
+container1.addEventListener("mousemove", (event) => {
+  const rect = container1.getBoundingClientRect();
+  mouse1.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+  mouse1.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+  raycaster1.setFromCamera(mouse1, camera1);
+
+  // Gabungkan semua objek tabung dari array cylinderParts (yang sudah kamu buat)
+  const intersects = raycaster1.intersectObjects(cylinderParts, true);
+
+  if (intersects.length === 0) {
+    tooltip.style.display = "none";
+    return;
+  }
+
+  // Tampilkan tooltip
+  const obj = intersects[0].object;
+  tooltip.style.left = event.clientX + 20 + "px";
+  tooltip.style.top = event.clientY + 10 + "px";
+  tooltip.innerHTML = `
+    <div class="tooltip-title">🧯 Tabung</div>
+    <ul>
+      <li>Memiliki 2 alas berbentuk lingkaran</li>
+      <li>Memiliki 1 sisi lengkung (selimut)</li>
+      <li>Tidak memiliki titik sudut</li>
+      <li>Memiliki 2 rusuk lengkung</li>
+      <li>Volume = π × r² × t</li>
+    </ul>
+  `;
+  tooltip.style.display = "block";
+});
+
+
+
+
+function animate() {
+  requestAnimationFrame(animate);
+  controls1.update(); // agar interaksi mouse halus
+  renderer1.render(scene1, camera1);
+}
+animate();
+
+
+
+// === tabung 2 ===
+const container2 = document.getElementById("container-tabung2");
+const scene2 = new THREE.Scene();
+const camera2 = new THREE.PerspectiveCamera(75, container2.clientWidth / container2.clientHeight, 0.1, 1000);
+camera2.position.set(0, 0, 5);
+
+const renderer2 = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer2.setClearColor(0x000000, 0);
+renderer2.setSize(container2.clientWidth, container2.clientHeight);
+container2.appendChild(renderer2.domElement);
+
+function resize() {
+  const width = container2.clientWidth;
+  const height = container2.clientHeight;
+  renderer2.setSize(width, height);
+  camera2.aspect = width / height;
+  camera2.updateProjectionMatrix();
+}
+window.addEventListener('resize', resize);
+resize();
+
+// === Tabung 2 ===
+const mouse2 = new THREE.Vector2();
+const raycaster2 = new THREE.Raycaster();
+let selectedSide = null;
+let isDragging = false;
+
+const tabungRadius2 = 1;
+const tabungTinggi2 = 2;
+const radialSegments2 = 64;
+
+const tabung2Sisi = [];
+
+// Sisi tutup
+const tutupGeometry = new THREE.CircleGeometry(tabungRadius2, radialSegments2);
+const tutupMaterial = new THREE.MeshBasicMaterial({
+  color: 0x0000ff,
+  transparent: true,
+  opacity: 0.6,
+  side: THREE.DoubleSide
+});
+const sisiTutup2 = new THREE.Mesh(tutupGeometry, tutupMaterial);
+sisiTutup2.rotation.x = -Math.PI / 2;
+sisiTutup2.position.y = tabungTinggi2 / 2;
+sisiTutup2.name = "Sisi 3 (Tutup)";
+tabung2Sisi.push(sisiTutup2);
+scene2.add(sisiTutup2);
+
+// Border tutup
+const tutupEdge = new THREE.EdgesGeometry(tutupGeometry);
+const tutupLine = new THREE.LineSegments(tutupEdge, new THREE.LineBasicMaterial({ color: 0x000000 }));
+sisiTutup2.add(tutupLine);
+
+// Nomor tutup
+const tutupNumberTexture = createNumberTexture(3, "#000000");
+const tutupNumberMaterial = new THREE.MeshBasicMaterial({ map: tutupNumberTexture, transparent: true });
+const tutupNumberPlane = new THREE.Mesh(new THREE.PlaneGeometry(0.4, 0.4), tutupNumberMaterial);
+tutupNumberPlane.position.set(0, 0, 0.1);
+sisiTutup2.add(tutupNumberPlane);
+
+
+// Sisi alas
+const alasGeometry = new THREE.CircleGeometry(tabungRadius2, radialSegments2);
+const alasMaterial = new THREE.MeshBasicMaterial({
+  color: 0xffff00,
+  transparent: true,
+  opacity: 0.6,
+  side: THREE.DoubleSide
+});
+const sisiAlas2 = new THREE.Mesh(alasGeometry, alasMaterial);
+sisiAlas2.rotation.x = -Math.PI / 2;
+sisiAlas2.position.y = -tabungTinggi2 / 2;
+sisiAlas2.name = "Sisi 1 (Alas)";
+tabung2Sisi.push(sisiAlas2);
+scene2.add(sisiAlas2);
+function createNumberTexture(number, textColor = "#ffffff") {
+  const size = 256;
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext("2d");
+
+
+  // Teks angka
+  ctx.fillStyle = textColor;
+  ctx.font = "bold 180px Arial";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(number, size / 2, size / 2);
+
+  const texture = new THREE.CanvasTexture(canvas);
+  return texture;
+}
+
+
+// Border alas
+const alasEdge = new THREE.EdgesGeometry(alasGeometry);
+const alasLine = new THREE.LineSegments(alasEdge, new THREE.LineBasicMaterial({ color: 0x000000 }));
+sisiAlas2.add(alasLine);
+
+// Nomor alas
+const alasNumberTexture = createNumberTexture(1, "#000000");
+const alasNumberMaterial = new THREE.MeshBasicMaterial({ map: alasNumberTexture, transparent: true });
+const alasNumberPlane = new THREE.Mesh(new THREE.PlaneGeometry(0.4, 0.4), alasNumberMaterial);
+alasNumberPlane.position.set(0, 0, 0.1);
+sisiAlas2.add(alasNumberPlane);
+
+// Sisi selimut
+const selimutGeometry = new THREE.CylinderGeometry(tabungRadius2, tabungRadius2, tabungTinggi2, radialSegments2, 1, true);
+const selimutMaterial = new THREE.MeshBasicMaterial({
+  color: 0xff0000,
+  transparent: true,
+  opacity: 0.6,
+  side: THREE.DoubleSide
+});
+const sisiSelimut2 = new THREE.Mesh(selimutGeometry, selimutMaterial);
+sisiSelimut2.name = "Sisi 2 (Selimut)";
+tabung2Sisi.push(sisiSelimut2);
+scene2.add(sisiSelimut2);
+
+// Border selimut
+const selimutEdge = new THREE.EdgesGeometry(selimutGeometry);
+const selimutLine = new THREE.LineSegments(selimutEdge, new THREE.LineBasicMaterial({ color: 0x000000 }));
+sisiSelimut2.add(selimutLine);
+
+// Nomor selimut
+const selimutNumberTexture = createNumberTexture(2, "#000000");
+const selimutNumberMaterial = new THREE.MeshBasicMaterial({ map: selimutNumberTexture, transparent: true });
+const selimutNumberPlane = new THREE.Mesh(new THREE.PlaneGeometry(0.4, 0.4), selimutNumberMaterial);
+selimutNumberPlane.position.set(tabungRadius2, 0, 0);
+sisiSelimut2.add(selimutNumberPlane);
+
+// Simpan posisi awal
+const tabung2PosisiAwal = tabung2Sisi.map(obj => obj.position.clone());
+const tabung2RotasiAwal = tabung2Sisi.map(obj => obj.rotation.clone());
+
+// === DRAG INTERAKTIF (SAMA PERSIS DENGAN BALOK)
+container2.addEventListener("pointerdown", (event) => {
+  const rect = container2.getBoundingClientRect();
+  mouse2.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+  mouse2.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+  raycaster2.setFromCamera(mouse2, camera2);
+  const intersects = raycaster2.intersectObjects(tabung2Sisi);
+  if (intersects.length > 0) {
+    selectedSide = intersects[0].object;
+    isDragging = true;
+    tooltipDrag.innerHTML = `<div class='tooltip-title'>🔷 ${selectedSide.name}</div><p>Drag sisi ini</p>`;
+    tooltipDrag.style.left = event.clientX + 20 + 'px';
+    tooltipDrag.style.top = event.clientY + 20 + 'px';
+    tooltipDrag.style.display = 'block';
+  }
+  // Jika sisi yang diklik adalah selimut dan belum diubah ke bentuk jaring
+if (selectedSide.name === "Sisi 2 (Selimut)" && !selectedSide.userData.isUnfolded) {
+  const panjangSelimut = 2 * Math.PI * tabungRadius2;
+  const tinggiSelimut = tabungTinggi2;
+
+  // Ganti geometry dari silinder jadi persegi panjang
+  const newGeometry = new THREE.PlaneGeometry(panjangSelimut, tinggiSelimut, 1, 1);
+  selectedSide.geometry.dispose();
+  selectedSide.geometry = newGeometry;
+
+  // Atur posisi dan rotasi ulang
+  selectedSide.rotation.set(0, 0, 0);
+  selectedSide.position.set(0, 0, 0);
+
+  // Hapus border dan angka lama
+  const childrenToRemove = [];
+  selectedSide.children.forEach(child => {
+    if (child.type === "LineSegments" || (child.type === "Mesh" && child.geometry.type === "PlaneGeometry")) {
+      childrenToRemove.push(child);
+    }
+  });
+  childrenToRemove.forEach(child => selectedSide.remove(child));
+
+  // Tambahkan border baru
+  const newBorder = new THREE.LineSegments(
+    new THREE.EdgesGeometry(newGeometry),
+    new THREE.LineBasicMaterial({ color: 0x000000 })
+  );
+  selectedSide.add(newBorder);
+
+  // Tambahkan nomor sisi baru
+  const numberTexture = createNumberTexture(2, "#000000");
+  const numberMaterial = new THREE.MeshBasicMaterial({ map: numberTexture, transparent: true });
+  const numberPlane = new THREE.Mesh(new THREE.PlaneGeometry(0.4, 0.4), numberMaterial);
+  numberPlane.position.set(0, 0, 0.05);
+  selectedSide.add(numberPlane);
+
+  // Tandai bahwa sudah unfolded
+  selectedSide.userData.isUnfolded = true;
+}
+
+});
+
+container2.addEventListener("pointermove", (event) => {
+  if (selectedSide && isDragging) {
+    selectedSide.position.x += event.movementX * 0.005;
+    selectedSide.position.y -= event.movementY * 0.005;
+    selectedSide.rotation.set(0, 0, 0);
+    tooltipDrag.style.left = event.clientX + 20 + 'px';
+    tooltipDrag.style.top = event.clientY + 20 + 'px';
+  }
+});
+
+container2.addEventListener("pointerup", () => {
+  selectedSide = null;
+  isDragging = false;
+  tooltipDrag.style.display = 'none';
+});
+
+
+// Tombol reset
+function resetSisi() {
+  tabung2Sisi.forEach((obj, i) => {
+    obj.position.copy(tabung2PosisiAwal[i]);
+    obj.rotation.copy(tabung2RotasiAwal[i]);
+
+    // Reset selimut khusus jika sudah diubah ke jaring
+    if (obj.name === "Sisi 2 (Selimut)" && obj.userData.isUnfolded) {
+      // Buat ulang geometry silinder
+      const selimutGeometryBaru = new THREE.CylinderGeometry(tabungRadius2, tabungRadius2, tabungTinggi2, radialSegments2, 1, true);
+      obj.geometry.dispose();
+      obj.geometry = selimutGeometryBaru;
+
+      // Hapus children lama (border & nomor dari jaring)
+      const childrenToRemove = [];
+      obj.children.forEach(child => {
+        if (child.type === "LineSegments" || (child.type === "Mesh" && child.geometry.type === "PlaneGeometry")) {
+          childrenToRemove.push(child);
+        }
+      });
+      childrenToRemove.forEach(child => obj.remove(child));
+
+      // Tambahkan border baru (EdgesGeometry)
+      const selimutEdge = new THREE.EdgesGeometry(selimutGeometryBaru);
+      const selimutLine = new THREE.LineSegments(selimutEdge, new THREE.LineBasicMaterial({ color: 0x000000 }));
+      obj.add(selimutLine);
+
+      // Tambahkan nomor di permukaan
+      const selimutNumberTexture = createNumberTexture(2, "#000000");
+      const selimutNumberMaterial = new THREE.MeshBasicMaterial({ map: selimutNumberTexture, transparent: true });
+      const selimutNumberPlane = new THREE.Mesh(new THREE.PlaneGeometry(0.4, 0.4), selimutNumberMaterial);
+      selimutNumberPlane.position.set(tabungRadius2, 0, 0);
+      obj.add(selimutNumberPlane);
+
+      // Reset flag
+      obj.userData.isUnfolded = false;
+    }
+  });
+}
+
+
+function animate2() {
+  requestAnimationFrame(animate2);
+  renderer2.render(scene2, camera2);
+}
+animate2();
+
+
+// tabung3
+let scene3, camera3, renderer3, mesh3, controls3;
+let isFirstTime = true;
+
+function buatTabung3() {
+  const jari = parseFloat(document.getElementById("input-jari-tabung3").value);
+  const tinggi = parseFloat(document.getElementById("input-tinggi-tabung3").value);
+  
+  if (isNaN(jari) || isNaN(tinggi) || jari <= 0 || tinggi <= 0) {
+    alert("Masukkan jari-jari dan tinggi yang valid.");
+    return;
+  }
+
+  const container = document.getElementById("container-tabung3");
+
+  if (isFirstTime) {
+    scene3 = new THREE.Scene();
+
+    camera3 = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+    camera3.position.z = 10;
+
+    renderer3 = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+
+    renderer3.setSize(width, height);
+    camera3.aspect = width / height;
+    camera3.updateProjectionMatrix();
+
+    document.getElementById("canvas-tabung3").appendChild(renderer3.domElement);
+
+    controls3 = new THREE.OrbitControls(camera3, renderer3.domElement);
+    controls3.enableDamping = true;
+
+    animate3();
+    isFirstTime = false;
+  }
+
+  if (mesh3) {
+    scene3.remove(mesh3);
+  }
+
+  // Buat geometri tabung
+const geometry = new THREE.CylinderGeometry(jari, jari, tinggi, 64); // 64 segmen agar halus
+
+// Material transparan hijau
+const material = new THREE.MeshPhongMaterial({
+  transparent: true,
+  opacity: 0.5,
+  side: THREE.DoubleSide
+});
+
+// Buat mesh dan tambahkan ke scene 
+mesh3 = new THREE.Mesh(geometry, material);
+
+// Tambahkan garis tepi hitam
+const edges = new THREE.EdgesGeometry(geometry);
+const lineMaterial = new THREE.LineBasicMaterial({ color: 0x000000 });
+const lineSegments = new THREE.LineSegments(edges, lineMaterial);
+mesh3.add(lineSegments);
+
+// Tambahkan ke scene
+scene3.add(mesh3);
+
+
+  // Hitung volume dan luas permukaan
+  const phi = Math.PI;
+  const volume = phi * jari * jari * tinggi;
+  const luasPermukaan = 2 * phi * jari * (jari + tinggi);
+
+  document.getElementById("volume-tabung3").textContent = `${volume.toFixed(2)} cm³`;
+  document.getElementById("luas-tabung3").textContent = `${luasPermukaan.toFixed(2)} cm²`;
+}
+
+function animate3() {
+  requestAnimationFrame(animate3);
+  if (mesh3) {
+    mesh3.rotation.x += 0.01;
+    mesh3.rotation.y += 0.01;
+  }
+  renderer3.render(scene3, camera3);
+  controls3.update();
+}
+
+
+window.onload = function () {
+  document.getElementById("explain-button").addEventListener("click", function () {
+    document.getElementById("modal-explain").style.display = "block";
+  });
+
+  document.getElementById("guide-button").addEventListener("click", function () {
+    document.getElementById("modal-guide").style.display = "block";
+  });
+
+  document.querySelectorAll(".close").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      const modalId = btn.getAttribute("data-close");
+      document.getElementById(modalId).style.display = "none";
+    });
+  });
+};
+// Fungsi untuk menutup modal berdasarkan ID
+  document.querySelectorAll(".close").forEach(function (closeBtn) {
+    closeBtn.addEventListener("click", function () {
+      const targetId = this.getAttribute("data-close");
+      const modal = document.getElementById(targetId);
+      if (modal) {
+        modal.style.display = "none";
+      }
+    });
+  });
+
+  // Menutup modal saat klik di luar konten
+  window.addEventListener("click", function (event) {
+    document.querySelectorAll(".modal").forEach(function (modal) {
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    });
+  });
+
+function tampilkanTabung(nomor) {
+  const tabung1 = document.getElementById("container-tabung1");
+  const tabung2 = document.getElementById("container-tabung2");
+  const tabung3 = document.getElementById("container-tabung3");
+  const geogebra = document.getElementById("geogebra-container");
+
+  tabung1.classList.remove("aktif");
+  tabung2.classList.remove("aktif");
+  tabung3.style.display = "none";
+  geogebra.style.display = "none";
+
+  // Tampilkan sesuai pilihan
+  if (nomor === 1) tabung1.classList.add("aktif");
+  else if (nomor === 2) tabung2.classList.add("aktif");
+  else if (nomor === 3) {
+    tabung3.style.display = "block";
+    buatTabung3();
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  tampilkanTabung(1);
+});
+
+function tampilkanGeoGebra() {
+  const tabung1 = document.getElementById("container-tabung1");
+  const tabung2 = document.getElementById("container-tabung2");
+  const container = document.getElementById('geogebra-container');
+
+  tabung1.classList.remove("aktif");
+  tabung2.classList.remove("aktif");
+  container.style.display = 'block';
+}
+
+
+  </script>
+
+</body>
+</html>

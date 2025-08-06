@@ -1,65 +1,115 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Menu Evaluasi - Aplikasi Bangun Ruang</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background-color: #f2f2f2;
-    }
-    h1 {
-      text-align: center;
-    }
-    h2 {
-      margin-top: 40px;
-      color: #00796B;
-    }
-    .menu-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 15px;
-      margin-top: 20px;
-    }
-    .menu-item {
-      background-color: #ffffff;
-      padding: 20px;
-      border-radius: 12px;
-      text-align: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      transition: transform 0.2s;
-      cursor: pointer;
-    }
-    .menu-item:hover {
-      transform: scale(1.05);
-      background-color: #e0f7fa;
-    }
-    .menu-item a {
-      text-decoration: none;
-      color: #333;
-      font-weight: bold;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Evaluasi Bangun Ruang</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 </head>
-<body>
+
+<body class="evaluasi">
+  <button onclick="goToMenu()" class="icon-button">
+  <i class="bi bi-arrow-left-circle"></i>
+</button>
+  <audio id="myAudio" src="assets/cheerful-joyful-playful-music-381499.mp3" autoplay loop></audio>
   <h1>Evaluasi Bangun Ruang</h1>
 
-  <h2>Bangun Ruang Sisi Datar</h2>
   <div class="menu-container">
-    <div class="menu-item"><a href="evaluasi_kubus.html">Kubus</a></div>
-    <div class="menu-item"><a href="evaluasi_balok.html">Balok</a></div>
-    <div class="menu-item"><a href="evaluasi_prisma.html">Prisma</a></div>
-    <div class="menu-item"><a href="evaluasi_limas.html">Limas</a></div>
+    <div class="menu-item">
+      <div id="kubus-preview" class="three-preview"></div>
+      <a href="quis_kubus.html">Kubus</a>
+    </div>
+    <div class="menu-item">
+      <div id="balok-preview" class="three-preview"></div>
+      <a href="quis_balok.html">Balok</a>
+    </div>
+    <div class="menu-item">
+      <div id="prisma-preview" class="three-preview"></div>
+      <a href="quis_prisma.html">Prisma</a>
+    </div>
+    <div class="menu-item">
+      <div id="limas-preview" class="three-preview"></div>
+      <a href="quis_limas.html">Limas</a>
+    </div>
+    <div class="menu-item">
+      <div id="tabung-preview" class="three-preview"></div>
+      <a href="quis_tabung.html">Tabung</a>
+    </div>
+    <div class="menu-item">
+      <div id="kerucut-preview" class="three-preview"></div>
+      <a href="quis_kerucut.html">Kerucut</a>
+    </div>
+    <div class="menu-item">
+      <div id="bola-preview" class="three-preview"></div>
+      <a href="quis_bola.html">Bola</a>
+    </div>
   </div>
 
-  <h2>Bangun Ruang Sisi Lengkung</h2>
-  <div class="menu-container">
-    <div class="menu-item"><a href="evaluasi_tabung.html">Tabung</a></div>
-    <div class="menu-item"><a href="evaluasi_kerucut.html">Kerucut</a></div>
-    <div class="menu-item"><a href="evaluasi_bola.html">Bola</a></div>
-  </div>
+  <script>
+    function createPreview(containerId, geometry) {
+  const container = document.getElementById(containerId);
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+
+  const size = container.clientWidth || 150;
+  renderer.setSize(size, size);
+  container.appendChild(renderer.domElement);
+
+  // ✅ Objek transparan
+  const material = new THREE.MeshPhongMaterial({
+    color: 0x00bcd4,
+    transparent: true,
+    opacity: 0.3,
+    shininess: 100,
+    side: THREE.DoubleSide
+  });
+  const mesh = new THREE.Mesh(geometry, material);
+  scene.add(mesh);
+
+  // ✅ Garis tepi
+  const edges = new THREE.EdgesGeometry(geometry);
+  const lineMaterial = new THREE.LineBasicMaterial({ color: 0x000000 });
+  const wireframe = new THREE.LineSegments(edges, lineMaterial);
+  scene.add(wireframe);
+
+  // ✅ Tambahkan cahaya agar mesh terlihat bagus
+  const light = new THREE.DirectionalLight(0xffffff, 1);
+  light.position.set(5, 5, 5).normalize();
+  scene.add(light);
+
+  camera.position.z = 3;
+
+  function animate() {
+    requestAnimationFrame(animate);
+    mesh.rotation.x += 0.01;
+    mesh.rotation.y += 0.01;
+    wireframe.rotation.x = mesh.rotation.x;
+    wireframe.rotation.y = mesh.rotation.y;
+    renderer.render(scene, camera);
+  }
+
+  animate();
+}
+
+    window.onload = function () {
+      createPreview("kubus-preview", new THREE.BoxGeometry(1, 1, 1));
+      createPreview("balok-preview", new THREE.BoxGeometry(1.4, 0.8, 0.6));
+      createPreview("prisma-preview", new THREE.CylinderGeometry(1, 1, 1, 3));
+      createPreview("limas-preview", new THREE.ConeGeometry(1, 1.4, 4));
+      createPreview("tabung-preview", new THREE.CylinderGeometry(0.7, 0.7, 1.2, 32));
+      createPreview("kerucut-preview", new THREE.ConeGeometry(0.7, 1.4, 32));
+      createPreview("bola-preview", new THREE.SphereGeometry(0.7, 32, 32));
+    };
+
+     function goToMenu() {
+    window.location.href = "index.html"; // Ganti sesuai nama file halaman menunya
+  }
+  </script>
 </body>
 </html>
- 

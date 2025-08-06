@@ -10,8 +10,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 </head>
-<body class="halaman-balok">
+<body class="balok">
 <button id="btn-kembali" onclick="window.location.href='sisidatar.html'">←</button>
+<audio id="myAudio" src="assets/cheerful-joyful-playful-music-381499.mp3" autoplay loop></audio>
   <!-- Tooltip -->
   <div id="tooltip">
     <div class="tooltip-title">Sifat-sifat Balok</div> 
@@ -32,16 +33,48 @@
   <div class="container-balok">
     <div id="container-balok1"></div>
     <div id="container-balok2"></div>
+    <div id="geogebra-container" style="display: none; margin-top: 20px;">
+  <iframe 
+    src="https://www.geogebra.org/material/iframe/id/s5eyt5a6/width/800/height/600/border/888888/rc/false/ai/false/sdz/false/smb/false/stb/false" 
+    width="1000" 
+    height="1000" 
+    style="border: 0;">
+  </iframe>
+</div>
+<div id="container-balok3">
+  <div id="canvas-balok3"></div>
+
+  <form id="hasil-perhitungan-balok3" style="color: black;">
+    <div class="form-group">
+      <label for="volume-balok3">Volume:</label>
+      <p id="volume-balok3" class="readonly-output">-</p>
+    </div>
+    <div class="form-group">
+      <label for="luas-balok3">Luas Permukaan:</label>
+      <p id="luas-balok3" class="readonly-output">-</p>
+    </div>
+  </form>
+</div>
+
   </div>
 
   <!-- Tombol reset di bawah -->
 <div class="bottom-buttons">
   <button id="explain-button">Penjelasan</button>
   <button id="guide-button">Panduan</button>
-  <a href="jaring-balok.html" id="net-button" class="button-link">Pola Balok</a>
+  <button onclick="tampilkanGeoGebra()">Tampilkan Pola Balok</button>
   <button onclick="tampilkanBalok(1)">Tampilkan Balok 1</button>
   <button onclick="tampilkanBalok(2)">Tampilkan Balok 2</button>
   <button onclick="resetSisi()">Reset Balok 2</button>
+  <div>
+  <input type="number" id="input-panjang-balok3" placeholder="Panjang (cm)">
+  <input type="number" id="input-lebar-balok3" placeholder="Lebar (cm)">
+  <input type="number" id="input-tinggi-balok3" placeholder="Tinggi (cm)">
+  <button onclick="tampilkanBalok(3)">Tampilkan Balok 3</button>
+
+  <!-- <div id="hasil-perhitungan-balok3" style="color: black;"></div> -->
+</div>
+
 </div>
 <!-- Modal penjelasan -->
 <div id="modal-explain" class="modal">
@@ -49,28 +82,45 @@
     <span class="close" data-close="modal-explain">&times;</span>
 
     <!-- Karakter animasi -->
-    <div class="character">
+    <!-- <div class="character">
       <img src="assets/slothalida-sloth.gif" alt="Karakter" />
-    </div>
+    </div> -->
 
     <!-- Teks penjelasan -->
     <div class="penjelasan-teks">
       <h2>Penjelasan Balok</h2>
-      <p>
-        Balok adalah bangun ruang tiga dimensi yang memiliki <strong>6 sisi berbentuk persegi panjang</strong>. 
-        Setiap sisi berpasangan dan berukuran sama. Balok memiliki <strong>12 rusuk</strong> dan <strong>8 titik sudut</strong>.
-      </p>
-      <p>
-        Balok berbeda dengan kubus karena panjang, lebar, dan tingginya bisa berbeda. Balok banyak ditemukan pada benda sehari-hari seperti kotak susu atau kardus.
-      </p>
-      <p>
-        Rumus:
-        <ul>
-          <li><strong>Volume</strong> = p × l × t</li>
-          <li><strong>Luas Permukaan</strong> = 2 × (pl + pt + lt)</li>
-        </ul>
-        Di mana <em>p</em> = panjang, <em>l</em> = lebar, dan <em>t</em> = tinggi.
-      </p>
+<p>
+  Balok adalah bangun ruang tiga dimensi yang memiliki <strong>6 sisi berbentuk persegi panjang</strong>. 
+  Setiap sisi saling berpasangan dan berukuran sama. Balok juga memiliki <strong>12 rusuk</strong> dan <strong>8 titik sudut</strong>.
+</p>
+
+<p><strong>Ciri-ciri Balok:</strong></p>
+<ul>
+  <li>Memiliki 6 sisi berbentuk persegi panjang.</li>
+  <li>Memiliki 12 rusuk yang membentuk kerangka balok.</li>
+  <li>Memiliki 8 titik sudut berbentuk sudut siku-siku (90°).</li>
+  <li>Pasangan sisi yang berhadapan memiliki bentuk dan ukuran yang sama.</li>
+  <li>Memiliki tiga ukuran: panjang (<em>p</em>), lebar (<em>l</em>), dan tinggi (<em>t</em>).</li>
+</ul>
+
+<p><strong>Rumus:</strong></p>
+<ul>
+  <li><strong>Volume</strong> = p × l × t</li>
+  <li><strong>Luas Permukaan</strong> = 2 × (p × l + p × t + l × t)</li>
+</ul>
+<p>
+  Di mana <em>p</em> = panjang, <em>l</em> = lebar, dan <em>t</em> = tinggi.
+</p>
+
+<p><strong>Contoh Penerapan Balok dalam Kehidupan Sehari-hari:</strong></p>
+<ul>
+  <li>Kotak susu atau kemasan minuman karton.</li>
+  <li>Kardus pengiriman barang.</li>
+  <li>Meja, lemari, atau rak buku yang berbentuk persegi panjang.</li>
+  <li>Tangki air atau akuarium berbentuk balok.</li>
+  <li>Batu bata dan balok kayu.</li>
+</ul>
+
     </div>
   </div>
 </div>
@@ -81,11 +131,23 @@
     <span class="close" data-close="modal-guide">&times;</span>
     <h2>Panduan Penggunaan</h2>
     <ul>
-      <li>Putar balok dengan klik dan drag (kecuali balok kedua).</li>
-      <li>Arahkan kursor ke sisi untuk melihat tooltip.</li>
-      <li>Klik Reset untuk mengembalikan posisi awal balok 2.</li>
-      <li>Klik Penjelasan untuk info tentang balok.</li>
-    </ul>
+  <li>Klik menu <strong>Tampilkan Balok 1 dan 2</strong> untuk menampilkan kedua balok dalam tampilan interaktif.</li>
+  
+  <li><strong>Balok 1</strong> dapat diputar dengan klik dan drag menggunakan mouse atau touchpad untuk melihat semua sisi dari berbagai sudut pandang.</li>
+  
+  <li>Arahkan kursor ke setiap sisi balok untuk melihat tooltip yang menampilkan informasi tentang panjang, lebar, atau tinggi dari sisi tersebut.</li>
+  
+  <li><strong>Balok 2</strong> terdiri dari bagian-bagian sisi yang dapat di-drag satu per satu. Pengguna dapat menyusun ulang bagian-bagian tersebut seperti menyusun potongan jaring balok secara manual.</li>
+  
+  <li>Gunakan tombol <strong>Reset Balok 2</strong> untuk mengembalikan semua bagian balok 2 ke posisi awalnya sebelum disusun ulang.</li>
+  
+  <li>Masukkan nilai pada kolom <strong>p</strong> (panjang), <strong>l</strong> (lebar), dan <strong>t</strong> (tinggi) untuk menampilkan balok 3 sesuai ukuran yang diinginkan.</li>
+  
+  <li>Klik tombol <strong>Penjelasan</strong> untuk membaca informasi umum tentang balok, seperti ciri-ciri balok, rumus volume, luas permukaan, serta contoh penerapan dalam kehidupan sehari-hari.</li>
+  
+  <li>Klik tombol <strong>Pola Balok</strong> untuk menampilkan <em>jaring-jaring balok</em> (pola permukaan balok dalam bentuk datar). Jaring ini dapat di-drag atau digeser menggunakan slider untuk memahami bagaimana bentuk balok terbentuk dari jaringnya.</li>
+</ul>
+
   </div>
 </div>
 <script>
@@ -112,7 +174,7 @@ resizeRenderer(); // panggil saat awal
 window.addEventListener('resize', resizeRenderer);
 
 const controls1 = new THREE.OrbitControls(camera1, renderer1.domElement);
-camera1.position.set(3, 2, 5);
+camera1.position.set(2, 2, 2);
 camera1.lookAt(0, 0, 0); // <— Tambahan penting agar kamera langsung menghadap ke balok
 controls1.update();
 scene1.add(new THREE.AmbientLight(0xffffff, 1));
@@ -422,12 +484,19 @@ container2.addEventListener("pointerdown", (event) => {
 
 container2.addEventListener("pointermove", (event) => {
   if (selectedSide && isDragging) {
-    selectedSide.position.x += event.movementX * 0.005;
-    selectedSide.position.y -= event.movementY * 0.005;
-    selectedSide.rotation.set(0, 0, 0);
-    tooltipDrag.style.left = event.clientX + 20 + 'px';
-    tooltipDrag.style.top = event.clientY + 20 + 'px';
+  selectedSide.position.x += event.movementX * 0.005;
+  selectedSide.position.y -= event.movementY * 0.005;
+  selectedSide.rotation.set(0, 0, 0);
+
+  // Koreksi posisi Z agar tidak terlalu jauh dari kamera
+  if (selectedSide.name === "Belakang") {
+    selectedSide.position.z = 0.5; // samakan dengan sisi depan
   }
+
+  tooltipDrag.style.left = event.clientX + 20 + 'px';
+  tooltipDrag.style.top = event.clientY + 20 + 'px';
+}
+
 });
 
 container2.addEventListener("pointerup", () => {
@@ -443,6 +512,95 @@ function resetSisi() {
   });
 }
 
+let sceneBalok, cameraBalok, rendererBalok, meshBalok, controlsBalok;
+let isFirstTimeBalok = true;
+
+function buatBalok3() {
+  const panjang = parseFloat(document.getElementById("input-panjang-balok3").value);
+  const lebar = parseFloat(document.getElementById("input-lebar-balok3").value);
+  const tinggi = parseFloat(document.getElementById("input-tinggi-balok3").value);
+
+  if (isNaN(panjang) || isNaN(lebar) || isNaN(tinggi) || panjang <= 0 || lebar <= 0 || tinggi <= 0) {
+    alert("Masukkan dimensi yang valid.");
+    return;
+  }
+
+  const container = document.getElementById("container-balok3");
+
+  if (isFirstTimeBalok) {
+    sceneBalok = new THREE.Scene();
+
+    cameraBalok = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+    cameraBalok.position.set(10, 10, 10); // bebas, nanti diatur ulang
+
+    rendererBalok = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+    rendererBalok.setSize(width, height);
+    cameraBalok.aspect = width / height;
+    cameraBalok.updateProjectionMatrix();
+
+    document.getElementById("canvas-balok3").appendChild(rendererBalok.domElement);
+
+    controlsBalok = new THREE.OrbitControls(cameraBalok, rendererBalok.domElement);
+    controlsBalok.enableDamping = true;
+
+    animateBalok3();
+    isFirstTimeBalok = false;
+  }
+
+  // Hapus mesh lama jika ada
+  if (meshBalok) {
+    sceneBalok.remove(meshBalok);
+  }
+
+  // Buat balok baru
+  const geometry = new THREE.BoxGeometry(panjang, tinggi, lebar);
+const material = new THREE.MeshPhongMaterial({
+  color: 0x8fd3e8,         // biru muda
+  transparent: true,
+  opacity: 0.5,
+  side: THREE.DoubleSide
+});
+
+meshBalok = new THREE.Mesh(geometry, material);
+
+// Tambahkan garis tepi hitam
+const edges = new THREE.EdgesGeometry(geometry);
+const lineMaterial = new THREE.LineBasicMaterial({ color: 0x000000 });
+const lineSegments = new THREE.LineSegments(edges, lineMaterial);
+meshBalok.add(lineSegments);
+
+// Tambahkan ke scene
+sceneBalok.add(meshBalok);
+
+
+  // Atur posisi kamera otomatis agar balok pas terlihat
+  const maxDim = Math.max(panjang, lebar, tinggi);
+  const fov = cameraBalok.fov * (Math.PI / 180);
+  const distance = (maxDim * Math.sqrt(3)) / (2 * Math.tan(fov / 2));
+  cameraBalok.position.set(distance, distance, distance);
+  cameraBalok.lookAt(0, 0, 0);
+  controlsBalok.target.set(0, 0, 0);
+  controlsBalok.update();
+
+  // Perhitungan volume dan luas
+  const volume = panjang * lebar * tinggi;
+  const luas = 2 * (panjang * lebar + panjang * tinggi + lebar * tinggi);
+
+  document.getElementById("volume-balok3").textContent = `${volume.toFixed(2)} cm³`;
+  document.getElementById("luas-balok3").textContent = `${luas.toFixed(2)} cm²`;
+}
+
+function animateBalok3() {
+  requestAnimationFrame(animateBalok3);
+  if (meshBalok) {
+    meshBalok.rotation.x += 0.01;
+    meshBalok.rotation.y += 0.01;
+  }
+  rendererBalok.render(sceneBalok, cameraBalok);
+  controlsBalok.update();
+}
 
 
 window.onload = function () {
@@ -484,19 +642,37 @@ window.onload = function () {
 function tampilkanBalok(nomor) {
   const balok1 = document.getElementById("container-balok1");
   const balok2 = document.getElementById("container-balok2");
+  const balok3 = document.getElementById("container-balok3");
+  const geogebra = document.getElementById("geogebra-container");
 
   balok1.classList.remove("aktif");
   balok2.classList.remove("aktif");
+  balok3.style.display = "none";
+  geogebra.style.display = "none";
 
-  if (nomor === 1) {
-    balok1.classList.add("aktif");
-  } else if (nomor === 2) {
-    balok2.classList.add("aktif");
+  // Tampilkan sesuai pilihan
+  if (nomor === 1) balok1.classList.add("aktif");
+  else if (nomor === 2) balok2.classList.add("aktif");
+  else if (nomor === 3) {
+    balok3.style.display = "block";
+    buatBalok3();
   }
 }
+
 document.addEventListener("DOMContentLoaded", () => {
   tampilkanBalok(1);
 });
+
+function tampilkanGeoGebra() {
+  const balok1 = document.getElementById("container-balok1");
+  const balok2 = document.getElementById("container-balok2");
+  const container = document.getElementById('geogebra-container');
+
+  balok1.classList.remove("aktif");
+  balok2.classList.remove("aktif");
+  container.style.display = 'block';
+}
+
 
   </script>
 

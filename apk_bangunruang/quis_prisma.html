@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kuis Bangun Ruang - Prisma</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="style.css">
+</head>
+<body class="quis">
+  <button onclick="goToMenu()" class="icon-button">
+  <i class="bi bi-arrow-left-circle"></i>
+</button>
+  <audio id="myAudio" src="assets/cheerful-joyful-playful-music-381499.mp3" autoplay loop></audio>
+  <div class="container">
+    <h2>Kuis Prisma</h2>
+
+    <div id="quiz-box">
+      <p id="question"></p>
+      <div id="options" class="option-group"></div>
+      <button onclick="nextQuestion()">Selanjutnya</button>
+    </div>
+
+    <div id="result-box" style="display:none;">
+      <h3>Hasil Kuis</h3>
+      <p id="score"></p>
+      <button onclick="showAnswers()">Lihat Jawaban</button>
+      <div id="answer-review"></div>
+      <button onclick="startQuiz()">Ulangi Kuis</button>
+    </div>
+  </div>
+
+  <script>
+const questionBank = [
+  { question: "Prisma adalah bangun ruang yang memiliki alas dan atap berupa ...", options: ["lingkaran", "segitiga", "dua bangun datar yang kongruen", "persegi panjang"], answer: "dua bangun datar yang kongruen" },
+  { question: "Jumlah sisi pada prisma segitiga adalah ...", options: ["4", "5", "6", "7"], answer: "5" },
+  { question: "Jumlah rusuk pada prisma segitiga adalah ...", options: ["6", "9", "12", "15"], answer: "9" },
+  { question: "Jumlah titik sudut pada prisma segitiga adalah ...", options: ["4", "6", "8", "10"], answer: "6" },
+  { question: "Setiap sisi tegak pada prisma berbentuk ...", options: ["lingkaran", "persegi panjang", "segitiga", "segi lima"], answer: "persegi panjang" },
+  { question: "Prisma segi empat memiliki jumlah sisi sebanyak ...", options: ["5", "6", "7", "8"], answer: "6" },
+  { question: "Jumlah rusuk pada prisma segi lima adalah ...", options: ["10", "15", "20", "12"], answer: "15" },
+  { question: "Volume prisma dihitung dengan rumus ...", options: ["1/3 x alas x tinggi", "π x r² x t", "luas alas x tinggi", "p x l x t"], answer: "luas alas x tinggi" },
+  { question: "Luas permukaan prisma adalah ...", options: ["jumlah luas alas dan tutup", "2 x luas alas + keliling alas x tinggi", "luas alas x tinggi", "π x r² x t"], answer: "2 x luas alas + keliling alas x tinggi" },
+  { question: "Prisma dengan alas berbentuk segi enam disebut ...", options: ["Prisma segi tiga", "Prisma segi lima", "Prisma segi enam", "Hexahedron"], answer: "Prisma segi enam" },
+  { question: "Jika luas alas 12 cm² dan tinggi 10 cm, maka volume prismanya adalah ...", options: ["22 cm³", "120 cm³", "60 cm³", "100 cm³"], answer: "120 cm³" },
+  { question: "Apakah semua sisi prisma berbentuk segi empat?", options: ["Ya", "Tidak", "Sebagian", "Kadang-kadang"], answer: "Tidak" },
+  { question: "Jumlah sisi pada prisma segi enam adalah ...", options: ["8", "10", "12", "14"], answer: "8" },
+  { question: "Jumlah titik sudut prisma segi lima adalah ...", options: ["10", "12", "14", "15"], answer: "10" },
+  { question: "Rusuk prisma adalah ...", options: ["Garis lengkung", "Garis pelukis", "Garis perpotongan antara dua sisi", "Sudut alas"], answer: "Garis perpotongan antara dua sisi" },
+  { question: "Jumlah sisi tegak pada prisma segi n adalah ...", options: ["n", "2n", "n+2", "3n"], answer: "n" },
+  { question: "Salah satu sifat utama prisma adalah ...", options: ["Sisi melengkung", "Alas dan atap berbeda", "Alas dan atap kongruen dan sejajar", "Tidak memiliki volume"], answer: "Alas dan atap kongruen dan sejajar" },
+  { question: "Jika alas prisma berbentuk persegi panjang dan tingginya 5 cm, maka bentuk bangunnya adalah ...", options: ["Balok", "Kubus", "Prisma segi empat", "Limas"], answer: "Prisma segi empat" },
+  { question: "Berapa jumlah sisi pada prisma segi lima?", options: ["6", "7", "8", "10"], answer: "7" },
+  { question: "Jumlah rusuk pada prisma segi enam adalah ...", options: ["12", "14", "18", "20"], answer: "18" },
+  { question: "Apakah prisma bisa memiliki alas berbentuk segi sembilan?", options: ["Tidak", "Ya", "Hanya sampai segi enam", "Tidak dapat dipastikan"], answer: "Ya" },
+  { question: "Jumlah rusuk pada prisma segi n adalah ...", options: ["2n", "3n", "n+2", "n²"], answer: "3n" },
+  { question: "Jumlah titik sudut pada prisma segi n adalah ...", options: ["2n", "n", "n+2", "3n"], answer: "2n" },
+  { question: "Jumlah sisi pada prisma segi n adalah ...", options: ["n", "2n", "n+2", "3n"], answer: "n + 2" },
+  { question: "Semua sisi tegak pada prisma ...", options: ["Berbentuk lingkaran", "Berbentuk segitiga", "Berbentuk persegi panjang", "Berbentuk trapesium"], answer: "Berbentuk persegi panjang" },
+  { question: "Apa nama prisma dengan alas segitiga?", options: ["Prisma segitiga", "Prisma siku-siku", "Limas segitiga", "Prisma persegi"], answer: "Prisma segitiga" },
+  { question: "Apakah balok merupakan salah satu bentuk prisma?", options: ["Ya", "Tidak", "Kadang-kadang", "Tidak dapat dipastikan"], answer: "Ya" },
+  { question: "Apakah prisma memiliki sisi lengkung?", options: ["Ya", "Tidak", "Kadang", "Tergantung alas"], answer: "Tidak" },
+  { question: "Nama lain dari prisma segi tiga adalah ...", options: ["Kubus", "Piramida", "Balok", "Trigon prisma"], answer: "Trigon prisma" },
+  { question: "Jika keliling alas 18 cm dan tinggi 10 cm, maka luas selimut prisma adalah ...", options: ["180 cm²", "28 cm²", "100 cm²", "90 cm²"], answer: "180 cm²" },
+  { question: "Salah satu contoh benda berbentuk prisma adalah ...", options: ["Kaleng", "Kotak tisu", "Topi kerucut", "Bola"], answer: "Kotak tisu" },
+  { question: "Volume prisma berbentuk segitiga dengan luas alas 20 cm² dan tinggi 5 cm adalah ...", options: ["100 cm³", "25 cm³", "10 cm³", "200 cm³"], answer: "100 cm³" },
+  { question: "Jika luas alas 30 cm² dan tinggi prisma 4 cm, maka volumenya adalah ...", options: ["90 cm³", "120 cm³", "60 cm³", "100 cm³"], answer: "120 cm³" },
+  { question: "Apakah limas termasuk prisma?", options: ["Ya", "Tidak", "Sebagian", "Hampir sama"], answer: "Tidak" },
+  { question: "Jumlah sisi prisma segi delapan adalah ...", options: ["10", "12", "14", "16"], answer: "10" },
+  { question: "Jumlah rusuk prisma segi sembilan adalah ...", options: ["27", "18", "20", "24"], answer: "27" },
+  { question: "Prisma dapat dibedakan berdasarkan ...", options: ["Panjang rusuk", "Jenis alasnya", "Jenis tutupnya", "Bentuk atap"], answer: "Jenis alasnya" },
+  { question: "Apakah prisma bisa mempunyai alas berbentuk segitiga sama kaki?", options: ["Tidak", "Ya", "Hanya sama sisi", "Tergantung tinggi"], answer: "Ya" },
+  { question: "Jumlah sisi tegak pada prisma segi enam adalah ...", options: ["4", "5", "6", "7"], answer: "6" },
+  { question: "Semua sisi tegak pada prisma sejajar dengan ...", options: ["Tepi alas", "Diagonal prisma", "Garis tinggi", "Sisi alas"], answer: "Garis tinggi" },
+  { question: "Apakah prisma memiliki titik puncak?", options: ["Ya", "Tidak", "Kadang", "Tergantung bentuk"], answer: "Tidak" },
+  { question: "Jika luas alas 15 cm² dan tinggi 3 cm, maka volumenya adalah ...", options: ["45 cm³", "30 cm³", "18 cm³", "60 cm³"], answer: "45 cm³" },
+  { question: "Nama lain prisma segi empat jika semua sudut siku-siku adalah ...", options: ["Balok", "Kubus", "Limas", "Kerucut"], answer: "Balok" },
+  { question: "Jumlah bidang diagonal prisma segitiga adalah ...", options: ["2", "3", "0", "1"], answer: "0" },
+  { question: "Apa yang membedakan prisma dan limas?", options: ["Prisma memiliki sisi lengkung", "Prisma tidak memiliki alas", "Prisma memiliki dua alas", "Prisma selalu segitiga"], answer: "Prisma memiliki dua alas" },
+  { question: "Jika tinggi prisma dinaikkan 2x, maka volumenya ...", options: ["Dikurangi 2x", "Tetap", "Bertambah 2x", "Bertambah 3x"], answer: "Bertambah 2x" },
+  { question: "Jumlah titik sudut prisma segi lima adalah ...", options: ["5", "10", "15", "8"], answer: "10" },
+  { question: "Jumlah diagonal ruang pada prisma adalah ...", options: ["Tidak ada", "Satu", "Empat", "Tergantung alas"], answer: "Tergantung alas" },
+  { question: "Luas permukaan prisma terdiri dari ...", options: ["2 alas + selimut", "3 sisi alas", "4 sisi atap", "5 bidang samping"], answer: "2 alas + selimut" }
+];
+
+
+
+    let selectedQuestions = [];
+    let currentQuestion = 0;
+    let userAnswers = [];
+
+    function shuffle(array) {
+      const copy = array.slice();
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function startQuiz() {
+      selectedQuestions = shuffle(questionBank).slice(0, 10);
+      currentQuestion = 0;
+      userAnswers = [];
+
+      document.getElementById("quiz-box").style.display = "block";
+      document.getElementById("result-box").style.display = "none";
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const q = selectedQuestions[currentQuestion];
+      document.getElementById("question").textContent = `${currentQuestion + 1}. ${q.question}`;
+
+      const optionsHtml = q.options.map(option => `
+        <label class="option-label">
+          <input type="radio" name="option" value="${option}" />
+          ${option}
+        </label>
+      `).join("");
+
+      document.getElementById("options").innerHTML = optionsHtml;
+    }
+
+    function nextQuestion() {
+      const selected = document.querySelector('input[name="option"]:checked');
+      if (!selected) return alert("Pilih jawaban dulu ya!");
+
+      userAnswers.push(selected.value);
+      currentQuestion++;
+
+      if (currentQuestion < selectedQuestions.length) {
+        renderQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      let score = 0;
+      for (let i = 0; i < selectedQuestions.length; i++) {
+        if (userAnswers[i] === selectedQuestions[i].answer) score++;
+      }
+
+      document.getElementById("quiz-box").style.display = "none";
+      document.getElementById("result-box").style.display = "block";
+      document.getElementById("score").innerHTML = `Jawaban Benar: ${score} dari ${selectedQuestions.length} soal <br> Skor: <strong>${(score / selectedQuestions.length * 100).toFixed(0)}%</strong>`;
+    }
+
+    function showAnswers() {
+      let html = "";
+      for (let i = 0; i < selectedQuestions.length; i++) {
+        const q = selectedQuestions[i];
+        const userAns = userAnswers[i];
+        const correct = userAns === q.answer;
+        html += `
+          <p>
+            <strong>Soal ${i + 1}:</strong> ${q.question}<br>
+            Jawabanmu: <span style="color:${correct ? 'green' : 'red'}">${userAns}</span><br>
+            Jawaban benar: <strong>${q.answer}</strong>
+          </p>
+        `;
+      }
+      document.getElementById("answer-review").innerHTML = html;
+    }
+
+    window.onload = startQuiz;
+     function goToMenu() {
+    window.location.href = "evaluasi.html"; // Ganti sesuai nama file halaman menunya
+  }
+  </script>
+</body>
+</html>

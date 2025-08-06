@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title> Limas Interaktif</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body class="limas">
+<button id="btn-kembali" onclick="window.location.href='sisidatar.html'">←</button>
+<audio id="myAudio" src="assets/cheerful-joyful-playful-music-381499.mp3" autoplay loop></audio>
+  <!-- Tooltip -->
+  <div id="tooltip">
+    <div class="tooltip-title">Sifat-sifat Limas</div> 
+    <div>
+      <ul>
+        <li>Memiliki 4 sisi, terdiri dari 1 alas segitiga dan 3 sisi tegak berbentuk segitiga</li>
+        <li>Memiliki 6 rusuk (3 rusuk alas dan 3 rusuk tegak)</li>
+        <li>Memiliki 4 titik sudut</li>
+        <li>Semua sisi tegak bertemu di satu titik puncak</li>
+        <li>Volume = ⅓ × luas alas × tinggi, Luas Permukaan = luas alas + jumlah luas sisi tegak</li>
+      </ul>
+    </div>
+  </div>
+  <div id="tooltip-drag" class="tooltip"></div>
+
+
+  <!-- Kontainer -->
+  <div class="container-limas">
+    <div id="container-limas1"></div>
+    <div id="container-limas2"></div>
+    <div id="geogebra-container" style="display: none; margin-top: 20px;">
+  <iframe 
+    src="https://www.geogebra.org/material/iframe/id/mptnuak4/width/800/height/600/border/888888/rc/false/ai/false/sdz/true/smb/false/stb/false"  
+    width="500" 
+    height="500" 
+    style="border: 0;">
+  </iframe>
+</div>
+<div id="container-limas3">
+  <div id="canvas-limas3"></div>
+
+  <form id="hasil-perhitungan-limas3" style="color: black;">
+    <div class="form-group">
+      <label for="volume-limas3">Volume:</label>
+      <p id="volume-limas3" class="readonly-output">-</p>
+    </div>
+    <div class="form-group">
+      <label for="luas-limas3">Luas Alas Segitiga:</label>
+      <p id="luas-limas3" class="readonly-output">-</p>
+    </div>
+  </form>
+</div>
+
+  </div>
+
+  <!-- Tombol reset di bawah -->
+<div class="bottom-buttons">
+  <button id="explain-button">Penjelasan</button>
+  <button id="guide-button">Panduan</button>
+  <button onclick="tampilkanGeoGebra()">Tampilkan Pola Limas</button>
+  <button onclick="tampilkanLimas(1)">Tampilkan Limas 1</button>
+  <button onclick="tampilkanLimas(2)">Tampilkan Limas 2</button>
+  <button onclick="resetSisi()">Reset Limas 2</button>
+  <div>
+  <input type="number" id="input-sisi-limas3" placeholder="Sisi alas segitiga (cm)">
+<input type="number" id="input-tinggi-limas3" placeholder="Tinggi limas (cm)">
+<button onclick="tampilkanLimas(3)">Tampilkan Limas 3</button>
+<!-- <div id="hasil-perhitungan-kubus3" style="color: black;"></div> -->
+</div>
+</div>
+<!-- Modal penjelasan -->
+<div id="modal-explain" class="modal">
+  <div class="modal-content">
+    <span class="close" data-close="modal-explain">&times;</span>
+
+    <!-- Karakter animasi -->
+    <!-- <div class="character">
+      <img src="assets/Sort Right.png" alt="Karakter" />
+    </div> -->
+
+    <!-- Teks penjelasan -->
+    <div class="penjelasan-teks">
+      <h2>Penjelasan Limas</h2>
+            <p>
+  Limas adalah bangun ruang tiga dimensi yang memiliki <strong>satu sisi alas berbentuk segi banyak</strong> dan <strong>sisi-sisi lainnya berupa segitiga</strong> yang bertemu di satu titik puncak.
+</p>
+
+<p><strong>Ciri-ciri Limas:</strong></p>
+<ul>
+  <li>Memiliki satu alas berbentuk segi-n (segi tiga, segi empat, segi lima, dll).</li>
+  <li>Memiliki sisi-sisi tegak berbentuk segitiga yang jumlahnya sama dengan jumlah sisi alas.</li>
+  <li>Semua sisi segitiga bertemu di satu titik puncak.</li>
+  <li>Memiliki rusuk tegak yang menghubungkan titik-titik sudut alas ke puncak.</li>
+  <li>Jumlah sisi = n + 1, jumlah titik sudut = n + 1, jumlah rusuk = 2n (n = jumlah sisi alas).</li>
+</ul>
+
+<p><strong>Rumus:</strong></p>
+<ul>
+  <li><strong>Volume</strong> = (1/3) × luas alas × tinggi</li>
+  <li><strong>Luas Permukaan</strong> = luas alas + jumlah luas sisi tegak</li>
+</ul>
+<p>
+  Tinggi limas adalah jarak tegak lurus dari titik puncak ke bidang alas.
+</p>
+
+<p><strong>Macam-macam Limas Berdasarkan Bentuk Alas:</strong></p>
+<ul>
+  <li><strong>Limas segitiga</strong> – alas berbentuk segitiga</li>
+  <li><strong>Limas segi empat</strong> – alas berbentuk persegi atau persegi panjang (seperti piramida Mesir)</li>
+  <li><strong>Limas segi lima</strong> – alas berbentuk segi lima</li>
+  <li><strong>Limas segi enam</strong> – alas berbentuk segi enam</li>
+</ul>
+
+<p><strong>Contoh Penerapan Limas dalam Kehidupan Sehari-hari:</strong></p>
+<ul>
+  <li>Atap rumah berbentuk limas segi empat.</li>
+  <li>Menara piramida (Mesir) yang berbentuk limas segi empat.</li>
+  <li>Tenda kemah kecil berbentuk limas segitiga.</li>
+  <li>Kerucut lalu lintas (mirip limas bundar / kerucut).</li>
+</ul>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Panduan -->
+<div id="modal-guide" class="modal">
+  <div class="modal-content">
+    <span class="close" data-close="modal-guide">&times;</span>
+    <h2>Panduan Penggunaan</h2>
+    <ul>
+      <ul>
+      <ol>
+  <li>Klik menu <strong>Tampilkan Limas 1 dan 2</strong> untuk menampilkan kedua limas dalam tampilan interaktif.</li>
+
+  <li><strong>Limas 1</strong> dapat diputar dengan klik dan drag menggunakan mouse atau touchpad untuk melihat bentuk limas dari berbagai sudut pandang.</li>
+
+  <li>Arahkan kursor ke sisi-sisi Limas 1 untuk melihat tooltip yang menampilkan informasi tentang bentuk alas, tinggi limas, dan sisi tegaknya.</li>
+
+  <li><strong>Limas 2</strong> terdiri dari bagian alas dan sisi-sisi tegak berbentuk segitiga yang dapat di-drag atau digeser. Pengguna dapat menyusun ulang bagian-bagian tersebut seperti menyusun jaring-jaring limas secara manual.</li>
+
+  <li>Gunakan tombol <strong>Reset Limas 2</strong> untuk mengembalikan semua bagian Limas 2 ke posisi awal sebelum disusun ulang.</li>
+
+  <li>Masukkan nilai pada kolom <strong>sisi alas</strong> dan <strong>tinggi</strong> untuk menampilkan <strong>Limas 3</strong> dengan ukuran sesuai input pengguna. Limas akan dibentuk secara otomatis berdasarkan ukuran alas dan tinggi yang dimasukkan.</li>
+
+  <li>Klik tombol <strong>Penjelasan</strong> untuk membaca informasi umum tentang limas, seperti ciri-ciri limas, jenis-jenis limas berdasarkan bentuk alas, rumus volume dan luas permukaan, serta contoh penerapan dalam kehidupan sehari-hari.</li>
+
+  <li>Klik tombol <strong>Pola Limas</strong> untuk menampilkan <em>jaring-jaring limas</em> berupa alas (berbentuk segi-n) dan sisi-sisi segitiga yang membentuk selimut limas. Jaring ini dapat di-drag atau digeser menggunakan slider untuk memahami bagaimana limas terbentuk dari bagian-bagian tersebut.</li>
+</ol>
+    </ul>
+  </div>
+</div>
+<script>
+const tooltip = document.getElementById("tooltip");
+const tooltipDrag = document.getElementById("tooltip-drag");
+
+// === LIMAS 1 ===
+const container1 = document.getElementById("container-limas1");
+const scene1 = new THREE.Scene();
+const camera1 = new THREE.PerspectiveCamera(75, container1.clientWidth / container1.clientHeight, 0.1, 1000);
+const renderer1 = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer1.setClearColor(0x000000, 0);
+container1.appendChild(renderer1.domElement);
+
+function resizeRenderer() {
+  const width = container1.clientWidth;
+  const height = container1.clientHeight;
+  renderer1.setSize(width, height);
+  camera1.aspect = width / height;
+  camera1.updateProjectionMatrix();
+}
+
+resizeRenderer(); // panggil saat awal
+window.addEventListener('resize', resizeRenderer);
+
+const controls1 = new THREE.OrbitControls(camera1, renderer1.domElement);
+camera1.position.set(2, 2, 2);
+camera1.lookAt(0, 0, 0); // <— Tambahan penting agar kamera langsung menghadap ke limas
+controls1.update();
+
+
+function createNumberTexture(number, textColor = "#ffffff") {
+  const size = 256;
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext("2d");
+ctx.clearRect(0, 0, size, size);
+
+  ctx.fillStyle = textColor;
+  ctx.font = "bold 120px Arial";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(number.toString(), size / 2, size / 2);
+
+  return new THREE.CanvasTexture(canvas);
+}
+
+// Fungsi membuat limas segitiga
+const cubeSides = []; // Tetap pakai nama cubeSides agar bagian lain tidak terganggu
+const baseSize = 2;
+const height = 2;
+const topY = height / 2;
+const bottomY = -height / 2;
+
+const sideColors = [0xff0000, 0xffff00, 0x0000ff, 0x00ff00];
+const faceNumbers = [1, 2, 3, 4]; // 1 alas + 3 sisi tegak
+
+// === BUAT ALAS SEGITIGA ===
+const shape = new THREE.Shape();
+shape.moveTo(0, baseSize);
+shape.lineTo(-baseSize * Math.sin(Math.PI / 3), -baseSize / 2);
+shape.lineTo(baseSize * Math.sin(Math.PI / 3), -baseSize / 2);
+shape.lineTo(0, baseSize);
+
+const baseGeometry = new THREE.ShapeGeometry(shape);
+const baseMaterial = new THREE.MeshBasicMaterial({
+  color: sideColors[0], transparent: true, opacity: 0.6, side: THREE.DoubleSide
+});
+const baseMesh = new THREE.Mesh(baseGeometry, baseMaterial);
+baseMesh.rotation.x = Math.PI / 2;
+baseMesh.position.y = bottomY;
+baseMesh.userData = { type: "face", info: `Sisi ${faceNumbers[0]}` };
+
+// === NOMOR PADA ALAS (menghadap ke bawah secara horizontal) ===
+const baseNumberTexture = createNumberTexture(faceNumbers[0], "#ffffff");
+const baseNumberMaterial = new THREE.MeshBasicMaterial({ map: baseNumberTexture, transparent: true, side: THREE.DoubleSide });
+const baseNumberPlane = new THREE.Mesh(new THREE.PlaneGeometry(0.4, 0.4), baseNumberMaterial);
+
+// Geser sedikit ke bawah alas
+baseNumberPlane.position.set(0, -0.02, 0);
+
+// Rotasi agar horizontal & menghadap ke bawah dengan orientasi benar
+baseNumberPlane.rotation.set(-Math.PI / 2, 0, 0); // ✅ Menghadap ke bawah secara horizontal
+baseNumberPlane.rotation.set(-Math.PI / 2, 0, Math.PI / 2);
+
+
+
+
+baseMesh.add(baseNumberPlane);
+
+
+scene1.add(baseMesh);
+cubeSides.push(baseMesh);
+
+// === TITIK DASAR DAN TITIK APEX ===
+const basePoints = [
+  new THREE.Vector3(0, bottomY, baseSize),
+  new THREE.Vector3(-baseSize * Math.sin(Math.PI / 3), bottomY, -baseSize / 2),
+  new THREE.Vector3(baseSize * Math.sin(Math.PI / 3), bottomY, -baseSize / 2)
+];
+const apex = new THREE.Vector3(0, topY, 0);
+
+// === 3 SISI TEGAK (SEGITIGA) ===
+for (let i = 0; i < 3; i++) {
+  const geometry = new THREE.BufferGeometry();
+  const vertices = new Float32Array([
+    basePoints[i].x, basePoints[i].y, basePoints[i].z,
+    basePoints[(i + 1) % 3].x, basePoints[(i + 1) % 3].y, basePoints[(i + 1) % 3].z,
+    apex.x, apex.y, apex.z
+  ]);
+  geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
+  geometry.computeVertexNormals();
+
+  const material = new THREE.MeshBasicMaterial({
+    color: sideColors[i + 1], transparent: true, opacity: 0.6, side: THREE.DoubleSide
+  });
+
+  const mesh = new THREE.Mesh(geometry, material);
+  mesh.userData = { type: "face", info: `Sisi ${faceNumbers[i + 1]}` };
+
+  // === NOMOR SISI ===
+  const numberTexture = createNumberTexture(faceNumbers[i + 1], "#ffffff", "#000000");
+  const numberMaterial = new THREE.MeshBasicMaterial({ map: numberTexture, transparent: true, side: THREE.DoubleSide });
+  const numberPlane = new THREE.Mesh(new THREE.PlaneGeometry(0.4, 0.4), numberMaterial);
+
+  // Posisi tengah sisi
+  const center = new THREE.Vector3()
+    .add(basePoints[i])
+    .add(basePoints[(i + 1) % 3])
+    .add(apex)
+    .multiplyScalar(1 / 3);
+  numberPlane.position.copy(center);
+
+  // Untuk sisi selimut: pastikan tegak ke depan, tidak ikut miring
+  const normal = new THREE.Vector3().crossVectors(
+    new THREE.Vector3().subVectors(basePoints[(i + 1) % 3], basePoints[i]),
+    new THREE.Vector3().subVectors(apex, basePoints[i])
+  ).normalize();
+
+  const lookAtTarget = new THREE.Vector3().addVectors(center, normal);
+  numberPlane.lookAt(lookAtTarget);
+  numberPlane.lookAt(lookAtTarget);
+numberPlane.rotateY(Math.PI); // atau rotateZ(Math.PI), tergantung hasil visual
+
+
+  mesh.add(numberPlane);
+  scene1.add(mesh);
+  cubeSides.push(mesh);
+}
+
+
+// === TITIK SUDUT (SPHERE) ===
+const pointGeometry = new THREE.SphereGeometry(0.08, 16, 16);
+const pointMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
+const spheres = [];
+
+[...basePoints, apex].forEach(pos => {
+  const sphere = new THREE.Mesh(pointGeometry, pointMaterial);
+  sphere.position.copy(pos);
+  sphere.userData = { type: "vertex", info: "Titik Sudut" };
+  spheres.push(sphere);
+  scene1.add(sphere);
+});
+
+// === RUSUK (EDGE) ===
+const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x222222 });
+const edgePoints = [
+  [basePoints[0], basePoints[1]],
+  [basePoints[1], basePoints[2]],
+  [basePoints[2], basePoints[0]],
+  [basePoints[0], apex],
+  [basePoints[1], apex],
+  [basePoints[2], apex]
+];
+
+edgePoints.forEach(pair => {
+  const geometry = new THREE.BufferGeometry().setFromPoints(pair);
+  const line = new THREE.Line(geometry, edgeMaterial);
+  line.userData = { type: "edge", info: "Rusuk" };
+  scene1.add(line);
+});
+
+
+
+
+const raycaster1 = new THREE.Raycaster();
+const mouse1 = new THREE.Vector2();
+
+// Gabungkan semua objek interaktif (sisi, titik, rusuk, dsb.)
+const lines = []; // Simpan semua garis rusuk di sini
+edgePoints.forEach(pair => {
+  const geometry = new THREE.BufferGeometry().setFromPoints(pair);
+  const line = new THREE.Line(geometry, edgeMaterial);
+  line.userData = { type: "edge", info: "Rusuk (Edge)" };
+  lines.push(line); // Tambah ke array
+  scene1.add(line);
+});
+
+const interactiveObjects = [...cubeSides, ...spheres, ...lines];
+
+
+// Gunakan 'mousemove' agar tooltip muncul saat hover
+container1.addEventListener("mousemove", (event) => {
+  const rect = container1.getBoundingClientRect();
+  mouse1.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+  mouse1.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+  raycaster1.setFromCamera(mouse1, camera1);
+  const intersects = raycaster1.intersectObjects(interactiveObjects, true);
+
+  // Sembunyikan tooltip jika tidak ada yang disentuh
+  if (intersects.length === 0) {
+    tooltip.style.display = "none";
+    return;
+  }
+
+  // Objek pertama yang disentuh
+  const obj = intersects[0].object;
+
+  // Atur posisi tooltip
+  tooltip.style.left = event.clientX + 200 + "px";
+  tooltip.style.top = event.clientY + 10 + "px";
+
+  // Isi tooltip (ubah jika perlu menampilkan info berdasarkan objek)
+  tooltip.innerHTML = `
+    <div class="tooltip-title">🔺 Limas Segitiga</div>
+    <ul>
+      <li>Memiliki alas berbentuk segitiga</li>
+      <li>Memiliki 6 rusuk (garis merah)</li>
+      <li>Memiliki 4 titik sudut (lingkaran ungu)</li>
+      <li>Memiliki 4 sisi (1 alas & 3 sisi tegak)</li>
+      <li>Sisi bertemu pada satu titik puncak</li>
+    </ul>
+  `;
+
+  tooltip.style.display = "block";
+});
+
+
+
+function animate() {
+  requestAnimationFrame(animate);
+  controls1.update(); // agar interaksi mouse halus
+  renderer1.render(scene1, camera1);
+}
+animate();
+
+
+
+// === LIMAS 2 ===
+const container2 = document.getElementById("container-limas2");
+const scene2 = new THREE.Scene();
+const camera2 = new THREE.PerspectiveCamera(75, container2.clientWidth / container2.clientHeight, 0.1, 1000);
+camera2.position.set(0, 0, 5);
+
+const renderer2 = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer2.setClearColor(0x000000, 0);
+renderer2.setSize(container2.clientWidth, container2.clientHeight);
+container2.appendChild(renderer2.domElement);
+
+function resize() {
+  const width = container2.clientWidth;
+  const height = container2.clientHeight;
+  renderer2.setSize(width, height);
+  camera2.aspect = width / height;
+  camera2.updateProjectionMatrix();
+}
+window.addEventListener('resize', resize);
+resize();
+
+function createNumberTexture(number, textColor = "#000000") {
+  const size = 256;
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext("2d");
+  ctx.fillStyle = textColor;
+  ctx.font = "bold 120px Arial";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(number.toString(), size / 2, size / 2);
+  return new THREE.CanvasTexture(canvas);
+}
+
+const sisiTegak = 3;
+const tinggi = 2;
+const radius2 = 1.5;
+
+const basePoints2 = [
+  new THREE.Vector3(-radius2, 0, -radius2),  // kiri
+  new THREE.Vector3(radius2, 0, -radius2),   // kanan
+  new THREE.Vector3(0, 0, radius2)           // belakang/tengah
+];
+
+const apex2 = new THREE.Vector3(0, tinggi, 0);
+
+const faceColors = [0xff0000, 0xffff00, 0x0000ff, 0x00ff00];
+const faceNames = ["Alas", "Sisi 2", "Sisi 3", "Sisi 4"];
+const faceNumbers2 = [1, 2, 3, 4];
+
+const sides = [], originalPositions = [], originalRotations = [];
+
+for (let i = 0; i <= sisiTegak; i++) {
+  let geometry;
+  const color = faceColors[i % faceColors.length];
+  const number = faceNumbers2[i];
+  const material = new THREE.MeshBasicMaterial({
+    color: color,
+    transparent: true,
+    opacity: 0.7,
+    side: THREE.DoubleSide
+  });
+
+  if (i === 0) {
+    // Alas segitiga
+    geometry = new THREE.BufferGeometry().setFromPoints(basePoints2);
+    geometry.setIndex([0, 1, 2]);
+    geometry.computeVertexNormals();
+  } else {
+    // Sisi tegak (segitiga antara dua titik alas dan titik puncak)
+    const p1 = basePoints2[i - 1];
+    const p2 = basePoints2[i % 3]; // agar sisi ke-3 kembali ke titik pertama
+
+    const vertices = [p1.clone(), p2.clone(), apex2.clone()];
+    geometry = new THREE.BufferGeometry().setFromPoints(vertices);
+    geometry.setIndex([0, 1, 2]);
+    geometry.computeVertexNormals();
+  }
+
+  const side = new THREE.Mesh(geometry, material);
+  side.name = faceNames[i] || `Sisi ${number}`;
+  side.userData = { type: "face", info: `Sisi ${number}` };
+
+  // Posisi dan rotasi default
+  side.position.set(0, 0, 0);
+  side.rotation.set(0, 0, 0);
+  originalPositions.push(side.position.clone());
+  originalRotations.push(side.rotation.clone());
+
+
+  // Border hitam
+  const border = new THREE.LineSegments(
+    new THREE.EdgesGeometry(geometry),
+    new THREE.LineBasicMaterial({ color: 0x000000 })
+  );
+  side.add(border);
+
+  // Angka sisi
+  const numberTexture = createNumberTexture(number, "#000000");
+  const numberMaterial = new THREE.MeshBasicMaterial({ map: numberTexture, transparent: true });
+  const numberPlane = new THREE.Mesh(new THREE.PlaneGeometry(0.4, 0.4), numberMaterial);
+
+  if (i === 0) {
+    // Alas
+    numberPlane.position.set(0, 0.01, 0);
+    numberPlane.rotation.set(-Math.PI / 2, 0, 0);
+  } else {
+    // Sisi tegak
+    numberPlane.position.set(0, tinggi / 2.5, 0);
+    numberPlane.lookAt(camera2.position);
+  }
+
+  side.add(numberPlane);
+  scene2.add(side);
+  sides.push(side);
+
+}
+
+// (Setelah semua kode setup LIMAS1 dan LIMAS2)
+
+// Animasi untuk balok interaktif (LIMAS 1)
+function animateLimas1() {
+  requestAnimationFrame(animateLimas1);
+  controls1.update(); // OrbitControls agar bisa rotasi/zoom
+  renderer1.render(scene1, camera1);
+}
+animateLimas1();
+
+// Animasi untuk balok net (LIMAS 2)
+function animateLimas2() {
+  requestAnimationFrame(animateLimas2);
+  renderer2.render(scene2, camera2);
+}
+animateLimas2();
+
+
+
+const raycaster2 = new THREE.Raycaster();
+const mouse2 = new THREE.Vector2();
+let selectedSide = null;
+let isDragging = false;
+
+container2.addEventListener("pointerdown", (event) => {
+  const rect = container2.getBoundingClientRect();
+  mouse2.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+  mouse2.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+  raycaster2.setFromCamera(mouse2, camera2);
+
+  const intersects = raycaster2.intersectObjects(sides, true);
+if (intersects.length > 0) {
+  selectedSide = intersects[0].object;
+
+  // Kalau yang diklik bukan Mesh utama (misal child), ambil parent
+  while (selectedSide.parent && !sides.includes(selectedSide)) {
+    selectedSide = selectedSide.parent;
+  }
+
+  isDragging = true;
+  tooltipDrag.innerHTML = `<div class='tooltip-title'>🔷 ${selectedSide.name}</div><p>Drag sisi ini</p>`;
+  tooltipDrag.style.left = event.clientX + 20 + 'px';
+  tooltipDrag.style.top = event.clientY + 20 + 'px';
+  tooltipDrag.style.display = 'block';
+}
+});
+
+container2.addEventListener("pointermove", (event) => {
+  if (selectedSide && isDragging) {
+    const movementSpeed = 0.005;
+
+    selectedSide.position.x += event.movementX * movementSpeed;
+    selectedSide.position.y -= event.movementY * movementSpeed;
+
+    tooltipDrag.style.left = event.clientX + 20 + 'px';
+    tooltipDrag.style.top = event.clientY + 20 + 'px';
+  }
+});
+
+
+container2.addEventListener("pointerup", () => {
+  selectedSide = null;
+  isDragging = false;
+  tooltipDrag.style.display = 'none';
+});
+
+
+function resetSisi() {
+  sides.forEach((side, i) => {
+    side.position.copy(originalPositions[i]);
+    side.rotation.copy(originalRotations[i]);
+  });
+}
+
+let sceneLimas3, cameraLimas3, rendererLimas3, meshLimas3, controlsLimas3;
+let isFirstTimeLimas3 = true;
+
+function buatLimas3() {
+  const sisi = parseFloat(document.getElementById("input-sisi-limas3").value);
+  const tinggi = parseFloat(document.getElementById("input-tinggi-limas3").value);
+
+  if (isNaN(sisi) || isNaN(tinggi) || sisi <= 0 || tinggi <= 0) {
+    alert("Masukkan sisi alas dan tinggi yang valid.");
+    return;
+  }
+
+  const container = document.getElementById("container-limas3");
+
+  if (isFirstTimeLimas3) {
+    sceneLimas3 = new THREE.Scene();
+
+    cameraLimas3 = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+    cameraLimas3.position.z = 10; // jarak proporsional
+    cameraLimas3.lookAt(0, 0, 0);
+
+    rendererLimas3 = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+
+    rendererLimas3.setSize(width, height);
+    cameraLimas3.aspect = width / height;
+    cameraLimas3.updateProjectionMatrix();
+
+    document.getElementById("canvas-limas3").appendChild(rendererLimas3.domElement);
+
+    controlsLimas3 = new THREE.OrbitControls(cameraLimas3, rendererLimas3.domElement);
+    controlsLimas3.enableDamping = true;
+
+    animateLimas3();
+    isFirstTimeLimas3 = false;
+  }
+
+  if (meshLimas3) {
+    sceneLimas3.remove(meshLimas3);
+  }
+
+  // Hitung posisi agar pusat limas di tengah
+  const halfSisi = sisi / 2;
+  const halfTinggi = tinggi / 2;
+
+  const vertices = new Float32Array([
+    -halfSisi, -halfTinggi, -halfSisi, // alas v0
+     halfSisi, -halfTinggi, -halfSisi, // alas v1
+     0,        -halfTinggi,  halfSisi, // alas v2
+     0,         halfTinggi,  0         // puncak v3
+  ]);
+
+  const indices = [
+    0, 2, 1, // alas
+    0, 1, 3, // sisi tegak 1
+    1, 2, 3, // sisi tegak 2
+    2, 0, 3  // sisi tegak 3
+  ];
+
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
+  geometry.setIndex(indices);
+  geometry.computeVertexNormals();
+  geometry.center(); // pusatkan rotasi di tengah objek
+
+
+// Material biru muda transparan
+const material = new THREE.MeshPhongMaterial({
+  color: 0x8fd3e8,
+  transparent: true,
+  opacity: 0.2,
+  side: THREE.DoubleSide
+});
+
+meshLimas3 = new THREE.Mesh(geometry, material);
+
+// Tambahkan garis tepi hitam
+const edges = new THREE.EdgesGeometry(geometry);
+const lineMaterial = new THREE.LineBasicMaterial({ color: 0x000000 });
+const lineSegments = new THREE.LineSegments(edges, lineMaterial);
+meshLimas3.add(lineSegments);
+
+// Tambahkan ke scene
+sceneLimas3.add(meshLimas3);
+
+  // Perhitungan luas dan volume
+  const luasAlas = 0.5 * sisi * sisi; // segitiga siku atau sama sisi
+  const volume = (1 / 3) * luasAlas * tinggi;
+
+  document.getElementById("volume-limas3").textContent = `${volume.toFixed(2)} cm³`;
+  document.getElementById("luas-limas3").textContent = `${luasAlas.toFixed(2)} cm² (alas)`;
+}
+
+function animateLimas3() {
+  requestAnimationFrame(animateLimas3);
+  if (meshLimas3) {
+    meshLimas3.rotation.x += 0.01;
+    meshLimas3.rotation.y += 0.01;
+  }
+  rendererLimas3.render(sceneLimas3, cameraLimas3);
+  controlsLimas3.update();
+}
+
+
+window.onload = function () {
+  document.getElementById("explain-button").addEventListener("click", function () {
+    document.getElementById("modal-explain").style.display = "block";
+  });
+
+  document.getElementById("guide-button").addEventListener("click", function () {
+    document.getElementById("modal-guide").style.display = "block";
+  });
+
+  document.querySelectorAll(".close").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      const modalId = btn.getAttribute("data-close");
+      document.getElementById(modalId).style.display = "none";
+    });
+  });
+};
+// Fungsi untuk menutup modal berdasarkan ID
+  document.querySelectorAll(".close").forEach(function (closeBtn) {
+    closeBtn.addEventListener("click", function () {
+      const targetId = this.getAttribute("data-close");
+      const modal = document.getElementById(targetId);
+      if (modal) {
+        modal.style.display = "none";
+      }
+    });
+  });
+
+  // Menutup modal saat klik di luar konten
+  window.addEventListener("click", function (event) {
+    document.querySelectorAll(".modal").forEach(function (modal) {
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    });
+  });
+
+function tampilkanLimas(nomor) {
+  const limas1 = document.getElementById("container-limas1");
+  const limas2 = document.getElementById("container-limas2");
+  const limas3 = document.getElementById("container-limas3");
+  const geogebra = document.getElementById("geogebra-container");
+
+  limas1.classList.remove("aktif");
+  limas2.classList.remove("aktif");
+  limas3.style.display = "none";
+  geogebra.style.display = "none";
+
+  // Tampilkan sesuai pilihan
+  if (nomor === 1) limas1.classList.add("aktif");
+  else if (nomor === 2) limas2.classList.add("aktif");
+  else if (nomor === 3) {
+    limas3.style.display = "block";
+    buatLimas3();
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  tampilkanLimas(1);
+});
+
+function tampilkanGeoGebra() {
+  const limas1 = document.getElementById("container-limas1");
+  const limas2 = document.getElementById("container-limas2");
+  const container = document.getElementById('geogebra-container');
+
+  limas1.classList.remove("aktif");
+  limas2.classList.remove("aktif");
+  container.style.display = 'block';
+}
+
+
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kuis Bangun Ruang - Tabung</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="style.css">
+</head>
+<body class="quis">
+  <button onclick="goToMenu()" class="icon-button">
+  <i class="bi bi-arrow-left-circle"></i>
+</button>
+  <audio id="myAudio" src="assets/cheerful-joyful-playful-music-381499.mp3" autoplay loop></audio>
+  <div class="container">
+    <h2>Kuis Tabung</h2>
+
+    <div id="quiz-box">
+      <p id="question"></p>
+      <div id="options" class="option-group"></div>
+      <button onclick="nextQuestion()">Selanjutnya</button>
+    </div>
+
+    <div id="result-box" style="display:none;">
+      <h3>Hasil Kuis</h3>
+      <p id="score"></p>
+      <button onclick="showAnswers()">Lihat Jawaban</button>
+      <div id="answer-review"></div>
+      <button onclick="startQuiz()">Ulangi Kuis</button>
+    </div>
+  </div>
+
+  <script>
+const questionBank = [
+  { question: "Tabung adalah bangun ruang dengan alas dan tutup berbentuk ...", options: ["persegi", "segitiga", "lingkaran", "persegi panjang"], answer: "lingkaran" },
+  { question: "Tabung memiliki berapa sisi lengkung?", options: ["1", "2", "3", "0"], answer: "1" },
+  { question: "Jumlah sisi pada tabung adalah ...", options: ["2", "3", "4", "5"], answer: "3" },
+  { question: "Jumlah rusuk pada tabung adalah ...", options: ["0", "1", "2", "3"], answer: "2" },
+  { question: "Tabung termasuk bangun ruang sisi ...", options: ["datar", "lengkung", "campuran", "tak beraturan"], answer: "lengkung" },
+  { question: "Volume tabung dihitung dengan rumus ...", options: ["π x r² x t", "1/3 x π x r² x t", "2πr x t", "π x r x t"], answer: "π x r² x t" },
+  { question: "Luas permukaan tabung dihitung dengan rumus ...", options: ["2πr² + 2πrt", "π x r² x t", "2πr²", "πr x t"], answer: "2πr² + 2πrt" },
+  { question: "Tabung tidak memiliki titik sudut karena ...", options: ["alasnya lingkaran", "tidak memiliki sisi", "bentuknya tertutup", "sisi-sisinya segitiga"], answer: "alasnya lingkaran" },
+  { question: "Sisi tegak tabung berbentuk ...", options: ["lingkaran", "persegi panjang", "setengah lingkaran", "segitiga"], answer: "persegi panjang" },
+  { question: "Jaring-jaring tabung terdiri dari ...", options: ["1 lingkaran dan 1 persegi panjang", "2 lingkaran dan 1 persegi panjang", "3 lingkaran", "2 persegi panjang"], answer: "2 lingkaran dan 1 persegi panjang" },
+  { question: "Jika jari-jari alas 7 cm dan tinggi 10 cm, maka volume tabung adalah ...", options: ["1540 cm³", "1400 cm³", "1470 cm³", "1000 cm³"], answer: "1540 cm³" },
+  { question: "Jika tinggi tabung dua kali lipat, maka volumenya akan ...", options: ["dikali 2", "dibagi 2", "tetap", "dikali 4"], answer: "dikali 2" },
+  { question: "Apakah tabung memiliki rusuk?", options: ["Ya", "Tidak", "Kadang", "Tergantung tinggi"], answer: "Tidak" },
+  { question: "Bagian yang melengkung pada tabung disebut ...", options: ["selimut tabung", "tutup tabung", "bidang alas", "volume"], answer: "selimut tabung" },
+  { question: "Apakah tabung memiliki titik sudut?", options: ["Ya", "Tidak", "Kadang", "Tergantung jari-jari"], answer: "Tidak" },
+  { question: "Jika tinggi dan jari-jari dikalikan 2, maka volume tabung dikalikan ...", options: ["2", "4", "6", "8"], answer: "8" },
+  { question: "Luas selimut tabung dapat dihitung dengan rumus ...", options: ["2πr²", "π x d x t", "2πr x t", "πr² x t"], answer: "2πr x t" },
+  { question: "Contoh benda berbentuk tabung adalah ...", options: ["bola", "kerucut", "kaleng susu", "kotak sepatu"], answer: "kaleng susu" },
+  { question: "Tabung memiliki simetri putar sebanyak ...", options: ["1", "2", "3", "tak hingga"], answer: "tak hingga" },
+  { question: "Satuan volume tabung adalah ...", options: ["cm", "cm²", "cm³", "cm⁴"], answer: "cm³" },
+  { question: "Satuan luas permukaan tabung adalah ...", options: ["cm", "cm²", "cm³", "cm⁴"], answer: "cm²" },
+  { question: "Tabung memiliki berapa buah lingkaran sebagai alas dan tutup?", options: ["1", "2", "3", "4"], answer: "2" },
+  { question: "Jika jari-jari alas 5 cm dan tinggi 12 cm, maka volume tabung adalah ...", options: ["942 cm³", "900 cm³", "1000 cm³", "785 cm³"], answer: "942 cm³" },
+  { question: "Jika tabung tidak memiliki tutup, maka disebut ...", options: ["tabung terbuka", "setengah tabung", "tabung potong", "tabung tertutup"], answer: "tabung terbuka" },
+  { question: "Luas permukaan tabung tanpa tutup adalah ...", options: ["πr² + 2πrt", "2πr² + 2πrt", "πr x t", "2πr x t"], answer: "πr² + 2πrt" },
+  { question: "Jumlah bidang pada tabung adalah ...", options: ["2", "3", "4", "5"], answer: "3" },
+  { question: "Apakah tinggi tabung sama dengan diameter?", options: ["Ya", "Tidak", "Kadang", "Tergantung"], answer: "Tidak" },
+  { question: "Apakah tabung termasuk prisma?", options: ["Ya", "Tidak", "Sebagian", "Tergantung"], answer: "Tidak" },
+  { question: "Tabung memiliki bidang alas berbentuk ...", options: ["persegi", "lingkaran", "segitiga", "persegi panjang"], answer: "lingkaran" },
+  { question: "Bidang lengkung pada tabung disebut juga ...", options: ["alas", "tutup", "selimut", "tinggi"], answer: "selimut" },
+  { question: "Tinggi tabung adalah ...", options: ["jari-jari alas", "jarak antara dua tutup", "diameter alas", "panjang rusuk"], answer: "jarak antara dua tutup" },
+  { question: "Jika diameter tabung 14 cm, maka jari-jarinya adalah ...", options: ["6 cm", "7 cm", "8 cm", "10 cm"], answer: "7 cm" },
+  { question: "Jika jari-jari dan tinggi sama, maka volume tabung adalah ...", options: ["πr³", "r x t", "π x r² x r", "πr²"], answer: "π x r² x r" },
+  { question: "Jika tinggi = 10 cm dan diameter = 14 cm, luas selimut tabung adalah ...", options: ["440 cm²", "330 cm²", "280 cm²", "220 cm²"], answer: "440 cm²" },
+  { question: "Apakah tabung memiliki titik puncak?", options: ["Ya", "Tidak", "Kadang", "Tergantung jari-jari"], answer: "Tidak" },
+  { question: "Jumlah simetri lipat tabung adalah ...", options: ["Tak hingga", "1", "2", "3"], answer: "Tak hingga" },
+  { question: "Apakah tabung dapat digulung menjadi bentuk jaring-jaring?", options: ["Ya", "Tidak", "Kadang", "Hanya jika tertutup"], answer: "Ya" },
+  { question: "Jaring-jaring tabung terdiri dari ...", options: ["lingkaran dan segitiga", "dua lingkaran dan satu persegi panjang", "satu lingkaran dan dua segitiga", "tiga lingkaran"], answer: "dua lingkaran dan satu persegi panjang" },
+  { question: "Jika luas alas = 154 cm² dan tinggi 10 cm, maka volumenya adalah ...", options: ["1540 cm³", "1000 cm³", "300 cm³", "200 cm³"], answer: "1540 cm³" },
+  { question: "Bagian tabung yang berbentuk persegi panjang disebut ...", options: ["alas", "tutup", "selimut", "tangkai"], answer: "selimut" },
+  { question: "Apakah tabung termasuk bangun ruang simetris?", options: ["Ya", "Tidak", "Kadang", "Tergantung tinggi"], answer: "Ya" },
+  { question: "Jika diameter = 10 cm dan tinggi = 12 cm, luas permukaan tabung tertutup adalah ...", options: ["942 cm²", "880 cm²", "940 cm²", "1000 cm²"], answer: "880 cm²" },
+  { question: "Apakah kaleng susu berbentuk tabung?", options: ["Ya", "Tidak", "Kadang", "Tidak pasti"], answer: "Ya" },
+  { question: "Satuan standar volume tabung dalam SI adalah ...", options: ["cm³", "m²", "liter", "meter"], answer: "m³" },
+  { question: "Jika luas alas 78,5 cm² dan tinggi 5 cm, maka volume tabung adalah ...", options: ["392,5 cm³", "400 cm³", "500 cm³", "450 cm³"], answer: "392,5 cm³" },
+  { question: "Salah satu sifat tabung adalah ...", options: ["memiliki puncak", "memiliki sisi datar dan sisi lengkung", "memiliki rusuk tegak", "memiliki segitiga"], answer: "memiliki sisi datar dan sisi lengkung" }
+];
+
+    let selectedQuestions = [];
+    let currentQuestion = 0;
+    let userAnswers = [];
+
+    function shuffle(array) {
+      const copy = array.slice();
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function startQuiz() {
+      selectedQuestions = shuffle(questionBank).slice(0, 10);
+      currentQuestion = 0;
+      userAnswers = [];
+
+      document.getElementById("quiz-box").style.display = "block";
+      document.getElementById("result-box").style.display = "none";
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const q = selectedQuestions[currentQuestion];
+      document.getElementById("question").textContent = `${currentQuestion + 1}. ${q.question}`;
+
+      const optionsHtml = q.options.map(option => `
+        <label class="option-label">
+          <input type="radio" name="option" value="${option}" />
+          ${option}
+        </label>
+      `).join("");
+
+      document.getElementById("options").innerHTML = optionsHtml;
+    }
+
+    function nextQuestion() {
+      const selected = document.querySelector('input[name="option"]:checked');
+      if (!selected) return alert("Pilih jawaban dulu ya!");
+
+      userAnswers.push(selected.value);
+      currentQuestion++;
+
+      if (currentQuestion < selectedQuestions.length) {
+        renderQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      let score = 0;
+      for (let i = 0; i < selectedQuestions.length; i++) {
+        if (userAnswers[i] === selectedQuestions[i].answer) score++;
+      }
+
+      document.getElementById("quiz-box").style.display = "none";
+      document.getElementById("result-box").style.display = "block";
+      document.getElementById("score").innerHTML = `Jawaban Benar: ${score} dari ${selectedQuestions.length} soal <br> Skor: <strong>${(score / selectedQuestions.length * 100).toFixed(0)}%</strong>`;
+    }
+
+    function showAnswers() {
+      let html = "";
+      for (let i = 0; i < selectedQuestions.length; i++) {
+        const q = selectedQuestions[i];
+        const userAns = userAnswers[i];
+        const correct = userAns === q.answer;
+        html += `
+          <p>
+            <strong>Soal ${i + 1}:</strong> ${q.question}<br>
+            Jawabanmu: <span style="color:${correct ? 'green' : 'red'}">${userAns}</span><br>
+            Jawaban benar: <strong>${q.answer}</strong>
+          </p>
+        `;
+      }
+      document.getElementById("answer-review").innerHTML = html;
+    }
+
+    window.onload = startQuiz;
+     function goToMenu() {
+    window.location.href = "evaluasi.html"; // Ganti sesuai nama file halaman menunya
+  }
+  </script>
+</body>
+</html>

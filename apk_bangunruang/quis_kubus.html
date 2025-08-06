@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kuis Bangun Ruang - Kubus</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="style.css">
+</head>
+<body class="quis">
+  <button onclick="goToMenu()" class="icon-button">
+  <i class="bi bi-arrow-left-circle"></i>
+</button>
+  <audio id="myAudio" src="assets/cheerful-joyful-playful-music-381499.mp3" autoplay loop></audio>
+  <div class="container">
+    <h2>Kuis Kubus</h2>
+
+    <div id="quiz-box">
+      <p id="question"></p>
+      <div id="options" class="option-group"></div>
+      <button onclick="nextQuestion()">Selanjutnya</button>
+    </div>
+
+    <div id="result-box" style="display:none;">
+      <h3>Hasil Kuis</h3>
+      <p id="score"></p>
+      <button onclick="showAnswers()">Lihat Jawaban</button>
+      <div id="answer-review"></div>
+      <button onclick="startQuiz()">Ulangi Kuis</button>
+    </div>
+  </div>
+
+  <script>
+    const questionBank = [
+  { question: "Berapa jumlah sisi pada kubus?", options: ["4", "6", "8", "12"], answer: "6" },
+  { question: "Berapa jumlah rusuk pada kubus?", options: ["8", "10", "12", "14"], answer: "12" },
+  { question: "Berapa jumlah titik sudut pada kubus?", options: ["4", "6", "8", "10"], answer: "8" },
+  { question: "Setiap sisi kubus berbentuk ...", options: ["Lingkaran", "Segitiga", "Persegi", "Persegi panjang"], answer: "Persegi" },
+  { question: "Semua rusuk kubus memiliki ...", options: ["Panjang yang berbeda", "Sudut tumpul", "Panjang yang sama", "Sudut lancip"], answer: "Panjang yang sama" },
+  { question: "Kubus adalah bangun ruang sisi ...", options: ["Datar", "Lengkung", "Campuran", "Tak beraturan"], answer: "Datar" },
+  { question: "Volume kubus dihitung dengan rumus ...", options: ["s x s x s", "p x l x t", "2 x (p x l + p x t + l x t)", "π x r² x t"], answer: "s x s x s" },
+  { question: "Jika panjang rusuk kubus 5 cm, volumenya adalah ...", options: ["25 cm³", "125 cm³", "100 cm³", "50 cm³"], answer: "125 cm³" },
+  { question: "Kubus memiliki berapa diagonal bidang?", options: ["4", "6", "12", "8"], answer: "12" },
+  { question: "Jumlah diagonal ruang pada kubus adalah ...", options: ["2", "3", "4", "6"], answer: "4" },
+  { question: "Luas permukaan kubus dengan rusuk 4 cm adalah ...", options: ["96 cm²", "64 cm²", "48 cm²", "32 cm²"], answer: "96 cm²" },
+  { question: "Rumus luas permukaan kubus adalah ...", options: ["4 x s²", "6 x s²", "2 x s²", "s x s"], answer: "6 x s²" },
+  { question: "Jumlah jaring-jaring berbeda yang dapat dibentuk dari kubus adalah ...", options: ["11", "6", "10", "14"], answer: "11" },
+  { question: "Kubus memiliki simetri putar sebanyak ...", options: ["3", "6", "9", "12"], answer: "9" },
+  { question: "Kubus memiliki simetri lipat sebanyak ...", options: ["9", "10", "12", "24"], answer: "9" },
+  { question: "Jumlah bidang diagonal kubus adalah ...", options: ["4", "6", "8", "12"], answer: "6" },
+  { question: "Rusuk adalah garis yang merupakan perpotongan antara ...", options: ["2 sisi", "2 sudut", "2 bidang diagonal", "2 volume"], answer: "2 sisi" },
+  { question: "Sisi kubus berjumlah ...", options: ["6", "8", "4", "10"], answer: "6" },
+  { question: "Berapa banyak sisi pada jaring-jaring kubus?", options: ["5", "6", "7", "8"], answer: "6" },
+  { question: "Apakah kubus memiliki sudut tumpul?", options: ["Ya", "Tidak", "Kadang-kadang", "Tidak dapat dipastikan"], answer: "Tidak" },
+  { question: "Titik sudut pada kubus merupakan pertemuan dari ...", options: ["2 rusuk", "3 rusuk", "4 rusuk", "5 rusuk"], answer: "3 rusuk" },
+  { question: "Apakah semua sisi pada kubus berbentuk persegi?", options: ["Ya", "Tidak", "Kadang-kadang", "Sebagian"], answer: "Ya" },
+  { question: "Berapa panjang diagonal ruang dari kubus dengan rusuk 2√3 cm?", options: ["6 cm", "4 cm", "2√3 cm", "3√2 cm"], answer: "6 cm" },
+  { question: "Satuan volume adalah ...", options: ["cm²", "cm³", "cm", "cm⁴"], answer: "cm³" },
+  { question: "Apa beda kubus dan balok?", options: ["Kubus semua rusuk sama panjang", "Kubus tidak punya sisi", "Kubus tidak punya volume", "Kubus sisi tidak sejajar"], answer: "Kubus semua rusuk sama panjang" },
+  { question: "Salah satu ciri jaring-jaring kubus adalah ...", options: ["Terdiri dari lingkaran", "6 buah persegi", "4 buah segitiga", "7 sisi yang sama"], answer: "6 buah persegi" },
+  { question: "Apakah kubus memiliki diagonal ruang?", options: ["Ya", "Tidak", "Kadang", "Hanya satu"], answer: "Ya" },
+  { question: "Kubus memiliki sisi yang ...", options: ["Berlengkung", "Datar", "Berbentuk lingkaran", "Berbentuk segitiga"], answer: "Datar" },
+  { question: "Berapa banyak rusuk sejajar pada kubus?", options: ["6", "8", "12", "3"], answer: "6" },
+  { question: "Satu sisi kubus dinamakan ...", options: ["Volume", "Luas", "Bidang", "Panjang"], answer: "Bidang" },
+  { question: "Apa bentuk jaring-jaring kubus yang benar?", options: ["6 persegi tersambung", "Lingkaran", "3 segitiga dan 3 persegi", "1 persegi dan 5 segitiga"], answer: "6 persegi tersambung" },
+  { question: "Diagonal bidang terdapat pada ...", options: ["Sisi kubus", "Volume kubus", "Sudut ruang", "Diagonal ruang"], answer: "Sisi kubus" },
+  { question: "Jarak antara dua titik sudut yang tidak terhubung oleh rusuk dinamakan ...", options: ["Sisi", "Titik", "Diagonal ruang", "Rusuk"], answer: "Diagonal ruang" },
+  { question: "Berapakah jumlah pasangan sisi sejajar pada kubus?", options: ["2", "3", "4", "6"], answer: "3" },
+  { question: "Jumlah sisi tegak pada kubus adalah ...", options: ["2", "3", "4", "5"], answer: "4" },
+  { question: "Apakah kubus termasuk bangun simetris?", options: ["Ya", "Tidak", "Kadang", "Tidak dapat dipastikan"], answer: "Ya" },
+  { question: "Jumlah titik sudut pada satu bidang kubus adalah ...", options: ["2", "3", "4", "6"], answer: "4" },
+  { question: "Salah satu sifat kubus adalah ...", options: ["Memiliki sisi tidak sejajar", "Sudutnya tumpul", "Sisi-sisinya berbentuk persegi", "Hanya memiliki satu bidang"], answer: "Sisi-sisinya berbentuk persegi" },
+  { question: "Diagonal ruang menghubungkan ...", options: ["2 rusuk", "2 sisi", "2 titik sudut berseberangan", "2 bidang sejajar"], answer: "2 titik sudut berseberangan" },
+  { question: "Sudut antara dua sisi pada kubus adalah ...", options: ["90°", "120°", "60°", "135°"], answer: "90°" },
+  { question: "Volume kubus dengan rusuk 10 cm adalah ...", options: ["100 cm³", "1000 cm³", "200 cm³", "500 cm³"], answer: "1000 cm³" },
+  { question: "Satuan luas permukaan adalah ...", options: ["cm", "cm³", "cm²", "cm⁴"], answer: "cm²" },
+  { question: "Kubus disebut juga sebagai ...", options: ["Tetrahedron", "Hexahedron", "Oktahedron", "Dodecahedron"], answer: "Hexahedron" },
+  { question: "Berapa jumlah garis pada seluruh jaring-jaring kubus?", options: ["12", "14", "10", "16"], answer: "12" },
+  { question: "Jika sisi kubus adalah s, maka volumenya adalah ...", options: ["s²", "s³", "3s", "6s"], answer: "s³" },
+  { question: "Jika luas satu sisi kubus adalah 36 cm², maka panjang rusuknya ...", options: ["4", "6", "9", "12"], answer: "6" },
+  { question: "Berapa luas permukaan kubus jika panjang rusuknya 2 cm?", options: ["8 cm²", "12 cm²", "16 cm²", "24 cm²"], answer: "24 cm²" },
+  { question: "Apa hubungan antara jumlah sisi dan rusuk pada kubus?", options: ["Rusuk 2x sisi", "Rusuk lebih sedikit", "Rusuk = sisi x 2", "Rusuk lebih banyak"], answer: "Rusuk lebih banyak" },
+  { question: "Apakah semua sisi kubus tegak lurus satu sama lain?", options: ["Ya", "Tidak", "Sebagian", "Tidak dapat dipastikan"], answer: "Ya" }
+];
+
+
+    let selectedQuestions = [];
+    let currentQuestion = 0;
+    let userAnswers = [];
+
+    function shuffle(array) {
+      const copy = array.slice();
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function startQuiz() {
+      selectedQuestions = shuffle(questionBank).slice(0, 10);
+      currentQuestion = 0;
+      userAnswers = [];
+
+      document.getElementById("quiz-box").style.display = "block";
+      document.getElementById("result-box").style.display = "none";
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const q = selectedQuestions[currentQuestion];
+      document.getElementById("question").textContent = `${currentQuestion + 1}. ${q.question}`;
+
+      const optionsHtml = q.options.map(option => `
+        <label class="option-label">
+          <input type="radio" name="option" value="${option}" />
+          ${option}
+        </label>
+      `).join("");
+
+      document.getElementById("options").innerHTML = optionsHtml;
+    }
+
+    function nextQuestion() {
+      const selected = document.querySelector('input[name="option"]:checked');
+      if (!selected) return alert("Pilih jawaban dulu ya!");
+
+      userAnswers.push(selected.value);
+      currentQuestion++;
+
+      if (currentQuestion < selectedQuestions.length) {
+        renderQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      let score = 0;
+      for (let i = 0; i < selectedQuestions.length; i++) {
+        if (userAnswers[i] === selectedQuestions[i].answer) score++;
+      }
+
+      document.getElementById("quiz-box").style.display = "none";
+      document.getElementById("result-box").style.display = "block";
+      document.getElementById("score").innerHTML = `Jawaban Benar: ${score} dari ${selectedQuestions.length} soal <br> Skor: <strong>${(score / selectedQuestions.length * 100).toFixed(0)}%</strong>`;
+    }
+
+    function showAnswers() {
+      let html = "";
+      for (let i = 0; i < selectedQuestions.length; i++) {
+        const q = selectedQuestions[i];
+        const userAns = userAnswers[i];
+        const correct = userAns === q.answer;
+        html += `
+          <p>
+            <strong>Soal ${i + 1}:</strong> ${q.question}<br>
+            Jawabanmu: <span style="color:${correct ? 'green' : 'red'}">${userAns}</span><br>
+            Jawaban benar: <strong>${q.answer}</strong>
+          </p>
+        `;
+      }
+      document.getElementById("answer-review").innerHTML = html;
+    }
+
+    window.onload = startQuiz;
+     function goToMenu() {
+    window.location.href = "evaluasi.html"; // Ganti sesuai nama file halaman menunya
+  }
+  </script>
+</body>
+</html>

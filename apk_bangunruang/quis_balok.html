@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kuis Bangun Ruang - Balok</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="style.css">
+</head>
+<body class="quis">
+  <button onclick="goToMenu()" class="icon-button">
+  <i class="bi bi-arrow-left-circle"></i>
+</button>
+<audio id="myAudio" src="assets/cheerful-joyful-playful-music-381499.mp3" autoplay loop></audio>
+  <div class="container">
+    <h2>Kuis Balok</h2>
+
+    <div id="quiz-box">
+      <p id="question"></p>
+      <div id="options" class="option-group"></div>
+      <button onclick="nextQuestion()">Selanjutnya</button>
+    </div>
+
+    <div id="result-box" style="display:none;">
+      <h3>Hasil Kuis</h3>
+      <p id="score"></p>
+      <button onclick="showAnswers()">Lihat Jawaban</button>
+      <div id="answer-review"></div>
+      <button onclick="startQuiz()">Ulangi Kuis</button>
+    </div>
+  </div>
+
+  <script>
+const questionBank = [
+  { question: "Berapa jumlah sisi pada balok?", options: ["4", "6", "8", "12"], answer: "6" },
+  { question: "Berapa jumlah rusuk pada balok?", options: ["8", "10", "12", "14"], answer: "12" },
+  { question: "Berapa jumlah titik sudut pada balok?", options: ["4", "6", "8", "10"], answer: "8" },
+  { question: "Setiap sisi balok berbentuk ...", options: ["Lingkaran", "Segitiga", "Persegi panjang", "Persegi"], answer: "Persegi panjang" },
+  { question: "Apakah semua rusuk balok memiliki panjang yang sama?", options: ["Ya", "Tidak", "Sebagian", "Kadang-kadang"], answer: "Tidak" },
+  { question: "Balok adalah bangun ruang sisi ...", options: ["Datar", "Lengkung", "Campuran", "Tak beraturan"], answer: "Datar" },
+  { question: "Volume balok dihitung dengan rumus ...", options: ["s³", "π x r² x t", "p x l x t", "2 x (p x l + p x t + l x t)"], answer: "p x l x t" },
+  { question: "Jika panjang = 5 cm, lebar = 3 cm, tinggi = 2 cm, maka volume balok adalah ...", options: ["10 cm³", "20 cm³", "30 cm³", "15 cm³"], answer: "30 cm³" },
+  { question: "Balok memiliki berapa diagonal bidang?", options: ["4", "6", "12", "8"], answer: "12" },
+  { question: "Jumlah diagonal ruang pada balok adalah ...", options: ["2", "3", "4", "6"], answer: "4" },
+  { question: "Luas permukaan balok dengan p=4, l=3, t=2 adalah ...", options: ["52 cm²", "48 cm²", "60 cm²", "64 cm²"], answer: "52 cm²" },
+  { question: "Rumus luas permukaan balok adalah ...", options: ["2(p+l+t)", "p x l x t", "2 x (p x l + p x t + l x t)", "s x s"], answer: "2 x (p x l + p x t + l x t)" },
+  { question: "Jumlah jaring-jaring berbeda dari balok adalah ...", options: ["11", "6", "4", "8"], answer: "6" },
+  { question: "Balok memiliki simetri putar sebanyak ...", options: ["2", "3", "6", "9"], answer: "3" },
+  { question: "Jumlah bidang pada balok adalah ...", options: ["4", "6", "8", "12"], answer: "6" },
+  { question: "Rusuk balok adalah pertemuan antara ...", options: ["2 sisi", "2 sudut", "2 bidang diagonal", "2 volume"], answer: "2 sisi" },
+  { question: "Bentuk jaring-jaring balok terdiri dari ...", options: ["6 persegi panjang", "4 persegi dan 2 segitiga", "1 lingkaran dan 5 persegi", "3 persegi"], answer: "6 persegi panjang" },
+  { question: "Sisi balok ada ...", options: ["4", "5", "6", "8"], answer: "6" },
+  { question: "Balok memiliki sisi yang ...", options: ["Berbentuk lingkaran", "Berbentuk segitiga", "Persegi panjang", "Tak tentu"], answer: "Persegi panjang" },
+  { question: "Titik sudut pada balok merupakan pertemuan dari ...", options: ["2 rusuk", "3 rusuk", "4 rusuk", "5 rusuk"], answer: "3 rusuk" },
+  { question: "Apakah semua sisi pada balok berbentuk persegi panjang?", options: ["Ya", "Tidak", "Kadang", "Sebagian"], answer: "Ya" },
+  { question: "Balok memiliki sisi sejajar sebanyak ...", options: ["2", "3", "6", "4"], answer: "3" },
+  { question: "Satuan volume adalah ...", options: ["cm²", "cm³", "cm", "cm⁴"], answer: "cm³" },
+  { question: "Perbedaan balok dan kubus adalah ...", options: ["Balok memiliki rusuk sama panjang", "Balok sisi tidak selalu persegi", "Balok tidak memiliki volume", "Balok punya sisi lengkung"], answer: "Balok sisi tidak selalu persegi" },
+  { question: "Apakah balok memiliki diagonal ruang?", options: ["Ya", "Tidak", "Kadang", "Hanya satu"], answer: "Ya" },
+  { question: "Balok memiliki sisi yang ...", options: ["Datar", "Lengkung", "Campuran", "Tidak sejajar"], answer: "Datar" },
+  { question: "Berapa banyak rusuk sejajar pada balok?", options: ["6", "8", "12", "3"], answer: "6" },
+  { question: "Sisi depan dan belakang balok adalah ...", options: ["Sejajar", "Berpotongan", "Sama panjang", "Diagonal"], answer: "Sejajar" },
+  { question: "Jumlah pasangan sisi sejajar pada balok adalah ...", options: ["2", "3", "4", "6"], answer: "3" },
+  { question: "Jumlah sisi tegak pada balok adalah ...", options: ["2", "3", "4", "5"], answer: "4" },
+  { question: "Apakah balok termasuk bangun simetris?", options: ["Ya", "Tidak", "Kadang", "Tidak dapat dipastikan"], answer: "Ya" },
+  { question: "Titik sudut di satu sisi balok ada ...", options: ["2", "3", "4", "6"], answer: "4" },
+  { question: "Salah satu sifat balok adalah ...", options: ["Sisi-sisinya berbentuk lingkaran", "Sudutnya tumpul", "Sisi-sisinya persegi panjang", "Tidak punya volume"], answer: "Sisi-sisinya persegi panjang" },
+  { question: "Diagonal ruang pada balok menghubungkan ...", options: ["Rusuk", "Sisi", "Titik sudut berseberangan", "Diagonal bidang"], answer: "Titik sudut berseberangan" },
+  { question: "Sudut antara dua sisi pada balok adalah ...", options: ["90°", "120°", "60°", "135°"], answer: "90°" },
+  { question: "Volume balok dengan p=10, l=5, t=2 adalah ...", options: ["100 cm³", "120 cm³", "150 cm³", "200 cm³"], answer: "100 cm³" },
+  { question: "Satuan luas permukaan adalah ...", options: ["cm", "cm³", "cm²", "cm⁴"], answer: "cm²" },
+  { question: "Jika panjang rusuk balok berbeda-beda, maka bentuknya adalah ...", options: ["Kubus", "Balok", "Tabung", "Limas"], answer: "Balok" },
+  { question: "Berapa jumlah garis pada seluruh jaring-jaring balok?", options: ["12", "14", "10", "16"], answer: "12" },
+  { question: "Jika panjang = 3, lebar = 2, tinggi = 1, volume balok adalah ...", options: ["6", "3", "5", "12"], answer: "6" },
+  { question: "Jika luas salah satu sisi balok adalah 24 cm² dan tinggi 3 cm, maka volumenya ...", options: ["72 cm³", "48 cm³", "60 cm³", "30 cm³"], answer: "72 cm³" },
+  { question: "Rumus untuk menghitung diagonal ruang balok adalah ...", options: ["√(p² + l² + t²)", "p + l + t", "2(p+l)", "p x l x t"], answer: "√(p² + l² + t²)" },
+  { question: "Apakah semua sisi balok tegak lurus?", options: ["Ya", "Tidak", "Kadang", "Tidak pasti"], answer: "Ya" },
+  { question: "Berapakah jumlah rusuk tegak balok?", options: ["2", "3", "4", "6"], answer: "4" },
+  { question: "Sisi balok yang berhadapan memiliki ukuran ...", options: ["Berbeda", "Sama", "Lebih panjang", "Lebih kecil"], answer: "Sama" },
+  { question: "Jaring-jaring balok terdiri dari berapa persegi panjang?", options: ["6", "4", "2", "8"], answer: "6" },
+  { question: "Volume balok jika diketahui panjang = 7, lebar = 3, tinggi = 2 adalah ...", options: ["42 cm³", "36 cm³", "28 cm³", "30 cm³"], answer: "42 cm³" }
+];
+
+
+    let selectedQuestions = [];
+    let currentQuestion = 0;
+    let userAnswers = [];
+
+    function shuffle(array) {
+      const copy = array.slice();
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function startQuiz() {
+      selectedQuestions = shuffle(questionBank).slice(0, 10);
+      currentQuestion = 0;
+      userAnswers = [];
+
+      document.getElementById("quiz-box").style.display = "block";
+      document.getElementById("result-box").style.display = "none";
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const q = selectedQuestions[currentQuestion];
+      document.getElementById("question").textContent = `${currentQuestion + 1}. ${q.question}`;
+
+      const optionsHtml = q.options.map(option => `
+        <label class="option-label">
+          <input type="radio" name="option" value="${option}" />
+          ${option}
+        </label>
+      `).join("");
+
+      document.getElementById("options").innerHTML = optionsHtml;
+    }
+
+    function nextQuestion() {
+      const selected = document.querySelector('input[name="option"]:checked');
+      if (!selected) return alert("Pilih jawaban dulu ya!");
+
+      userAnswers.push(selected.value);
+      currentQuestion++;
+
+      if (currentQuestion < selectedQuestions.length) {
+        renderQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      let score = 0;
+      for (let i = 0; i < selectedQuestions.length; i++) {
+        if (userAnswers[i] === selectedQuestions[i].answer) score++;
+      }
+
+      document.getElementById("quiz-box").style.display = "none";
+      document.getElementById("result-box").style.display = "block";
+      document.getElementById("score").innerHTML = `Jawaban Benar: ${score} dari ${selectedQuestions.length} soal <br> Skor: <strong>${(score / selectedQuestions.length * 100).toFixed(0)}%</strong>`;
+    }
+
+    function showAnswers() {
+      let html = "";
+      for (let i = 0; i < selectedQuestions.length; i++) {
+        const q = selectedQuestions[i];
+        const userAns = userAnswers[i];
+        const correct = userAns === q.answer;
+        html += `
+          <p>
+            <strong>Soal ${i + 1}:</strong> ${q.question}<br>
+            Jawabanmu: <span style="color:${correct ? 'green' : 'red'}">${userAns}</span><br>
+            Jawaban benar: <strong>${q.answer}</strong>
+          </p>
+        `;
+      }
+      document.getElementById("answer-review").innerHTML = html;
+    }
+
+    window.onload = startQuiz;
+    function goToMenu() {
+    window.location.href = "evaluasi.html"; // Ganti sesuai nama file halaman menunya
+  }
+  </script>
+</body>
+</html>

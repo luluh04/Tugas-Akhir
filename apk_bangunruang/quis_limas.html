@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kuis Bangun Ruang - Limas</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="style.css">
+</head>
+<body class="quis">
+  <button onclick="goToMenu()" class="icon-button">
+  <i class="bi bi-arrow-left-circle"></i>
+</button>
+  <audio id="myAudio" src="assets/cheerful-joyful-playful-music-381499.mp3" autoplay loop></audio>
+  <div class="container">
+    <h2>Kuis Limas</h2>
+
+    <div id="quiz-box">
+      <p id="question"></p>
+      <div id="options" class="option-group"></div>
+      <button onclick="nextQuestion()">Selanjutnya</button>
+    </div>
+
+    <div id="result-box" style="display:none;">
+      <h3>Hasil Kuis</h3>
+      <p id="score"></p>
+      <button onclick="showAnswers()">Lihat Jawaban</button>
+      <div id="answer-review"></div>
+      <button onclick="startQuiz()">Ulangi Kuis</button>
+    </div>
+  </div>
+
+  <script>
+const questionBank = [
+  { question: "Limas adalah bangun ruang yang memiliki alas berbentuk ...", options: ["lingkaran", "segitiga atau segi-n", "bola", "kerucut"], answer: "segitiga atau segi-n" },
+  { question: "Berapa jumlah sisi pada limas segi empat?", options: ["4", "5", "6", "3"], answer: "5" },
+  { question: "Jumlah rusuk pada limas segi empat adalah ...", options: ["6", "8", "10", "12"], answer: "8" },
+  { question: "Jumlah titik sudut pada limas segi empat adalah ...", options: ["4", "5", "6", "7"], answer: "5" },
+  { question: "Bagian alas limas berbentuk ...", options: ["segi-n", "persegi panjang", "persegi saja", "selalu segitiga"], answer: "segi-n" },
+  { question: "Sisi tegak pada limas berbentuk ...", options: ["persegi", "persegi panjang", "segitiga", "lingkaran"], answer: "segitiga" },
+  { question: "Volume limas dihitung dengan rumus ...", options: ["alas x tinggi", "1/3 x luas alas x tinggi", "luas alas x panjang", "2 x luas alas"], answer: "1/3 x luas alas x tinggi" },
+  { question: "Berapa jumlah sisi pada limas segi tiga?", options: ["3", "4", "5", "6"], answer: "4" },
+  { question: "Jumlah rusuk pada limas segi tiga adalah ...", options: ["6", "9", "10", "7"], answer: "6" },
+  { question: "Jumlah titik sudut pada limas segi tiga adalah ...", options: ["3", "4", "5", "6"], answer: "4" },
+  { question: "Limas segi empat memiliki ... sisi tegak", options: ["3", "4", "5", "6"], answer: "4" },
+  { question: "Limas berbeda dari prisma karena ...", options: ["tidak punya volume", "hanya memiliki satu alas", "tidak memiliki tinggi", "semua sisi alas kongruen"], answer: "hanya memiliki satu alas" },
+  { question: "Nama lain limas segi empat beraturan adalah ...", options: ["kerucut", "piramida", "kubus", "prisma"], answer: "piramida" },
+  { question: "Sisi tegak pada limas segi empat berjumlah ...", options: ["3", "4", "5", "6"], answer: "4" },
+  { question: "Limas segi lima memiliki berapa sisi?", options: ["5", "6", "7", "8"], answer: "6" },
+  { question: "Jumlah rusuk limas segi lima adalah ...", options: ["8", "10", "12", "15"], answer: "10" },
+  { question: "Volume limas segi empat dengan luas alas 36 cm² dan tinggi 10 cm adalah ...", options: ["120 cm³", "180 cm³", "90 cm³", "150 cm³"], answer: "120 cm³" },
+  { question: "Apakah semua sisi tegak limas selalu sama besar?", options: ["Ya", "Tidak", "Kadang", "Tergantung alas"], answer: "Tergantung alas" },
+  { question: "Jumlah sisi limas segi n adalah ...", options: ["n", "n+1", "n+2", "2n"], answer: "n + 1" },
+  { question: "Jumlah titik sudut limas segi n adalah ...", options: ["n", "n+1", "2n", "n+2"], answer: "n + 1" },
+  { question: "Jumlah rusuk limas segi n adalah ...", options: ["2n", "n+1", "2n - 1", "2n"], answer: "2n" },
+  { question: "Limas termasuk bangun ruang sisi ...", options: ["lengkung", "datar", "ganda", "campuran"], answer: "datar" },
+  { question: "Titik puncak limas adalah ...", options: ["perpotongan sisi alas", "salah satu sudut alas", "titik pertemuan semua sisi tegak", "sumbu alas"], answer: "titik pertemuan semua sisi tegak" },
+  { question: "Semua sisi tegak limas selalu berbentuk ...", options: ["persegi panjang", "segitiga", "persegi", "trapesium"], answer: "segitiga" },
+  { question: "Limas segi empat memiliki berapa titik sudut?", options: ["4", "5", "6", "3"], answer: "5" },
+  { question: "Limas segi enam memiliki ... sisi", options: ["6", "7", "8", "9"], answer: "7" },
+  { question: "Rusuk limas adalah ...", options: ["garis pada sisi tegak", "perpotongan dua sisi", "hanya sisi tegak", "bidang alas"], answer: "perpotongan dua sisi" },
+  { question: "Jika alas limas adalah persegi dan tinggi 12 cm, maka tinggi limas adalah ...", options: ["tinggi alas", "tinggi tegak dari alas ke puncak", "panjang rusuk", "sudut tumpul"], answer: "tinggi tegak dari alas ke puncak" },
+  { question: "Nama bangun ruang dengan alas segi lima dan sisi tegak segitiga adalah ...", options: ["kerucut", "limas segi lima", "prisma", "bola"], answer: "limas segi lima" },
+  { question: "Volume limas segi tiga dihitung dengan ...", options: ["s³", "luas alas x tinggi", "1/3 x luas alas x tinggi", "2 x luas alas"], answer: "1/3 x luas alas x tinggi" },
+  { question: "Salah satu contoh benda berbentuk limas adalah ...", options: ["tenda pramuka", "botol air", "tabung gas", "kubus"], answer: "tenda pramuka" },
+  { question: "Limas dengan alas berbentuk persegi dinamakan ...", options: ["limas segi lima", "limas segi empat", "limas segi tiga", "kerucut"], answer: "limas segi empat" },
+  { question: "Limas disebut juga sebagai ...", options: ["prisma", "piramida", "tabung", "balok"], answer: "piramida" },
+  { question: "Limas segi lima beraturan memiliki sisi tegak sebanyak ...", options: ["5", "6", "4", "3"], answer: "5" },
+  { question: "Apakah limas memiliki sisi lengkung?", options: ["Ya", "Tidak", "Kadang", "Tergantung alas"], answer: "Tidak" },
+  { question: "Apakah limas memiliki alas ganda?", options: ["Ya", "Tidak", "Kadang", "Tidak dapat dipastikan"], answer: "Tidak" },
+  { question: "Jumlah bidang diagonal pada limas segi empat adalah ...", options: ["0", "2", "4", "8"], answer: "0" },
+  { question: "Jika tinggi limas bertambah 2x, maka volumenya ...", options: ["Bertambah 2x", "Bertambah 3x", "Tetap", "Berkurang 2x"], answer: "Bertambah 2x" },
+  { question: "Apakah limas memiliki simetri putar?", options: ["Tidak", "Ya", "Kadang", "Tidak pasti"], answer: "Tidak" },
+  { question: "Berapa sisi segitiga pada limas segi tiga?", options: ["3", "4", "5", "2"], answer: "3" },
+  { question: "Apakah semua sisi limas berbentuk segitiga?", options: ["Ya", "Tidak", "Kadang", "Tidak pasti"], answer: "Tidak" },
+  { question: "Jumlah seluruh rusuk pada limas segi enam adalah ...", options: ["12", "10", "14", "8"], answer: "12" },
+  { question: "Tinggi limas adalah ...", options: ["rusuk alas", "tinggi dari alas ke puncak", "panjang sisi tegak", "lebar sisi"], answer: "tinggi dari alas ke puncak" },
+  { question: "Jika luas alas 36 cm² dan tinggi 9 cm, maka volume limas adalah ...", options: ["108 cm³", "124 cm³", "81 cm³", "100 cm³"], answer: "108 cm³" },
+  { question: "Luas permukaan limas adalah ...", options: ["luas alas + jumlah sisi tegak", "2 x luas alas", "jumlah rusuk x tinggi", "luas alas + luas semua sisi tegak"], answer: "luas alas + luas semua sisi tegak" },
+  { question: "Sisi alas limas bisa berbentuk ...", options: ["hanya persegi", "lingkaran", "berbagai segi-n", "elips"], answer: "berbagai segi-n" },
+  { question: "Jumlah sisi limas segi sembilan adalah ...", options: ["9", "10", "11", "12"], answer: "10" },
+  { question: "Nama limas dengan alas berbentuk segitiga sama sisi adalah ...", options: ["limas segi empat", "limas segi tiga beraturan", "kerucut", "bola"], answer: "limas segi tiga beraturan" }
+];
+
+
+    let selectedQuestions = [];
+    let currentQuestion = 0;
+    let userAnswers = [];
+
+    function shuffle(array) {
+      const copy = array.slice();
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function startQuiz() {
+      selectedQuestions = shuffle(questionBank).slice(0, 10);
+      currentQuestion = 0;
+      userAnswers = [];
+
+      document.getElementById("quiz-box").style.display = "block";
+      document.getElementById("result-box").style.display = "none";
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const q = selectedQuestions[currentQuestion];
+      document.getElementById("question").textContent = `${currentQuestion + 1}. ${q.question}`;
+
+      const optionsHtml = q.options.map(option => `
+        <label class="option-label">
+          <input type="radio" name="option" value="${option}" />
+          ${option}
+        </label>
+      `).join("");
+
+      document.getElementById("options").innerHTML = optionsHtml;
+    }
+
+    function nextQuestion() {
+      const selected = document.querySelector('input[name="option"]:checked');
+      if (!selected) return alert("Pilih jawaban dulu ya!");
+
+      userAnswers.push(selected.value);
+      currentQuestion++;
+
+      if (currentQuestion < selectedQuestions.length) {
+        renderQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      let score = 0;
+      for (let i = 0; i < selectedQuestions.length; i++) {
+        if (userAnswers[i] === selectedQuestions[i].answer) score++;
+      }
+
+      document.getElementById("quiz-box").style.display = "none";
+      document.getElementById("result-box").style.display = "block";
+      document.getElementById("score").innerHTML = `Jawaban Benar: ${score} dari ${selectedQuestions.length} soal <br> Skor: <strong>${(score / selectedQuestions.length * 100).toFixed(0)}%</strong>`;
+    }
+
+    function showAnswers() {
+      let html = "";
+      for (let i = 0; i < selectedQuestions.length; i++) {
+        const q = selectedQuestions[i];
+        const userAns = userAnswers[i];
+        const correct = userAns === q.answer;
+        html += `
+          <p>
+            <strong>Soal ${i + 1}:</strong> ${q.question}<br>
+            Jawabanmu: <span style="color:${correct ? 'green' : 'red'}">${userAns}</span><br>
+            Jawaban benar: <strong>${q.answer}</strong>
+          </p>
+        `;
+      }
+      document.getElementById("answer-review").innerHTML = html;
+    }
+
+    window.onload = startQuiz;
+     function goToMenu() {
+    window.location.href = "evaluasi.html"; // Ganti sesuai nama file halaman menunya
+  }
+  </script>
+</body>
+</html>

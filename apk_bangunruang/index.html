@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bangun Ruang Interaktif</title>
+  <!-- Fonts dan CSS -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <!-- Three.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body class="index">
+  <div class="hero-section">
+    <!-- Grid Background -->
+    <div class="grid-bg top"></div>
+
+    <div class="hero-content">
+      <!-- animasi karakter -->
+       <div class="komentar-box">
+          <div class="karakter"></div>
+          <div class="teks-komentar" id="teksKomentar"></div>
+        </div>
+       <!-- Header Bar Gabungan Nama dan Audio -->
+<div class="header-audio-bar">
+  <h1 class="school-name">MTS Bany Tsamin</h1>
+  <div class="audio-box">
+    <img src="assets/square.png" alt="Background Audio Box" />
+    <button class="audio-button" onclick="playAudio()">
+      <img id="audioBtn" src="assets/Speaker.png" alt="Tombol Audio" />
+    </button>
+  </div>
+</div>
+
+<!-- Audio Background -->
+<audio id="myAudio" src="assets/cheerful-joyful-playful-music-381499.mp3" autoplay loop></audio>
+
+
+      <!-- Lingkaran Background -->
+      <div class="background-circles">
+        <div class="circle circle1"></div>
+        <div class="circle circle2"></div>
+        <div class="circle circle3"></div>
+      </div>
+
+      <!-- Konten Utama -->
+      <div class="centered-content">
+        <div class="shape-wrapper">
+          <div id="kubus-container" class="shape-canvas"></div>
+          <div class="shadow-circle"></div>
+        </div>
+
+        <!-- Tooltip Info -->
+        <div id="tooltip"></div>
+
+        <!-- Navigasi -->
+        <div class="buttons">
+          <button onclick="location.href='bangunruang.html'">Simulator Bangun Ruang</button>
+          <button onclick="location.href='evaluasi.html'">Evaluasi Umum</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-bg bottom"></div>
+  </div>
+
+  <!-- JS Utama -->
+  <script src="script.js"></script>
+</body>
+</html>

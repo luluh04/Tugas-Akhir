@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kuis Bangun Ruang - Bola</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="style.css">
+</head>
+<body class="quis">
+  <button onclick="goToMenu()" class="icon-button">
+  <i class="bi bi-arrow-left-circle"></i>
+</button>
+  <audio id="myAudio" src="assets/cheerful-joyful-playful-music-381499.mp3" autoplay loop></audio>
+  <div class="container">
+    <h2>Kuis Bola</h2>
+
+    <div id="quiz-box">
+      <p id="question"></p>
+      <div id="options" class="option-group"></div>
+      <button onclick="nextQuestion()">Selanjutnya</button>
+    </div>
+
+    <div id="result-box" style="display:none;">
+      <h3>Hasil Kuis</h3>
+      <p id="score"></p>
+      <button onclick="showAnswers()">Lihat Jawaban</button>
+      <div id="answer-review"></div>
+      <button onclick="startQuiz()">Ulangi Kuis</button>
+    </div>
+  </div>
+
+  <script>
+const questionBank = [
+  { question: "Bola adalah bangun ruang yang memiliki ...", options: ["sudut", "rusuk", "satu bidang lengkung", "sisi datar"], answer: "satu bidang lengkung" },
+  { question: "Jumlah sisi pada bola adalah ...", options: ["1", "2", "3", "tidak terdefinisi"], answer: "1" },
+  { question: "Bola tidak memiliki ...", options: ["volume", "permukaan", "rusuk dan titik sudut", "jari-jari"], answer: "rusuk dan titik sudut" },
+  { question: "Volume bola dihitung dengan rumus ...", options: ["4/3 × π × r³", "π × r² × t", "1/3 × π × r² × t", "π × r × t"], answer: "4/3 × π × r³" },
+  { question: "Luas permukaan bola dihitung dengan rumus ...", options: ["4 × π × r²", "2 × π × r × t", "π × r²", "π × d"], answer: "4 × π × r²" },
+  { question: "Bola termasuk bangun ruang sisi ...", options: ["datar", "lengkung", "majemuk", "beraturan"], answer: "lengkung" },
+  { question: "Bola memiliki berapa rusuk?", options: ["0", "1", "2", "3"], answer: "0" },
+  { question: "Bola memiliki berapa titik sudut?", options: ["0", "1", "2", "Tak hingga"], answer: "0" },
+  { question: "Jari-jari bola adalah ...", options: ["diameter bola", "setengah diameter", "sisi tegak", "tinggi bola"], answer: "setengah diameter" },
+  { question: "Bola memiliki bentuk yang ...", options: ["beraturan", "tak beraturan", "berbentuk persegi", "berbentuk limas"], answer: "beraturan" },
+  { question: "Jika jari-jari bola adalah 7 cm, maka volumenya adalah ...", options: ["1436 cm³", "1400 cm³", "1447.4 cm³", "1500 cm³"], answer: "1436 cm³" },
+  { question: "Jika jari-jari bola 7 cm, maka luas permukaannya adalah ...", options: ["615.75 cm²", "600 cm²", "628.32 cm²", "700 cm²"], answer: "615.75 cm²" },
+  { question: "Contoh benda berbentuk bola adalah ...", options: ["bola basket", "kaleng susu", "topi ulang tahun", "dadu"], answer: "bola basket" },
+  { question: "Apakah bola memiliki sisi datar?", options: ["Ya", "Tidak", "Kadang", "Tergantung"], answer: "Tidak" },
+  { question: "Apakah bola memiliki simetri putar?", options: ["Ya", "Tidak", "Hanya horizontal", "Tergantung jari-jari"], answer: "Ya" },
+  { question: "Apakah bola memiliki jaring-jaring?", options: ["Tidak", "Ya", "Tergantung", "Kadang"], answer: "Tidak" },
+  { question: "Jika diameter bola adalah 14 cm, maka jari-jarinya adalah ...", options: ["5 cm", "6 cm", "7 cm", "8 cm"], answer: "7 cm" },
+  { question: "Satuan volume bola adalah ...", options: ["cm²", "cm³", "cm", "cm⁴"], answer: "cm³" },
+  { question: "Satuan luas permukaan bola adalah ...", options: ["cm²", "cm³", "cm", "liter"], answer: "cm²" },
+  { question: "Bola memiliki ... sisi, ... rusuk, dan ... titik sudut", options: ["1, 1, 1", "2, 0, 0", "1, 0, 0", "0, 0, 1"], answer: "1, 0, 0" },
+  { question: "Jika r = 3 cm, volume bola adalah ...", options: ["113.1 cm³", "90 cm³", "130 cm³", "105 cm³"], answer: "113.1 cm³" },
+  { question: "Jika jari-jari bola dikalikan 2, maka volumenya menjadi ...", options: ["dikali 2", "dikali 4", "dikali 6", "dikali 8"], answer: "dikali 8" },
+  { question: "Jika jari-jari bola 4 cm, maka luas permukaannya adalah ...", options: ["201.06 cm²", "250 cm²", "188 cm²", "225 cm²"], answer: "201.06 cm²" },
+  { question: "Diameter bola adalah ...", options: ["r/2", "2r", "π × r", "4/3 × r"], answer: "2r" },
+  { question: "Bola tidak memiliki ...", options: ["volume", "luas", "tinggi", "titik sudut"], answer: "titik sudut" },
+  { question: "Semua titik pada permukaan bola ...", options: ["berjari-jari berbeda", "berada pada garis lurus", "berjari-jari sama dari pusat", "berbentuk datar"], answer: "berjari-jari sama dari pusat" },
+  { question: "Apakah bola bisa dibentuk dari rotasi?", options: ["Ya", "Tidak", "Tergantung", "Kadang"], answer: "Ya" },
+  { question: "Bola adalah hasil rotasi dari ...", options: ["segitiga", "lingkaran", "persegi panjang", "setengah lingkaran"], answer: "setengah lingkaran" },
+  { question: "Apakah bola memiliki rusuk tegak?", options: ["Ya", "Tidak", "Kadang", "Hanya di sumbu x"], answer: "Tidak" },
+  { question: "Rumus volume bola menggunakan konstanta ...", options: ["π", "r", "t", "d"], answer: "π" },
+  { question: "Apakah bola termasuk bangun ruang beraturan?", options: ["Ya", "Tidak", "Kadang", "Tidak pasti"], answer: "Ya" },
+  { question: "Apakah semua permukaan bola melengkung?", options: ["Ya", "Tidak", "Sebagian", "Tergantung"], answer: "Ya" },
+  { question: "Jika luas permukaan bola adalah 314 cm², maka jari-jarinya ...", options: ["4 cm", "5 cm", "6 cm", "7 cm"], answer: "5 cm" },
+  { question: "Jika jari-jari bola = 6 cm, maka volume bola adalah ...", options: ["904.32 cm³", "905 cm³", "850 cm³", "900 cm³"], answer: "904.32 cm³" },
+  { question: "Jika jari-jari = 5 cm, maka luas permukaan bola adalah ...", options: ["314 cm²", "315 cm²", "320 cm²", "325 cm²"], answer: "314 cm²" },
+  { question: "Jika jari-jari bola = 0, maka volumenya adalah ...", options: ["0", "1", "tak hingga", "tidak terdefinisi"], answer: "0" },
+  { question: "Apakah volume bola bisa bernilai negatif?", options: ["Ya", "Tidak", "Kadang", "Hanya jika r negatif"], answer: "Tidak" },
+  { question: "Jika luas permukaan = 452.16 cm², maka jari-jarinya adalah ...", options: ["6 cm", "7 cm", "8 cm", "9 cm"], answer: "6 cm" },
+  { question: "Jaring-jaring bola terdiri dari ...", options: ["2 lingkaran", "1 lingkaran", "tidak ada", "1 lingkaran dan 1 segitiga"], answer: "tidak ada" },
+  { question: "Apakah bola memiliki alas?", options: ["Ya", "Tidak", "Kadang", "Jika dipotong"], answer: "Tidak" },
+  { question: "Sebuah bola padat jika dipotong sejajar sumbu akan menjadi ...", options: ["lingkaran", "elips", "segitiga", "persegi"], answer: "lingkaran" },
+  { question: "Contoh benda berbentuk bola adalah ...", options: ["bola tenis", "topi kerucut", "balok kayu", "tabung"], answer: "bola tenis" },
+  { question: "Bola memiliki jari-jari tetap dari ...", options: ["puncak", "tengah", "garis pelukis", "diameter"], answer: "tengah" },
+  { question: "Apakah bola memiliki tinggi?", options: ["Ya", "Tidak", "Kadang", "Tergantung"], answer: "Tidak" },
+  { question: "Jika jari-jari bola 10 cm, maka volumenya adalah ...", options: ["4188.79 cm³", "4000 cm³", "4200 cm³", "3900 cm³"], answer: "4188.79 cm³" }
+];
+
+
+    let selectedQuestions = [];
+    let currentQuestion = 0;
+    let userAnswers = [];
+
+    function shuffle(array) {
+      const copy = array.slice();
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function startQuiz() {
+      selectedQuestions = shuffle(questionBank).slice(0, 10);
+      currentQuestion = 0;
+      userAnswers = [];
+
+      document.getElementById("quiz-box").style.display = "block";
+      document.getElementById("result-box").style.display = "none";
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const q = selectedQuestions[currentQuestion];
+      document.getElementById("question").textContent = `${currentQuestion + 1}. ${q.question}`;
+
+      const optionsHtml = q.options.map(option => `
+        <label class="option-label">
+          <input type="radio" name="option" value="${option}" />
+          ${option}
+        </label>
+      `).join("");
+
+      document.getElementById("options").innerHTML = optionsHtml;
+    }
+
+    function nextQuestion() {
+      const selected = document.querySelector('input[name="option"]:checked');
+      if (!selected) return alert("Pilih jawaban dulu ya!");
+
+      userAnswers.push(selected.value);
+      currentQuestion++;
+
+      if (currentQuestion < selectedQuestions.length) {
+        renderQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      let score = 0;
+      for (let i = 0; i < selectedQuestions.length; i++) {
+        if (userAnswers[i] === selectedQuestions[i].answer) score++;
+      }
+
+      document.getElementById("quiz-box").style.display = "none";
+      document.getElementById("result-box").style.display = "block";
+      document.getElementById("score").innerHTML = `Jawaban Benar: ${score} dari ${selectedQuestions.length} soal <br> Skor: <strong>${(score / selectedQuestions.length * 100).toFixed(0)}%</strong>`;
+    }
+
+    function showAnswers() {
+      let html = "";
+      for (let i = 0; i < selectedQuestions.length; i++) {
+        const q = selectedQuestions[i];
+        const userAns = userAnswers[i];
+        const correct = userAns === q.answer;
+        html += `
+          <p>
+            <strong>Soal ${i + 1}:</strong> ${q.question}<br>
+            Jawabanmu: <span style="color:${correct ? 'green' : 'red'}">${userAns}</span><br>
+            Jawaban benar: <strong>${q.answer}</strong>
+          </p>
+        `;
+      }
+      document.getElementById("answer-review").innerHTML = html;
+    }
+
+    window.onload = startQuiz;
+     function goToMenu() {
+    window.location.href = "evaluasi.html"; // Ganti sesuai nama file halaman menunya
+  }
+  </script>
+</body>
+</html>
